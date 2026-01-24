@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/upload.css";
 import CTA from "./CTA";
-export default function STLUploadCard() {
+export default function STLUploadCard({onFileUpload}) {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
 
@@ -64,7 +64,10 @@ export default function STLUploadCard() {
       {/* show buttons when the file is uploaded and valid */}
       {file && !error && (
         <div className="action-buttons">
-          <CTA text="Check Printability" variant="secondary" onClick={() => console.log("Validate STL")} />
+          <CTA 
+          text="Check Printability" 
+          variant="secondary" 
+          onClick={() => onFileUpload(file)} />
           <CTA text="Estimate Print Cost" variant="secondary" onClick={() => console.log("Estimate cost")} />
         </div>
       )}

@@ -1,7 +1,10 @@
+import { useState } from "react";
 import STLUploadCard from "../components/STLUploadCard";
 import InteractiveRobot from "../components/InteractiveRobot";
+import STLValidatorPanel from "../components/STLValidatorPanel";
 
 export default function STLValidationPage() {
+  const [uploadedFile, setUploadedFile] = useState(null);
   return (
     <>
 
@@ -19,8 +22,13 @@ export default function STLValidationPage() {
         <InteractiveRobot />
       </section>
 
+        
       {/* Upload section */}
-      <STLUploadCard />
+      {!uploadedFile && <STLUploadCard onFileUpload={setUploadedFile}/>}
+      
+      {/* validator panel with already uploaded file */}
+      {uploadedFile && <STLValidatorPanel file={uploadedFile} />}
+   
     </>
   );
 }
