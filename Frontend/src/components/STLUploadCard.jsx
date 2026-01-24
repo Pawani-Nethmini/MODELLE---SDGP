@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../styles/upload.css";
-
+import CTA from "./CTA";
 export default function STLUploadCard() {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
@@ -14,7 +14,7 @@ export default function STLUploadCard() {
     if (!selectedFile) return;
 
     if (!selectedFile.name.toLowerCase().endsWith(".stl")) {
-      setError("Only STL files are allowed.");
+      setError("Only STL files are allowed for now.");
       setFile(null);
       return;
     }
@@ -52,15 +52,22 @@ export default function STLUploadCard() {
       </label>
       
 
-      {file && <p className="success">File selected: {file.name}</p>}
+      {/* {file && <p className="success">File selected: {file.name}</p>} */}
+      {file && (
+        <div className="file-info">
+          <p className="success">File selected: {file.name}</p>
+          <p className="file-size">Size: {(file.size / 1024 / 1024).toFixed(2)} MB</p>
+        </div>
+      )}
       {error && <p className="error">{error}</p>}
 
-      <div className="action-buttons">
-        <button disabled={!file}>Run Printability Check</button>
-        <button disabled={!file} className="secondary">
-          Get Cost Estimate
-        </button>
-      </div>
+      {/* show buttons when the file is uploaded and valid */}
+      {file && !error && (
+        <div className="action-buttons">
+          <CTA text="Check Printability" variant="secondary" onClick={() => console.log("Validate STL")} />
+          <CTA text="Estimate Print Cost" variant="secondary" onClick={() => console.log("Estimate cost")} />
+        </div>
+      )}
     </section>
   );
 }
