@@ -3,7 +3,7 @@ import "../styles/upload.css";
 import CTA from "./CTA";
 import STLValidatorPanel from "./STLValidatorPanel";
 
-import STLPreview from "./STLPreview";
+
 
 export default function STLUploadCard({onFileUpload}) {
   const [file, setFile] = useState(null);

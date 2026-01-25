@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../theme/theme.css";
 import CTA from "./CTA";
+import STLPreview from "./STLPreview";
 
 export default function STLValidatorPanel({ file }) {
   const [purpose, setPurpose] = useState("");
