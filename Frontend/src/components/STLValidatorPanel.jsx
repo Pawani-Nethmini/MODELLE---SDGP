@@ -3,7 +3,7 @@ import "../theme/theme.css";
 import CTA from "./CTA";
 import STLPreview from "./STLPreview";
 
-export default function STLValidatorPanel({ file }) {
+export default function STLValidatorPanel({ file, onFileUpload }) {
   const [purpose, setPurpose] = useState("");
   const [printerProfile, setPrinterProfile] = useState("");
   const [availablePrinters, setAvailablePrinters] = useState([]);
@@ -59,17 +59,6 @@ export default function STLValidatorPanel({ file }) {
           <p style={styles.text}>
             Size: {file ? (file.size / 1024 / 1024).toFixed(2) : "0.00"} MB
           </p>
-
-          {/* <div style={styles.preview}>
-            <div style={styles.previewContent}>
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
-              <span style={styles.previewText}>3D Model Preview</span>
-            </div>
-          </div> */}
 
           <div style={styles.preview}>
             {file ? (
@@ -132,15 +121,19 @@ export default function STLValidatorPanel({ file }) {
           )}
         </div>
       </div>
-      <div style={{display:"flex",justifyContent: "center", marginBottom: "2rem"}}>
+      
+      <div style={styles.buttonContainer}>
         <CTA 
           text="Check Printability" 
           variant="secondary" 
-          onClick={() => onFileUpload(file)} />
-        <CTA text="Estimate Print Cost" variant="secondary" onClick={() => console.log("Estimate cost")} />
-
+          onClick={() => onFileUpload(file)} 
+        />
+        <CTA 
+          text="Estimate Print Cost" 
+          variant="secondary" 
+          onClick={() => console.log("Estimate cost")} 
+        />
       </div>
-      
 
       <style>{`
         .header-gradient {
@@ -163,16 +156,15 @@ export default function STLValidatorPanel({ file }) {
 const styles = {
   container: {
     display: "flex",
-    gap: "24px",
+    gap: "20px",
     padding: "24px",
     background: "var(--bg-main)",
     backgroundSize: "400% 400%",
     animation: "gradientShift 15s ease infinite",
     color: "var(--text-primary)",
     borderRadius: "12px",
-    maxWidth: "900px",
-    margin: "3rem auto",
-    boxShadow: "var(--shadow-card)"
+    boxShadow: "var(--shadow-card)",
+    margin: "0"
   },
   column: {
     flex: 1,
@@ -252,5 +244,11 @@ const styles = {
     fontSize: "14px",
     color: "var(--text-secondary)",
     marginBottom: "4px"
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "1rem",
+    marginTop: "1.5rem"
   }
 };
