@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/upload.css";
 import CTA from "./CTA";
+import STLValidatorPanel from "./STLValidatorPanel";
 export default function STLUploadCard({onFileUpload}) {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
@@ -53,16 +54,16 @@ export default function STLUploadCard({onFileUpload}) {
       
 
       {/* {file && <p className="success">File selected: {file.name}</p>} */}
-      {file && (
+      {/* {file && (
         <div className="file-info">
           <p className="success">File selected: {file.name}</p>
           <p className="file-size">Size: {(file.size / 1024 / 1024).toFixed(2)} MB</p>
         </div>
-      )}
+      )} */}
       {error && <p className="error">{error}</p>}
 
       {/* show buttons when the file is uploaded and valid */}
-      {file && !error && (
+      {/* {file && !error && (
         <div className="action-buttons">
           <CTA 
           text="Check Printability" 
@@ -70,7 +71,8 @@ export default function STLUploadCard({onFileUpload}) {
           onClick={() => onFileUpload(file)} />
           <CTA text="Estimate Print Cost" variant="secondary" onClick={() => console.log("Estimate cost")} />
         </div>
-      )}
+      )} */}
+      {file && !error && <STLValidatorPanel file={file} />}
     </section>
   );
 }

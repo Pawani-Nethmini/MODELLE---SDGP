@@ -121,12 +121,13 @@ export default function STLValidatorPanel({ file }) {
           )}
         </div>
       </div>
-      <div style={{display: "flex", justifyContent: "center", marginBottom: "2rem"}}>
+      <div style={{display:"flex",justifyContent: "center", marginBottom: "2rem"}}>
         <CTA 
-          
           text="Check Printability" 
           variant="secondary" 
           onClick={() => onFileUpload(file)} />
+        <CTA text="Estimate Print Cost" variant="secondary" onClick={() => console.log("Estimate cost")} />
+
       </div>
       
 
