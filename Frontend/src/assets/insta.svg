@@ -1,0 +1,19 @@
+<svg width="324" height="324" viewBox="0 0 324 324" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<mask id="mask0_234_27" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="324" height="324">
+<rect width="324" height="324" fill="url(#pattern0_234_27)"/>
+</mask>
+<g mask="url(#mask0_234_27)">
+<rect x="481.98" y="454.992" width="645" height="580" transform="rotate(-179.555 481.98 454.992)" fill="url(#paint0_linear_234_27)"/>
+</g>
+<defs>
+<pattern id="pattern0_234_27" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_234_27" transform="scale(0.02)"/>
+</pattern>
+<linearGradient id="paint0_linear_234_27" x1="1126.98" y1="744.992" x2="481.98" y2="744.992" gradientUnits="userSpaceOnUse">
+<stop offset="0.05" stop-color="#00F5FF"/>
+<stop offset="0.5" stop-color="#7D98F3"/>
+<stop offset="1" stop-color="#8B5CF6"/>
+</linearGradient>
+<image id="image0_234_27" width="50" height="50" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAADK0lEQVR4nO2ZO09UQRiGnwIVIpddy6UVwViIgp2X2ElMVH4BISp/QAWpvbRGQqnBP6CYWMnitVN7EWxUbAUFhArXfMl7komB3TmX3Tkm+yaTnOz55jvz7nzXGWiiiVygF5gA5oEFYAOoZDRMl+ksA+PAoXoQGAReZLho3zEPDGRBYA8wDfyR4h/AA+CCdmc/2cF0mc6LwEN9q6JvTwEtSRUXgZdS9hu4BXTSOHQCt4FNZ3cKSXYiMqXvMq1QOAp80VreAHvjTJ7WxG9AifAoActa033fSYOySzOnY+QHx2Vm23quicikzCfyhjtam4Xoquh1olMjHTvCefmkmdHQDu+7gBWtsaeaogkJWfgLgWUnh5h/7oQZvb9RTVFZQhbL80pkWO/nqilalFCa8sDyzyjwFPik0mNDz7N6ZzI7YUhkjMS5GuZv+nbFmoQ6EhBoAyaBnx6lxypwE2hN8J0O6bC17oroQ0ni/Adn/nPgilPG2OjTb3OO3PuEeapSa51JiJRkCtF2n/SYc8ox4yRJt5I1kTZnJ17FrIXMT15r7ruYZlbJmsik5BeSFHQiE+2Mhf4gRIqOY/uY02444wSAYggio45jp0WUv0ZCEJmV7GXS46p0PQ5BJLJtC7Fp0eeT5OpFZF2y7aRHu3St/+9EOqXrl6d807SqObuVHWkxFtLZR33KaU/Mhwy/RSUxkz9Ncpx1EmIhdImyGCMru7A5Sz4dX72JtKoUr6gAjEPmAPA2L0Xjv2X8kmonH3P6nKcyPkJJ/2o0v6xIdFh5pl3PY45jRztRl8ZqLUWr26pSfNWz1bWrg331anUXMzh8KCiMPlGfsq6xoN9GEvYusQ4fQh8H+WDYp30YD3xA54NHWuO1PB+Z1oL3kSlOVLFLlrzhbpyudEDXCpu+x/cNwiCwpWuFft9JU2Jux5fdhEe3cy58L87EFsfE7Jj/BOHQD3x1Em3sS9GCQ2ZTlyzmbI1Cl3xiy2kXEuefFt3ZbUvZiu4nLqmry6LNjWC6+pQnZpzotC1zSnw97eII8Myj9Mh6lOsVcHrUN8w55UdWizZdHxVarwMH60GgiSaIh7/0wax6IqjhkwAAAABJRU5ErkJggg=="/>
+</defs>
+</svg>
