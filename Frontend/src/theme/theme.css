@@ -1,0 +1,48 @@
+/* src/theme/theme.css */
+:root {
+  /* Backgrounds */
+  --bg-main: linear-gradient(-45deg, #0a0a0a, #150e1f, #0a0a0a, #150e1f);
+  --bg-surface: #0a0a0a;
+  --bg-translucent: rgba(0, 245, 255, 0.05);
+  --bg-card-hover: rgba(0, 245, 255, 0.08);
+
+  /* Borders & accents */
+  --border-color: #00f5ff;
+  --border-color-subtle: rgba(0, 245, 255, 0.2);
+  --border-color-dashed: #00f5ff;
+
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-secondary: #cfcfcf;
+  --text-muted: #777777;
+
+  /* Gradients */
+  --header-gradient: linear-gradient(90deg, #00f5ff 10%, #8b5cf6 100%);
+
+  /* Shadows & Glows */
+  --shadow-glow: 0 0 20px rgba(0, 245, 255, 0.1);
+  --shadow-glow-hover: 0 0 30px rgba(0, 245, 255, 0.2);
+  --shadow-card: 0 8px 32px rgba(0, 245, 255, 0.1);
+
+  /* Interactive States */
+  --opacity-disabled: 0.5;
+  --cursor-disabled: not-allowed;
+  --cursor-pointer: pointer;
+}
+
+/* ===== Reusable Utility Classes ===== */
+
+.header-gradient {
+  background: var(--header-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Animations ===== */
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
