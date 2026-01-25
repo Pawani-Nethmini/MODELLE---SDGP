@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "../styles/upload.css";
 import CTA from "./CTA";
+import STLPreview from "./STLPreview";
+
 export default function STLUploadCard({onFileUpload}) {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
@@ -56,7 +58,7 @@ export default function STLUploadCard({onFileUpload}) {
       {file && (
         <div className="file-info">
           <p className="success">File selected: {file.name}</p>
-          <p className="file-size">Size: {(file.size / 1024 / 1024).toFixed(2)} MB</p>
+          <p className="file-size">Size: {(file.size / 1024).toFixed(2)} KB</p>
         </div>
       )}
       {error && <p className="error">{error}</p>}

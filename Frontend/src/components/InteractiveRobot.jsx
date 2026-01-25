@@ -117,7 +117,8 @@ export default function InteractiveRobot() {
     const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
     rightEye.position.set(0.28, 0.05, 0.7);
     
-    eyeGroup.add(leftEye, rightEye);
+    // eyeGroup.add(leftEye, rightEye);
+    eyeGroup.add(rightEye, leftEye);
     head.add(eyeGroup);
 
 
