@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "../theme/theme.css";
 import CTA from "./CTA";
+import STLPreview from "./STLPreview";
+
 
 export default function STLValidatorPanel({ file }) {
   const [purpose, setPurpose] = useState("");
@@ -59,7 +61,7 @@ export default function STLValidatorPanel({ file }) {
             Size: {file ? (file.size / 1024 / 1024).toFixed(2) : "0.00"} MB
           </p>
 
-          <div style={styles.preview}>
+          {/* <div style={styles.preview}>
             <div style={styles.previewContent}>
               <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -68,7 +70,20 @@ export default function STLValidatorPanel({ file }) {
               </svg>
               <span style={styles.previewText}>3D Model Preview</span>
             </div>
+          </div> */}
+
+          <div style={styles.preview}>
+            {file ? (
+              <STLPreview file={file} />
+            ) : (
+              <div style={styles.previewContent}>
+                <span style={styles.previewText}>No STL loaded</span>
+              </div>
+            )}
           </div>
+
+
+
         </div>
 
         {/* RIGHT COLUMN */}
