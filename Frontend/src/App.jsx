@@ -8,9 +8,17 @@ import Designers from "./pages/Designers";
 import MyProjects from "./pages/MyProjects";
 import MyOrders from "./pages/MyOrders";
 import UserProfile from "./pages/UserProfile";
+import Splash from "./components/Splash";
+import About from "./components/About";
+import Features from "./components/HowItWorks3D";
+import Contact from "./components/Footer";
 
+export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
 
-function App() {
+  if (showSplash) {
+    return <Splash onFinish={() => setShowSplash(false)} />;
+  }
   return (
     <BrowserRouter>
       <Layout>
@@ -28,4 +36,3 @@ function App() {
   );
 }
 
-export default App;
