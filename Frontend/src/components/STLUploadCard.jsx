@@ -57,13 +57,10 @@ export default function STLUploadCard({onFileUpload}) {
             </div>
           </label>
 
-<<<<<<< Updated upstream
 
           <p>Upload your STL file here</p>
           <span className="hint">Only .STL files • Max 100MB</span>
-=======
           {error && <p className="error">{error}</p>}
->>>>>>> Stashed changes
         </div>
 
         {/* Validator Panel */}
