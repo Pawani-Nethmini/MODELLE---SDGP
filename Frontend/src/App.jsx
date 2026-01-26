@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-
+import { useState } from "react";
 import Home from "./pages/Home";
 import STLValidationPage from "./pages/STLValidationPage";
 import Printers from "./pages/Printers";
@@ -20,10 +20,13 @@ export default function App() {
     return <Splash onFinish={() => setShowSplash(false)} />;
   }
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/upload-stl" element={<STLValidationPage />} />
           <Route path="/printers" element={<Printers />} />
           <Route path="/designers" element={<Designers />} />

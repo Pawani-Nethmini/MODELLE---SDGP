@@ -1,0 +1,144 @@
+.how-section {
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5rem 2rem;
+    color: white;
+    margin: 3rem;
+    border-radius: 15px;
+}
+
+.how-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  background: linear-gradient(90deg, #00f5ff 10%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  perspective: 1200px; /* enables 3D */
+}
+
+.step-card {
+  width: 240px;
+  height: 300px;
+  background: linear-gradient(145deg, #141428, #0e0e1a);
+  border-radius: 20px;
+  padding: 2rem;
+  transform-style: preserve-3d;
+  transform: rotateY(-12deg);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.step-card:hover {
+  box-shadow: 0 35px 60px rgba(0, 245, 255, 0.25);
+}
+
+.step-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #00f5ff;
+  margin-bottom: 1rem;
+  transform: translateZ(40px); /* depth */
+}
+
+.step-card h3 {
+  margin-bottom: 1rem;
+  transform: translateZ(30px);
+}
+
+.step-card p {
+  color: #b8b8ff;
+  line-height: 1.5;
+  transform: translateZ(20px);
+}
+
+/* ================= MEDIA QUERIES ================== */
+
+/* Tablet / smaller desktop */
+@media (max-width: 1024px) {
+  .how-title {
+    font-size: 2.2rem;
+  }
+
+  .step-card {
+    width: 200px;
+    height: 270px;
+    padding: 1.5rem;
+  }
+
+  .step-number {
+    font-size: 2.5rem;
+  }
+
+  .step-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .step-card p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile layout - stack vertically */
+@media (max-width: 768px) {
+  .how-section {
+    margin: 2rem 1rem;
+  }
+  .card-container {
+    flex-direction: column;  /* stack cards vertically */
+    align-items: center;
+    gap: 2rem;               /* spacing between cards */
+    perspective: none;       /* remove 3D perspective for mobile */
+  }
+
+  .step-card {
+    width: 90%;              /* almost full width */
+    max-width: 300px;
+    height: auto;            /* adjust height automatically */
+    transform: none;         /* remove tilt on mobile */
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+  }
+
+  .step-number {
+    font-size: 2rem;
+    text-align: center;
+    transform: none;
+  }
+
+  .step-card h3, .step-card p {
+    text-align: center;
+    transform: none;
+  }
+}
+
+/* Smallest screens */
+@media (max-width: 480px) {
+  .how-title {
+    font-size: 2rem;
+  }
+
+  .step-card {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .step-number {
+    font-size: 1.8rem;
+  }
+
+  .step-card h3 {
+    font-size: 1rem;
+  }
+
+  .step-card p {
+    font-size: 0.9rem;
+  }
+}
