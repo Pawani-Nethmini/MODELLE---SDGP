@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CTA from "./CTA";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,6 +51,7 @@ export default function Navbar() {
               alignItems: "center",
               justifyContent: "center",
             }}
+            onClick={() => navigate("/customer")}
           />
         </div>
 
@@ -127,7 +128,10 @@ export default function Navbar() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/customer"); // mobile "Get Started" button
+              }}
             />
           </div>
         </div>

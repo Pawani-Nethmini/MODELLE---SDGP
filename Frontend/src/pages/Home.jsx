@@ -1,4 +1,5 @@
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
+// Frontend\src\components\Navbar.jsx
 import Hero from "../components/Hero";
 import About from "../components/About";
 import HowItWorks3D from "../components/HowItWorks3D";
@@ -11,7 +12,7 @@ import Footer from "../components/Footer";
 export default function Home() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <section id="hero">
         <Hero />
       </section>

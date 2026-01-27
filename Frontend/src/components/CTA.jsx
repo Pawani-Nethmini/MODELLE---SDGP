@@ -10,7 +10,7 @@ export default function CTA({
   const presetButtons = {
     getStarted: {
       text: "Get Started",
-      link: "/signup",
+      link: "/customer",
       style: "primary",
     },
     joinCommunity: {

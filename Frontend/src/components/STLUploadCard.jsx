@@ -53,13 +53,16 @@ export default function STLUploadCard({onFileUpload}) {
                 className="upload-icon"
               />
               <p>Upload your STL file here</p>
+<<<<<<< Updated upstream
               <span className="hint">Only .STL files • Max 100MB</span>
+=======
+          <span className="hint">Only .STL files • Max 100MB</span>
+>>>>>>> Stashed changes
             </div>
           </label>
 
 
-          <p>Upload your STL file here</p>
-          <span className="hint">Only .STL files • Max 100MB</span>
+          
           {error && <p className="error">{error}</p>}
         </div>
 
