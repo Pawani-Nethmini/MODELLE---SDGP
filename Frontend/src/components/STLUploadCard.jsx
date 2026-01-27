@@ -52,7 +52,7 @@ export default function STLUploadCard({onFileUpload}) {
                 alt="Upload STL"
                 className="upload-icon"
               />
-              <p>Drag & drop your STL file here</p>
+              <p>Upload your STL file here</p>
               <span className="hint">Only .STL files • Max 100MB</span>
             </div>
           </label>

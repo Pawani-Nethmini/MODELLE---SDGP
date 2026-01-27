@@ -1,0 +1,93 @@
+/* =========================
+   Gradient Animation
+   ========================= */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* =========================
+   Main Page Container
+   ========================= */
+.ValidatorScreen {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+
+  /* Deep cyber gradient */
+  background: linear-gradient(
+    120deg,
+    #1c131c 5%,
+    #102d3d 50%,
+    #0b4353 100%
+  );
+  background-size: 300% 300%;
+  animation: gradientFlow 12s ease infinite;
+
+  /* Neon-ish glow */
+  box-shadow:
+    inset 0 0 100px rgba(0, 245, 255, 0.1),
+    inset 0 0 150px rgba(139, 92, 246, 0.12);
+
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 4rem;
+
+  overflow-x: hidden;
+}
+
+/* =========================
+   Atmospheric glow overlay
+   ========================= */
+.ValidatorScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(0, 245, 255, 0.08),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      rgba(139, 92, 246, 0.08),
+      transparent 60%
+    );
+  pointer-events: none;
+}
+
+/* =========================
+   Optional noise layer (luxury feel)
+   ========================= */
+.ValidatorScreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* =========================
+   Content stacking
+   ========================= */
+.ValidatorScreen > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   Robot container safety
+   ========================= */
+.ValidatorScreen section {
+  width: 100%;
+}

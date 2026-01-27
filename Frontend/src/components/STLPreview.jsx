@@ -46,7 +46,7 @@ export default function STLPreview({ file }) {
       geometry.computeBoundingBox();
 
       const material = new THREE.MeshStandardMaterial({
-        color: 0xf8f8f8,
+        color: 0xd7ebe7,
         metalness: 0.15,
         roughness: 0.45,
         });
