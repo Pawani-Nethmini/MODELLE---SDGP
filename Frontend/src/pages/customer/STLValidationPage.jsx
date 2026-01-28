@@ -2,6 +2,8 @@ import { useState } from "react";
 import STLUploadCard from "../../components/STLUploadCard";
 import InteractiveRobot from "../../components/InteractiveRobot";
 import STLValidatorPanel from "../../components/STLValidatorPanel";
+import "../../styles/stlValidator.css";
+
 export default function STLValidationPage() {
   const [uploadedFile, setUploadedFile] = useState(null);
   return (

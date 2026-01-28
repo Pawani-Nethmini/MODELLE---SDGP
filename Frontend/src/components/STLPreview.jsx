@@ -53,6 +53,7 @@ export default function STLPreview({ file }) {
 
 
       const mesh = new THREE.Mesh(geometry, material);
+      
       scene.add(mesh);
 
       // Fit camera
