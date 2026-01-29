@@ -1,0 +1,41 @@
+Hexagon shape with glow and pulse
+.hexagon {
+  position: relative;
+  width: 120px;
+  height: 110px; /* height = width * sqrt(3)/2 for regular hex */
+  background: #1e1e1e; /* dark hexagon */
+  border: 4px solid #333; /* slightly darker border for depth */
+  border-radius: 15px;
+  clip-path: polygon(
+    50% 0%,
+    93% 25%,
+    93% 75%,
+    50% 100%,
+    7% 75%,
+    7% 25%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.5), 0 0 40px rgba(0, 245, 255, 0.3);
+  animation: pulseGlow 1.5s infinite ease-in-out;
+}
+
+/* Centered logo inside the hexagon */
+.hex-logo {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+/* Pulse & Glow directly on hexagon */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.5), 0 0 40px rgba(0, 245, 255, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(0, 245, 255, 0.8), 0 0 60px rgba(0, 245, 255, 0.5);
+    transform: scale(1.05);
+  }
+}

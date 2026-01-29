@@ -9,26 +9,34 @@ export default function InteractiveRobot() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const container = containerRef.current;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
     // Scene setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
     renderer.setClearColor(0x000000, 0);
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Lighting - enhance for glossy shapes
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
     directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
 
-    const pointLight = new THREE.PointLight(0x00ffff, 0.5);
+    const pointLight = new THREE.PointLight(0x00ffff, 0.6);
     pointLight.position.set(-5, 3, -5);
     scene.add(pointLight);
+    
+    const backLight = new THREE.PointLight(0x8b5cf6, 0.4);
+    backLight.position.set(0, -3, -8);
+    scene.add(backLight);
 
     // Robot parts
     const robot = new THREE.Group();
@@ -78,16 +86,14 @@ export default function InteractiveRobot() {
     head.position.y = 1.6;
     robot.add(head);
 
-
-
-    // Eyes - simple rounded rectangle style "00"
+    // Eyes - clearer, more defined rounded rectangles
     const eyeGroup = new THREE.Group();
     
-    // Left eye - rounded rectangle
+    // Eye shape - rounded rectangle with better proportions
     const eyeShape = new THREE.Shape();
-    const eyeWidth = 0.22;
-    const eyeHeight = 0.3;
-    const radius = 0.11;
+    const eyeWidth = 0.28;
+    const eyeHeight = 0.38;
+    const radius = 0.14;
     
     eyeShape.moveTo(-eyeWidth/2 + radius, -eyeHeight/2);
     eyeShape.lineTo(eyeWidth/2 - radius, -eyeHeight/2);
@@ -100,42 +106,58 @@ export default function InteractiveRobot() {
     eyeShape.quadraticCurveTo(-eyeWidth/2, -eyeHeight/2, -eyeWidth/2 + radius, -eyeHeight/2);
     
     const eyeGeometry = new THREE.ExtrudeGeometry(eyeShape, {
-      depth: 0.05,
-      bevelEnabled: false
+      depth: 0.08,
+      bevelEnabled: true,
+      bevelThickness: 0.02,
+      bevelSize: 0.02,
+      bevelSegments: 3
     });
     
     const eyeMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x00ffaa,
-      emissive: 0x00aa77,
-      roughness: 0.3,
-      metalness: 0.1
+      color: 0x00ffcc,
+      emissive: 0x00ffcc,
+      emissiveIntensity: 0.8,
+      roughness: 0.2,
+      metalness: 0.3
     });
     
     const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-    leftEye.position.set(-0.28, 0.05, 0.7);
+    leftEye.position.set(-0.32, 0.08, 0.72);
     
     const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-    rightEye.position.set(0.28, 0.05, 0.7);
+    rightEye.position.set(0.32, 0.08, 0.72);
     
-    // eyeGroup.add(leftEye, rightEye);
-    eyeGroup.add(rightEye, leftEye);
+    eyeGroup.add(leftEye, rightEye);
     head.add(eyeGroup);
 
-
-
-    // Scale down the entire robot
-    robot.scale.set(0.5, 0.5, 0.5);
+    // Scale the robot - larger size
+    const isMobile = width < 768;
+    const scale = isMobile ? 0.5 : 0.7;
+    robot.scale.set(scale, scale, scale);
+    
+    // Position robot slightly down
+    robot.position.y = -0.5;
     
     scene.add(robot);
     camera.position.z = 5;
 
     // Mouse move handler
     const handleMouseMove = (event) => {
-      mousePos.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mousePos.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      mousePos.current.x = (event.clientX / width) * 2 - 1;
+      mousePos.current.y = -(event.clientY / height) * 2 + 1;
+    };
+
+    // Touch move handler for mobile
+    const handleTouchMove = (event) => {
+      if (event.touches.length > 0) {
+        const touch = event.touches[0];
+        mousePos.current.x = (touch.clientX / width) * 2 - 1;
+        mousePos.current.y = -(touch.clientY / height) * 2 + 1;
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
 
     // Animation
     let time = 0;
@@ -143,18 +165,16 @@ export default function InteractiveRobot() {
       requestAnimationFrame(animate);
       time += 0.01;
 
-      // Smooth head rotation towards mouse (reversed)
-      const targetRotationY = -mousePos.current.x * 0.5;
+      // Smooth head rotation towards mouse
+      const targetRotationY = mousePos.current.x * 0.5;
       const targetRotationX = -mousePos.current.y * 0.3;
       
       head.rotation.y += (targetRotationY - head.rotation.y) * 0.1;
       head.rotation.x += (targetRotationX - head.rotation.x) * 0.1;
 
       // Gentle floating animation
-      robot.position.y = Math.sin(time) * 0.08;
+      robot.position.y = -0.5 + Math.sin(time) * 0.08;
       robot.rotation.y = Math.sin(time * 0.5) * 0.03;
-
-
 
       renderer.render(scene, camera);
     };
@@ -164,9 +184,17 @@ export default function InteractiveRobot() {
 
     // Resize handler
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
+      
+      camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(newWidth, newHeight);
+
+      // Adjust robot scale on resize
+      const isMobile = newWidth < 768;
+      const scale = isMobile ? 0.5 : 0.7;
+      robot.scale.set(scale, scale, scale);
     };
 
     window.addEventListener('resize', handleResize);
@@ -174,16 +202,17 @@ export default function InteractiveRobot() {
     // Cleanup
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
-      if (containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
       }
     };
   }, []);
 
   return (
-    <div className="relative w-full h-screen bg-transparent overflow-hidden">
-      <div ref={containerRef} className="w-full h-full" />
+    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+      <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
     </div>
   );
 }

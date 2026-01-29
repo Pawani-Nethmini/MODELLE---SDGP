@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/upload.css";
 import CTA from "./CTA";
-import STLPreview from "./STLPreview";
+import STLValidatorPanel from "./STLValidatorPanel";
 
 export default function STLUploadCard({onFileUpload}) {
   const [file, setFile] = useState(null);
@@ -38,41 +38,38 @@ export default function STLUploadCard({onFileUpload}) {
         Validate your 3D model and get printing insights
       </p>
 
-      <label className="upload-box">
-        <input type="file" accept=".stl" hidden onChange={handleFileChange} />
+      {/* SIDE-BY-SIDE LAYOUT */}
+      <div className={`upload-validator-layout ${file && !error ? 'has-file' : ''}`}>
+        
+        {/* Upload Area */}
+        <div className={`upload-section ${file && !error ? 'compact' : ''}`}>
+          <label className="upload-box">
+            <input type="file" accept=".stl" hidden onChange={handleFileChange} />
 
-        <div className="upload-content">
-          <img
-            src="/upload-icon.png"
-            alt="Upload STL"
-            className="upload-icon" />
+            <div className="upload-content">
+              <img
+                src="/upload-icon.png"
+                alt="Upload STL"
+                className="upload-icon"
+              />
+              <p>Upload your STL file here</p>
+                <span className="hint">Only .STL files • Max 100MB</span>
+
+            </div>
+          </label>
 
 
-          <p>Drag & drop your STL file here</p>
-          <span className="hint">Only .STL files • Max 100MB</span>
+          
+          {error && <p className="error">{error}</p>}
         </div>
-      </label>
-      
 
-      {/* {file && <p className="success">File selected: {file.name}</p>} */}
-      {file && (
-        <div className="file-info">
-          <p className="success">File selected: {file.name}</p>
-          <p className="file-size">Size: {(file.size / 1024).toFixed(2)} KB</p>
-        </div>
-      )}
-      {error && <p className="error">{error}</p>}
-
-      {/* show buttons when the file is uploaded and valid */}
-      {file && !error && (
-        <div className="action-buttons">
-          <CTA 
-          text="Check Printability" 
-          variant="secondary" 
-          onClick={() => onFileUpload(file)} />
-          <CTA text="Estimate Print Cost" variant="secondary" onClick={() => console.log("Estimate cost")} />
-        </div>
-      )}
+        {/* Validator Panel */}
+        {file && !error && (
+          <div className="validator-section">
+            <STLValidatorPanel file={file} onFileUpload={onFileUpload} />
+          </div>
+        )}
+      </div>
     </section>
   );
 }

@@ -1,34 +1,21 @@
-import { useState } from "react";
 import STLUploadCard from "../components/STLUploadCard";
 import InteractiveRobot from "../components/InteractiveRobot";
-import STLValidatorPanel from "../components/STLValidatorPanel";
+import BackgroundShapes from "../components/BackgroundShapes";
+import "../styles/stlvalidation.css";
 
 export default function STLValidationPage() {
-  const [uploadedFile, setUploadedFile] = useState(null);
   return (
     <>
-
+      {/* Full page 3D background - behind everything */}
+      <BackgroundShapes />
+      
       {/* Robot section */}
-      <section
-        style={{
-          height: "50vh",
-          width: "100%",
-          position: "relative",
-          overflow: "hidden",
-          pointerEvents: "none", 
-          marginTop: "-150px"
-        }}
-      >
+      <section className="robot-section">
         <InteractiveRobot />
       </section>
 
-        
       {/* Upload section */}
-      {!uploadedFile && <STLUploadCard onFileUpload={setUploadedFile}/>}
-      
-      {/* validator panel with already uploaded file */}
-      {uploadedFile && <STLValidatorPanel file={uploadedFile} />}
-   
+      <STLUploadCard />
     </>
   );
 }

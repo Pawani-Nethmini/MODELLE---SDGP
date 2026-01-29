@@ -1,0 +1,26 @@
+.robot-section {
+  height: 60vh;
+  min-height: 500px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+  margin-top: 0;
+  margin-bottom: -100px;
+}
+
+@media (max-width: 768px) {
+  .robot-section {
+    height: 45vh;
+    min-height: 350px;
+    margin-bottom: -60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .robot-section {
+    height: 40vh;
+    min-height: 300px;
+    margin-bottom: -40px;
+  }
+}

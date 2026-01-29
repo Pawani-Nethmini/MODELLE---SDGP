@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { STLLoader } from "three-stdlib";
-import "../styles/upload.css";
+
 
 
 export default function STLPreview({ file }) {
@@ -46,13 +46,14 @@ export default function STLPreview({ file }) {
       geometry.computeBoundingBox();
 
       const material = new THREE.MeshStandardMaterial({
-        color: 0xf8f8f8,
+        color: 0xd7ebe7,
         metalness: 0.15,
         roughness: 0.45,
         });
 
 
       const mesh = new THREE.Mesh(geometry, material);
+      
       scene.add(mesh);
 
       // Fit camera

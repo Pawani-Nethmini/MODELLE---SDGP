@@ -1,11 +1,58 @@
 import React from "react";
 
-export default function CTA({ text, onClick, variant = "primary", style }) {
+export default function CTA({
+  text,
+  onClick,
+  variant = "primary",
+  style,
+}) {
+  // Preset CTA definitions (used by file #2)
+  const presetButtons = {
+    getStarted: {
+      text: "Get Started",
+      link: "/customer",
+      style: "primary",
+    },
+    joinCommunity: {
+      text: "Join the Community",
+      link: "/community",
+      style: "primary",
+    },
+    exploreFeatures: {
+      text: "Explore Features",
+      link: "/HowItWorks3D",
+      style: "secondary",
+    },
+    login: {
+      text: "Log In",
+      link: "/login",
+      style: "secondary",
+    },
+  };
+
+  const preset = presetButtons[variant];
+
   return (
     <>
-      <button className={`cta-button ${variant}`} onClick={onClick} style={style}>
-        {text}
-      </button>
+      {/* --- Mode 1: Preset CTA (anchor link) --- */}
+      {preset ? (
+        <a
+          href={preset.link}
+          className={`cta-button ${preset.style}`}
+          style={style}
+        >
+          {preset.text}
+        </a>
+      ) : (
+        /* --- Mode 2: Custom CTA (button with onClick) --- */
+        <button
+          className={`cta-button ${variant}`}
+          onClick={onClick}
+          style={style}
+        >
+          {text}
+        </button>
+      )}
 
       <style jsx>{`
         .cta-button {
@@ -17,6 +64,8 @@ export default function CTA({ text, onClick, variant = "primary", style }) {
           cursor: pointer;
           transition: all 0.3s ease;
           text-align: center;
+          display: inline-block;
+          text-decoration: none;
         }
 
         .cta-button.primary {
