@@ -1,15 +1,22 @@
 # exposes stll + printer validation as an API so that
 #  the Node.js backend can call it using HTTP requests
 
-from fastapi import FastAPI, File, UploadFile, Form
 import shutil
 import os
 import uuid
+from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.middleware.cors import CORSMiddleware
 
 from validator.validation_pipeline import run_validation_pipeline
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+ )
 # temp folder to store uploaded files
 TEMP_DIR = "temp_stl_uploads"
 os.makedirs(TEMP_DIR, exist_ok=True)

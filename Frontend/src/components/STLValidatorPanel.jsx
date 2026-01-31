@@ -2,11 +2,15 @@ import { useState } from "react";
 import "../theme/theme.css";
 import CTA from "./CTA";
 import STLPreview from "./STLPreview";
+import { validateSTL } from "../../../backend/api/src/services/validationService";
 
 export default function STLValidatorPanel({ file, onFileUpload }) {
   const [purpose, setPurpose] = useState("");
   const [printerProfile, setPrinterProfile] = useState("");
   const [availablePrinters, setAvailablePrinters] = useState([]);
+  const [validationResult, setValidationResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const purposes = [
     {
@@ -126,7 +130,30 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
         <CTA 
           text="Check Printability" 
           variant="secondary" 
-          onClick={() => onFileUpload(file)} 
+          // onClick={() => onFileUpload(file)}
+          onClick={async () => {
+            if (!file || !printerProfile) {
+              alert("Please select a purpose and printer profile.");
+              return;
+            } 
+            try {
+              // pass the file object to the Node.js validation service
+              setLoading(true);
+              setError("");
+              setValidationResult(null);
+
+              // call the API through validationService.js
+              const response = await validateSTL(file, printerProfile);
+
+              setValidationResult(response);
+
+            } catch (error) {
+              console.error("Validation Error:", error);
+              setError("Error during STL validation. Check console for details.");
+            } finally {
+              setLoading(false);
+            }
+          }}
         />
         <CTA 
           text="Estimate Print Cost" 
@@ -149,6 +176,18 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
           100% { background-position: 0% 50%; }
         }
       `}</style>
+
+      <div style={{ marginTop: "1rem" }}>
+        {loading && <p>Validating STL, please wait...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {validationResult && (
+          <div className="validation-result">
+            <h3>Validation Results:</h3>
+            <pre>{JSON.stringify(validationResult, null, 2)}</pre>
+          </div>
+        )}
+      </div>
+
     </>
   );
 }
