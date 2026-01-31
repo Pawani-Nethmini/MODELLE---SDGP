@@ -5,8 +5,8 @@ import "../styles/stlvalidation.css";
 
 export default function STLValidationPage() {
   return (
-    <>
-      {/* Full page 3D background - behind everything */}
+    <div style={{ position: 'relative', width: '100%' }}>
+      {/* Full page 3D background - MUST BE FIRST */}
       <BackgroundShapes />
       
       {/* Robot section */}
@@ -16,6 +16,6 @@ export default function STLValidationPage() {
 
       {/* Upload section */}
       <STLUploadCard />
-    </>
+    </div>
   );
 }

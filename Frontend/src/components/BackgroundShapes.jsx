@@ -1,177 +1,237 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-export default function BackgroundShapes() {
+export default function RobotPage() {
   const containerRef = useRef(null);
+  const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const container = containerRef.current;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
-    // Scene setup
+    /* ================= SCENE ================= */
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    
+
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+    camera.position.set(0, 1.5, 6);
+    camera.lookAt(0, 0.5, 0);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
+    /* ================= LIGHTING ================= */
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
-    const pointLight = new THREE.PointLight(0x00ffff, 0.3);
-    pointLight.position.set(-5, 3, -5);
-    scene.add(pointLight);
-    
-    const backLight = new THREE.PointLight(0x8b5cf6, 0.2);
-    backLight.position.set(0, -3, -8);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    keyLight.position.set(3, 5, 4);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0x88ccff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    const backLight = new THREE.DirectionalLight(0xffffff, 0.2);
+    backLight.position.set(0, 3, -3);
     scene.add(backLight);
 
-    // Create background objects
-    const backgroundObjects = new THREE.Group();
-    const floatingShapes = [];
-    
-    // Material variations with reduced opacity
-    const materials = [
-      new THREE.MeshStandardMaterial({ 
-        color: 0x00f5ff, 
-        roughness: 0.3, 
-        metalness: 0.6,
-        transparent: true,
-        opacity: 0.4
-      }),
-      new THREE.MeshStandardMaterial({ 
-        color: 0x7d98f3, 
-        roughness: 0.4, 
-        metalness: 0.5,
-        transparent: true,
-        opacity: 0.35
-      }),
-      new THREE.MeshStandardMaterial({ 
-        color: 0x8b5cf6, 
-        roughness: 0.3, 
-        metalness: 0.6,
-        transparent: true,
-        opacity: 0.4
-      }),
-      new THREE.MeshStandardMaterial({ 
-        color: 0x00d4ff, 
-        roughness: 0.2, 
-        metalness: 0.7,
-        transparent: true,
-        opacity: 0.35
-      })
-    ];
-    
-    // Create variety of smaller smooth shapes
-    const shapes = [
-      { geometry: new THREE.SphereGeometry(0.3, 32, 32), material: materials[0] },
-      { geometry: new THREE.SphereGeometry(0.25, 32, 32), material: materials[1] },
-      { geometry: new THREE.SphereGeometry(0.28, 32, 32), material: materials[3] },
-      { geometry: new THREE.TorusGeometry(0.3, 0.12, 16, 32), material: materials[2] },
-      { geometry: new THREE.TorusGeometry(0.28, 0.1, 16, 32), material: materials[0] },
-      { geometry: new THREE.CylinderGeometry(0.2, 0.2, 0.8, 32), material: materials[1] },
-      { geometry: new THREE.CylinderGeometry(0.18, 0.18, 0.6, 32), material: materials[3] },
-      { geometry: new THREE.CapsuleGeometry(0.15, 0.5, 4, 16), material: materials[2] },
-      { geometry: new THREE.CapsuleGeometry(0.12, 0.4, 4, 16), material: materials[0] },
-      { geometry: new THREE.TorusGeometry(0.4, 0.1, 16, 32, Math.PI), material: materials[1] },
-      { geometry: new THREE.BoxGeometry(0.4, 0.4, 0.4, 8, 8, 8), material: materials[3] },
-      { geometry: new THREE.ConeGeometry(0.25, 0.6, 32), material: materials[2] }
-    ];
-    
-    // Create 30 shapes spread evenly across the entire viewport
-    for (let i = 0; i < 30; i++) {
-      const shapeData = shapes[i % shapes.length];
-      const mesh = new THREE.Mesh(shapeData.geometry, shapeData.material.clone());
-      
-      // Distribute shapes in grid-like pattern for even coverage
-      const gridX = (i % 6) - 2.5; // 6 columns
-      const gridY = Math.floor(i / 6) - 2.5; // 5 rows
-      
-      // Add randomness to grid positions for natural look
-      mesh.position.x = gridX * 5 + (Math.random() - 0.5) * 3;
-      mesh.position.y = gridY * 4 + (Math.random() - 0.5) * 3;
-      mesh.position.z = -8 + (Math.random() * -15); // Far back (z: -8 to -23)
-      
-      mesh.rotation.x = Math.random() * Math.PI;
-      mesh.rotation.y = Math.random() * Math.PI;
-      mesh.rotation.z = Math.random() * Math.PI;
-      
-      const scale = 0.5 + Math.random() * 0.4;
-      mesh.scale.set(scale, scale, scale);
-      
-      backgroundObjects.add(mesh);
-      floatingShapes.push({
-        mesh: mesh,
-        rotationSpeed: {
-          x: (Math.random() - 0.5) * 0.006,
-          y: (Math.random() - 0.5) * 0.006,
-          z: (Math.random() - 0.5) * 0.006
-        },
-        floatSpeed: Math.random() * 0.012 + 0.006,
-        floatOffset: Math.random() * Math.PI * 2,
-        driftSpeed: {
-          x: (Math.random() - 0.5) * 0.003,
-          y: (Math.random() - 0.5) * 0.003
-        },
-        initialX: mesh.position.x,
-        initialY: mesh.position.y
-      });
-    }
-    
-    scene.add(backgroundObjects);
-    camera.position.z = 5;
+    /* ================= ROBOT ================= */
+    const robot = new THREE.Group();
+    scene.add(robot);
 
-    // Animation
-    let time = 0;
+    // Materials
+    const whiteMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 0.2,
+      metalness: 0.1,
+    });
+
+    const screenMaterial = new THREE.MeshStandardMaterial({
+      color: 0x1a1a2e,
+      roughness: 0.1,
+      metalness: 0.8,
+    });
+
+    const eyeMaterial = new THREE.MeshStandardMaterial({
+      color: 0x00d4ff,
+      emissive: 0x00d4ff,
+      emissiveIntensity: 1.5,
+      roughness: 0.3,
+    });
+
+    /* ---- BODY ---- */
+    const bodyGeometry = new THREE.SphereGeometry(0.7, 32, 32);
+    bodyGeometry.scale(1, 1.1, 0.95);
+    const body = new THREE.Mesh(bodyGeometry, whiteMaterial);
+    body.position.y = 0;
+    body.castShadow = true;
+    robot.add(body);
+
+    /* ---- HEAD GROUP ---- */
+    const head = new THREE.Group();
+    head.position.y = 1.2;
+    robot.add(head);
+
+    /* Head shell - rounded rectangle */
+    const headGeometry = new THREE.BoxGeometry(1.3, 0.9, 0.85);
+    const headShell = new THREE.Mesh(headGeometry, whiteMaterial);
+    
+    // Round the edges by creating a more sophisticated shape
+    const roundedHeadGeometry = new THREE.BoxGeometry(1.3, 0.9, 0.85, 6, 6, 6);
+    const positions = roundedHeadGeometry.attributes.position;
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const z = positions.getZ(i);
+      
+      // Apply smooth rounding to corners
+      const factor = 0.15;
+      if (Math.abs(x) > 0.5 && Math.abs(y) > 0.3) {
+        positions.setY(i, y * (1 - factor * Math.abs(x) / 0.65));
+        positions.setX(i, x * (1 - factor * Math.abs(y) / 0.45));
+      }
+      if (Math.abs(z) > 0.3 && Math.abs(y) > 0.3) {
+        positions.setZ(i, z * (1 - factor * Math.abs(y) / 0.45));
+      }
+    }
+    roundedHeadGeometry.computeVertexNormals();
+    
+    const roundedHead = new THREE.Mesh(roundedHeadGeometry, whiteMaterial);
+    roundedHead.castShadow = true;
+    head.add(roundedHead);
+
+    /* Face screen - with rounded corners */
+    const faceScreenShape = new THREE.Shape();
+    const screenWidth = 1.05;
+    const screenHeight = 0.65;
+    const radius = 0.15; // Corner radius
+    
+    // Create rounded rectangle shape
+    faceScreenShape.moveTo(-screenWidth/2 + radius, -screenHeight/2);
+    faceScreenShape.lineTo(screenWidth/2 - radius, -screenHeight/2);
+    faceScreenShape.quadraticCurveTo(screenWidth/2, -screenHeight/2, screenWidth/2, -screenHeight/2 + radius);
+    faceScreenShape.lineTo(screenWidth/2, screenHeight/2 - radius);
+    faceScreenShape.quadraticCurveTo(screenWidth/2, screenHeight/2, screenWidth/2 - radius, screenHeight/2);
+    faceScreenShape.lineTo(-screenWidth/2 + radius, screenHeight/2);
+    faceScreenShape.quadraticCurveTo(-screenWidth/2, screenHeight/2, -screenWidth/2, screenHeight/2 - radius);
+    faceScreenShape.lineTo(-screenWidth/2, -screenHeight/2 + radius);
+    faceScreenShape.quadraticCurveTo(-screenWidth/2, -screenHeight/2, -screenWidth/2 + radius, -screenHeight/2);
+    
+    const faceScreenGeometry = new THREE.ExtrudeGeometry(faceScreenShape, {
+      depth: 0.08,
+      bevelEnabled: false
+    });
+    
+    const faceScreen = new THREE.Mesh(faceScreenGeometry, screenMaterial);
+    faceScreen.position.z = 0.43;
+    head.add(faceScreen);
+
+    /* Eyes - circular */
+    // Left eye (sphere)
+    const leftEyeGeometry = new THREE.SphereGeometry(0.12, 32, 32);
+    const leftEye = new THREE.Mesh(leftEyeGeometry, eyeMaterial);
+    leftEye.position.set(-0.25, 0.08, 0.52);
+    head.add(leftEye);
+
+    // Right eye (sphere)
+    const rightEyeGeometry = new THREE.SphereGeometry(0.12, 32, 32);
+    const rightEye = new THREE.Mesh(rightEyeGeometry, eyeMaterial);
+    rightEye.position.set(0.25, 0.08, 0.52);
+    head.add(rightEye);
+
+    /* ---- FLOATING ARMS ---- */
+    const armGeometry = new THREE.SphereGeometry(0.22, 32, 32);
+    armGeometry.scale(0.9, 1.1, 0.9);
+    
+    const leftArm = new THREE.Mesh(armGeometry, whiteMaterial);
+    leftArm.position.set(-1.05, 0.3, 0);
+    leftArm.castShadow = true;
+    robot.add(leftArm);
+
+    const rightArm = new THREE.Mesh(armGeometry, whiteMaterial);
+    rightArm.position.set(1.05, 0.3, 0);
+    rightArm.castShadow = true;
+    robot.add(rightArm);
+
+    /* Small hand details */
+    const handMaterial = new THREE.MeshStandardMaterial({
+      color: 0xf0f0f0,
+      roughness: 0.3,
+    });
+
+    const leftHand = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 16, 16),
+      handMaterial
+    );
+    leftHand.position.set(-1.05, 0.05, 0);
+    robot.add(leftHand);
+
+    const rightHand = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 16, 16),
+      handMaterial
+    );
+    rightHand.position.set(1.05, 0.05, 0);
+    robot.add(rightHand);
+
+    /* ================= INTERACTION ================= */
+    const baseY = -0.5;
+
+    const onMove = (x, y) => {
+      mouse.current.x = (x / width) * 2 - 1;
+      mouse.current.y = -(y / height) * 2 + 1;
+    };
+
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('touchmove', e => {
+      if (e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY);
+    });
+
+    /* ================= ANIMATION ================= */
+    let t = 0;
     const animate = () => {
       requestAnimationFrame(animate);
-      time += 0.01;
+      t += 0.01;
 
-      floatingShapes.forEach((shape, index) => {
-        shape.mesh.rotation.x += shape.rotationSpeed.x;
-        shape.mesh.rotation.y += shape.rotationSpeed.y;
-        shape.mesh.rotation.z += shape.rotationSpeed.z;
-        
-        shape.mesh.position.y += Math.sin(time * shape.floatSpeed + shape.floatOffset) * 0.002;
-        shape.mesh.position.x += Math.cos(time * shape.floatSpeed * 0.7 + shape.floatOffset) * 0.002;
-        
-        const scale = shape.mesh.scale.x;
-        const pulseScale = scale + Math.sin(time * 0.5 + index) * 0.015;
-        shape.mesh.scale.set(pulseScale, pulseScale, pulseScale);
-        
-        // Wrap around with boundaries that cover full screen
-        const maxX = 15;
-        const maxY = 12;
-        
-        if (shape.mesh.position.x > maxX) shape.mesh.position.x = -maxX;
-        if (shape.mesh.position.x < -maxX) shape.mesh.position.x = maxX;
-        if (shape.mesh.position.y > maxY) shape.mesh.position.y = -maxY;
-        if (shape.mesh.position.y < -maxY) shape.mesh.position.y = maxY;
-      });
+      // Head follows mouse with smooth interpolation
+      const targetRotY = mouse.current.x * 0.4;
+      const targetRotX = -mouse.current.y * 0.25;
+      head.rotation.y += (targetRotY - head.rotation.y) * 0.08;
+      head.rotation.x += (targetRotX - head.rotation.x) * 0.08;
+
+      // Gentle floating animation
+      robot.position.y = baseY + Math.sin(t * 1.2) * 0.08;
+      robot.rotation.z = Math.sin(t * 0.6) * 0.02;
+
+      // Arms float independently
+      leftArm.position.y = 0.3 + Math.sin(t * 1.5 + 0) * 0.06;
+      rightArm.position.y = 0.3 + Math.sin(t * 1.5 + Math.PI) * 0.06;
       
-      backgroundObjects.rotation.y += 0.0002;
-      backgroundObjects.rotation.x = Math.sin(time * 0.08) * 0.03;
+      leftHand.position.y = 0.05 + Math.sin(t * 1.5 + 0) * 0.06;
+      rightHand.position.y = 0.05 + Math.sin(t * 1.5 + Math.PI) * 0.06;
+
+      // Slight arm rotation
+      leftArm.rotation.z = Math.sin(t * 0.8) * 0.1;
+      rightArm.rotation.z = -Math.sin(t * 0.8) * 0.1;
+
+      // Eye glow pulse
+      eyeMaterial.emissiveIntensity = 1.5 + Math.sin(t * 2) * 0.2;
 
       renderer.render(scene, camera);
     };
 
     animate();
 
-    // Resize handler
+    /* ================= WINDOW RESIZE ================= */
     const handleResize = () => {
-      const newWidth = window.innerWidth;
-      const newHeight = window.innerHeight;
-      
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
@@ -179,26 +239,126 @@ export default function BackgroundShapes() {
 
     window.addEventListener('resize', handleResize);
 
+    /* ================= CLEANUP ================= */
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (container && renderer.domElement) {
-        container.removeChild(renderer.domElement);
-      }
+      container.removeChild(renderer.domElement);
+      renderer.dispose();
     };
   }, []);
 
   return (
-    <div 
-      ref={containerRef} 
-      style={{
-        position: 'fixed',
+    <div style={{
+      width: '100%',
+      height: '100vh',
+      position: 'relative',
+      background: 'linear-gradient(135deg, #1e1e2e 0%, #2d1b3d 25%, #1e293b 50%, #0f172a 75%, #1e1e2e 100%)',
+      backgroundSize: '400% 400%',
+      animation: 'gradientLoop 15s ease infinite',
+      overflow: 'hidden'
+    }}>
+      <style>{`
+        @keyframes gradientLoop {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
+      
+      {/* Navigation */}
+      <nav style={{
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100vh',
-        zIndex: -1,
-        pointerEvents: 'none'
-      }}
-    />
+        right: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '20px 40px',
+        zIndex: 10
+      }}>
+        <div style={{ color: 'white', fontSize: '24px' }}>🤖 M</div>
+        <div style={{ display: 'flex', gap: '30px' }}>
+          {['Home', 'Upload STL', 'Printers', 'Designers', 'My Projects', 'My Orders'].map(item => (
+            <a key={item} href="#" style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}>
+              {item}
+            </a>
+          ))}
+        </div>
+        <div style={{ color: 'white', fontSize: '24px' }}>👤</div>
+      </nav>
+
+      {/* Robot Container */}
+      <div ref={containerRef} style={{ 
+        width: '100%', 
+        height: '60%',
+        position: 'absolute',
+        top: '10%',
+        left: 0
+      }} />
+
+      {/* Content */}
+      <div style={{
+        position: 'absolute',
+        bottom: '15%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        textAlign: 'center',
+        zIndex: 10
+      }}>
+        <h1 style={{
+          color: '#00d4ff',
+          fontSize: '48px',
+          fontWeight: 'bold',
+          marginBottom: '10px',
+          fontFamily: 'Arial, sans-serif'
+        }}>
+          Upload Your STL File
+        </h1>
+        <p style={{
+          color: '#f4f4f4',
+          fontSize: '18px',
+          marginBottom: '40px'
+        }}>
+          Validate your 3D model and get printing insights
+        </p>
+        
+        {/* Upload Box */}
+        <div style={{
+          border: '2px dashed #555',
+          borderRadius: '12px',
+          padding: '60px 120px',
+          backgroundColor: 'rgba(208, 22, 22, 0.05)',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease'
+        }}>
+          <div style={{ fontSize: '48px', marginBottom: '20px' }}>📄</div>
+          <p style={{ color: 'white', fontSize: '16px', marginBottom: '5px' }}>
+            Upload your STL file here
+          </p>
+          <p style={{ color: '#808080', fontSize: '14px' }}>
+            Only .STL files • Max 100MB
+          </p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        position: 'absolute',
+        bottom: '20px',
+        left: '40px',
+        color: '#ffffff',
+        fontSize: '14px'
+      }}>
+        <div style={{ marginBottom: '5px' }}>🤖 M</div>
+        <div>Where Your 3D Imaginations Come To</div>
+      </div>
+    </div>
   );
 }
