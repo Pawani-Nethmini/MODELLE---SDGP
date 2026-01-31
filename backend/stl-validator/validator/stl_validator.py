@@ -20,6 +20,13 @@ def validate_stl(file_path):
     mesh.apply_translation(-mesh.centroid)
 
     extents = mesh.extents
+    dimensions = {
+        "x": float(mesh.extents[0]),
+        "y": float(mesh.extents[1]),
+        "z": float(mesh.extents[2])
+    }
+
+
     scale_factor = 1.0 / max(extents)
     mesh.apply_scale(scale_factor)
 
@@ -74,6 +81,7 @@ def validate_stl(file_path):
         "printable": len(errors) == 0,
         "converted_to_binary": True,
         "errors": errors,
+        "dimensions": dimensions,
         "stats": {
             "faces": int(len(mesh.faces)),
             "vertices": int(len(mesh.vertices)),
