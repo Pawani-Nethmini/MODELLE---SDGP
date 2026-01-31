@@ -1,0 +1,125 @@
+{
+  "printerProfiles": [
+    {
+      "id": "fdm_desktop",
+      "technology": "FDM",
+      "class": "desktop",
+      "maxBuildVolume": {
+        "x": 200,
+        "y": 200,
+        "z": 200,
+        "unit": "mm"
+      },
+      "minWallThickness": {
+        "value": 0.8,
+        "unit": "mm"
+      },
+      "minFeatureSize": {
+        "min": 0.5,
+        "max": 0.6,
+        "unit": "mm"
+      },
+      "maxOverhangAngle": {
+        "value": 45,
+        "unit": "degrees"
+      },
+      "triangleCountLimit": 1000000
+    },
+    {
+      "id": "fdm_industrial",
+      "technology": "FDM",
+      "class": "industrial",
+      "maxBuildVolume": {
+        "x": 900,
+        "y": 600,
+        "z": 900,
+        "unit": "mm"
+      },
+      "minWallThickness": {
+        "value": 1.0,
+        "unit": "mm"
+      },
+      "minFeatureSize": {
+        "min": 0.6,
+        "max": 0.8,
+        "unit": "mm"
+      },
+      "maxOverhangAngle": {
+        "value": 60,
+        "unit": "degrees"
+      },
+      "triangleCountLimit": 2000000
+    },
+    {
+      "id": "sla_desktop",
+      "technology": "SLA",
+      "class": "desktop",
+      "maxBuildVolume": {
+        "x": 145,
+        "y": 145,
+        "z": 175,
+        "unit": "mm"
+      },
+      "minWallThickness": {
+        "value": 0.5,
+        "unit": "mm"
+      },
+      "minFeatureSize": {
+        "min": 0.3,
+        "max": 0.5,
+        "unit": "mm"
+      },
+      "maxOverhangAngle": {
+        "value": 45,
+        "unit": "degrees"
+      },
+      "triangleCountLimit": 1000000
+    },
+    {
+      "id": "sla_industrial",
+      "technology": "SLA",
+      "class": "industrial",
+      "maxBuildVolume": {
+        "x": 1500,
+        "y": 750,
+        "z": 500,
+        "unit": "mm"
+      },
+      "minWallThickness": {
+        "value": 0.5,
+        "unit": "mm"
+      },
+      "minFeatureSize": {
+        "min": 0.3,
+        "max": 0.5,
+        "unit": "mm"
+      },
+      "maxOverhangAngle": {
+        "value": 45,
+        "unit": "degrees"
+      },
+      "triangleCountLimit": 1500000
+    },
+    {
+      "id": "sls_industrial",
+      "technology": "SLS",
+      "class": "industrial",
+      "maxBuildVolume": {
+        "x": 750,
+        "y": 550,
+        "z": 550,
+        "unit": "mm"
+      },
+      "minWallThickness": {
+        "value": 0.7,
+        "unit": "mm"
+      },
+      "minFeatureSize": {
+        "min": 0.5,
+        "max": 1.0,
+        "unit": "mm"
+      },
+      "triangleCountLimit": 2000000
+    }
+  ]
+}
