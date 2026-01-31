@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 export default function InteractiveRobot() {
   const containerRef = useRef(null);
-  const mousePos = useRef({ x: 0, y: 0 });
-  const [isLoaded, setIsLoaded] = useState(false);
+  const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -13,205 +12,243 @@ export default function InteractiveRobot() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // Scene setup
+    /* ================= SCENE ================= */
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    
+
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+    camera.position.set(0, 1.5, 6);
+    camera.lookAt(0, 0.5, 0);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
-    // Lighting - enhance for glossy shapes
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
+    /* ================= LIGHTING ================= */
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
-    const pointLight = new THREE.PointLight(0x00ffff, 0.6);
-    pointLight.position.set(-5, 3, -5);
-    scene.add(pointLight);
-    
-    const backLight = new THREE.PointLight(0x8b5cf6, 0.4);
-    backLight.position.set(0, -3, -8);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    keyLight.position.set(3, 5, 4);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0x88ccff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    const backLight = new THREE.DirectionalLight(0xffffff, 0.2);
+    backLight.position.set(0, 3, -3);
     scene.add(backLight);
 
-    // Robot parts
+    /* ================= ROBOT ================= */
     const robot = new THREE.Group();
+    scene.add(robot);
 
-    // Body - textured sphere with speckles
-    const bodyGeometry = new THREE.SphereGeometry(1, 64, 64);
-    
-    // Create speckled texture
-    const bodyCanvas = document.createElement('canvas');
-    bodyCanvas.width = 512;
-    bodyCanvas.height = 512;
-    const bodyCtx = bodyCanvas.getContext('2d');
-    bodyCtx.fillStyle = '#f5f5f5';
-    bodyCtx.fillRect(0, 0, 512, 512);
-    
-    // Add speckles
-    for (let i = 0; i < 2000; i++) {
-      const x = Math.random() * 512;
-      const y = Math.random() * 512;
-      const size = Math.random() * 2 + 0.5;
-      bodyCtx.fillStyle = `rgba(180, 180, 180, ${Math.random() * 0.4})`;
-      bodyCtx.beginPath();
-      bodyCtx.arc(x, y, size, 0, Math.PI * 2);
-      bodyCtx.fill();
-    }
-    
-    const bodyTexture = new THREE.CanvasTexture(bodyCanvas);
-    const bodyMaterial = new THREE.MeshStandardMaterial({ 
-      map: bodyTexture,
-      roughness: 0.8,
-      metalness: 0.1
+    // Materials
+    const whiteMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 0.2,
+      metalness: 0.1,
     });
-    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-    body.scale.set(1, 1.15, 1);
+
+    const screenMaterial = new THREE.MeshStandardMaterial({
+      color: 0x1a1a2e,
+      roughness: 0.1,
+      metalness: 0.8,
+    });
+
+    const eyeMaterial = new THREE.MeshStandardMaterial({
+      color: 0x00d4ff,
+      emissive: 0x00d4ff,
+      emissiveIntensity: 1.5,
+      roughness: 0.3,
+    });
+
+    /* ---- BODY ---- */
+    const bodyGeometry = new THREE.SphereGeometry(0.7, 32, 32);
+    bodyGeometry.scale(1, 1.1, 0.95);
+    const body = new THREE.Mesh(bodyGeometry, whiteMaterial);
+    body.position.y = 0;
+    body.castShadow = true;
     robot.add(body);
 
-    // Head (will rotate to follow mouse)
+    /* ---- HEAD GROUP ---- */
     const head = new THREE.Group();
-    const headGeometry = new THREE.SphereGeometry(0.8, 64, 64);
-    const headMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0xffffff,
-      roughness: 0.3,
-      metalness: 0.2
-    });
-    const headMesh = new THREE.Mesh(headGeometry, headMaterial);
-    head.add(headMesh);
-    head.position.y = 1.6;
+    head.position.y = 1.2;
     robot.add(head);
 
-    // Eyes - clearer, more defined rounded rectangles
-    const eyeGroup = new THREE.Group();
+    /* Head shell - rounded rectangle */
+    const headGeometry = new THREE.BoxGeometry(1.3, 0.9, 0.85);
+    const headShell = new THREE.Mesh(headGeometry, whiteMaterial);
     
-    // Eye shape - rounded rectangle with better proportions
-    const eyeShape = new THREE.Shape();
-    const eyeWidth = 0.28;
-    const eyeHeight = 0.38;
-    const radius = 0.14;
-    
-    eyeShape.moveTo(-eyeWidth/2 + radius, -eyeHeight/2);
-    eyeShape.lineTo(eyeWidth/2 - radius, -eyeHeight/2);
-    eyeShape.quadraticCurveTo(eyeWidth/2, -eyeHeight/2, eyeWidth/2, -eyeHeight/2 + radius);
-    eyeShape.lineTo(eyeWidth/2, eyeHeight/2 - radius);
-    eyeShape.quadraticCurveTo(eyeWidth/2, eyeHeight/2, eyeWidth/2 - radius, eyeHeight/2);
-    eyeShape.lineTo(-eyeWidth/2 + radius, eyeHeight/2);
-    eyeShape.quadraticCurveTo(-eyeWidth/2, eyeHeight/2, -eyeWidth/2, eyeHeight/2 - radius);
-    eyeShape.lineTo(-eyeWidth/2, -eyeHeight/2 + radius);
-    eyeShape.quadraticCurveTo(-eyeWidth/2, -eyeHeight/2, -eyeWidth/2 + radius, -eyeHeight/2);
-    
-    const eyeGeometry = new THREE.ExtrudeGeometry(eyeShape, {
-      depth: 0.08,
-      bevelEnabled: true,
-      bevelThickness: 0.02,
-      bevelSize: 0.02,
-      bevelSegments: 3
-    });
-    
-    const eyeMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x00ffcc,
-      emissive: 0x00ffcc,
-      emissiveIntensity: 0.8,
-      roughness: 0.2,
-      metalness: 0.3
-    });
-    
-    const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-    leftEye.position.set(-0.32, 0.08, 0.72);
-    
-    const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-    rightEye.position.set(0.32, 0.08, 0.72);
-    
-    eyeGroup.add(leftEye, rightEye);
-    head.add(eyeGroup);
-
-    // Scale the robot - larger size
-    const isMobile = width < 768;
-    const scale = isMobile ? 0.5 : 0.7;
-    robot.scale.set(scale, scale, scale);
-    
-    // Position robot slightly down
-    robot.position.y = -0.5;
-    
-    scene.add(robot);
-    camera.position.z = 5;
-
-    // Mouse move handler
-    const handleMouseMove = (event) => {
-      mousePos.current.x = (event.clientX / width) * 2 - 1;
-      mousePos.current.y = -(event.clientY / height) * 2 + 1;
-    };
-
-    // Touch move handler for mobile
-    const handleTouchMove = (event) => {
-      if (event.touches.length > 0) {
-        const touch = event.touches[0];
-        mousePos.current.x = (touch.clientX / width) * 2 - 1;
-        mousePos.current.y = -(touch.clientY / height) * 2 + 1;
+    // Round the edges by creating a more sophisticated shape
+    const roundedHeadGeometry = new THREE.BoxGeometry(1.3, 0.9, 0.85, 6, 6, 6);
+    const positions = roundedHeadGeometry.attributes.position;
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const z = positions.getZ(i);
+      
+      // Apply smooth rounding to corners
+      const factor = 0.15;
+      if (Math.abs(x) > 0.5 && Math.abs(y) > 0.3) {
+        positions.setY(i, y * (1 - factor * Math.abs(x) / 0.65));
+        positions.setX(i, x * (1 - factor * Math.abs(y) / 0.45));
       }
+      if (Math.abs(z) > 0.3 && Math.abs(y) > 0.3) {
+        positions.setZ(i, z * (1 - factor * Math.abs(y) / 0.45));
+      }
+    }
+    roundedHeadGeometry.computeVertexNormals();
+    
+    const roundedHead = new THREE.Mesh(roundedHeadGeometry, whiteMaterial);
+    roundedHead.castShadow = true;
+    head.add(roundedHead);
+
+    /* Face screen - with rounded corners */
+    const faceScreenShape = new THREE.Shape();
+    const screenWidth = 1.05;
+    const screenHeight = 0.65;
+    const radius = 0.15; // Corner radius
+    
+    // Create rounded rectangle shape
+    faceScreenShape.moveTo(-screenWidth/2 + radius, -screenHeight/2);
+    faceScreenShape.lineTo(screenWidth/2 - radius, -screenHeight/2);
+    faceScreenShape.quadraticCurveTo(screenWidth/2, -screenHeight/2, screenWidth/2, -screenHeight/2 + radius);
+    faceScreenShape.lineTo(screenWidth/2, screenHeight/2 - radius);
+    faceScreenShape.quadraticCurveTo(screenWidth/2, screenHeight/2, screenWidth/2 - radius, screenHeight/2);
+    faceScreenShape.lineTo(-screenWidth/2 + radius, screenHeight/2);
+    faceScreenShape.quadraticCurveTo(-screenWidth/2, screenHeight/2, -screenWidth/2, screenHeight/2 - radius);
+    faceScreenShape.lineTo(-screenWidth/2, -screenHeight/2 + radius);
+    faceScreenShape.quadraticCurveTo(-screenWidth/2, -screenHeight/2, -screenWidth/2 + radius, -screenHeight/2);
+    
+    const faceScreenGeometry = new THREE.ExtrudeGeometry(faceScreenShape, {
+      depth: 0.08,
+      bevelEnabled: false
+    });
+    
+    const faceScreen = new THREE.Mesh(faceScreenGeometry, screenMaterial);
+    faceScreen.position.z = 0.43;
+    head.add(faceScreen);
+
+    /* Eyes - circular */
+    // Left eye (sphere)
+    const leftEyeGeometry = new THREE.SphereGeometry(0.12, 32, 32);
+    const leftEye = new THREE.Mesh(leftEyeGeometry, eyeMaterial);
+    leftEye.position.set(-0.25, 0.08, 0.52);
+    head.add(leftEye);
+
+    // Right eye (sphere)
+    const rightEyeGeometry = new THREE.SphereGeometry(0.12, 32, 32);
+    const rightEye = new THREE.Mesh(rightEyeGeometry, eyeMaterial);
+    rightEye.position.set(0.25, 0.08, 0.52);
+    head.add(rightEye);
+
+    /* ---- FLOATING ARMS ---- */
+    const armGeometry = new THREE.SphereGeometry(0.22, 32, 32);
+    armGeometry.scale(0.9, 1.1, 0.9);
+    
+    const leftArm = new THREE.Mesh(armGeometry, whiteMaterial);
+    leftArm.position.set(-1.05, 0.3, 0);
+    leftArm.castShadow = true;
+    robot.add(leftArm);
+
+    const rightArm = new THREE.Mesh(armGeometry, whiteMaterial);
+    rightArm.position.set(1.05, 0.3, 0);
+    rightArm.castShadow = true;
+    robot.add(rightArm);
+
+    /* Small hand details */
+    const handMaterial = new THREE.MeshStandardMaterial({
+      color: 0xf0f0f0,
+      roughness: 0.3,
+    });
+
+    const leftHand = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 16, 16),
+      handMaterial
+    );
+    leftHand.position.set(-1.05, 0.05, 0);
+    robot.add(leftHand);
+
+    const rightHand = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 16, 16),
+      handMaterial
+    );
+    rightHand.position.set(1.05, 0.05, 0);
+    robot.add(rightHand);
+
+    /* ================= INTERACTION ================= */
+    const baseY = -0.5;
+
+    const onMove = (x, y) => {
+      mouse.current.x = (x / width) * 2 - 1;
+      mouse.current.y = -(y / height) * 2 + 1;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('touchmove', e => {
+      if (e.touches[0]) onMove(e.touches[0].clientX, e.touches[0].clientY);
+    });
 
-    // Animation
-    let time = 0;
+    /* ================= ANIMATION ================= */
+    let t = 0;
     const animate = () => {
       requestAnimationFrame(animate);
-      time += 0.01;
+      t += 0.01;
 
-      // Smooth head rotation towards mouse
-      const targetRotationY = mousePos.current.x * 0.5;
-      const targetRotationX = -mousePos.current.y * 0.3;
-      
-      head.rotation.y += (targetRotationY - head.rotation.y) * 0.1;
-      head.rotation.x += (targetRotationX - head.rotation.x) * 0.1;
+      // Head follows mouse with smooth interpolation
+      const targetRotY = mouse.current.x * 0.4;
+      const targetRotX = -mouse.current.y * 0.25;
+      head.rotation.y += (targetRotY - head.rotation.y) * 0.08;
+      head.rotation.x += (targetRotX - head.rotation.x) * 0.08;
 
       // Gentle floating animation
-      robot.position.y = -0.5 + Math.sin(time) * 0.08;
-      robot.rotation.y = Math.sin(time * 0.5) * 0.03;
+      robot.position.y = baseY + Math.sin(t * 1.2) * 0.08;
+      robot.rotation.z = Math.sin(t * 0.6) * 0.02;
+
+      // Arms float independently
+      leftArm.position.y = 0.3 + Math.sin(t * 1.5 + 0) * 0.06;
+      rightArm.position.y = 0.3 + Math.sin(t * 1.5 + Math.PI) * 0.06;
+      
+      leftHand.position.y = 0.05 + Math.sin(t * 1.5 + 0) * 0.06;
+      rightHand.position.y = 0.05 + Math.sin(t * 1.5 + Math.PI) * 0.06;
+
+      // Slight arm rotation
+      leftArm.rotation.z = Math.sin(t * 0.8) * 0.1;
+      rightArm.rotation.z = -Math.sin(t * 0.8) * 0.1;
+
+      // Eye glow pulse
+      eyeMaterial.emissiveIntensity = 1.5 + Math.sin(t * 2) * 0.2;
 
       renderer.render(scene, camera);
     };
 
     animate();
-    setIsLoaded(true);
 
-    // Resize handler
+    /* ================= WINDOW RESIZE ================= */
     const handleResize = () => {
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
-      
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
-
-      // Adjust robot scale on resize
-      const isMobile = newWidth < 768;
-      const scale = isMobile ? 0.5 : 0.7;
-      robot.scale.set(scale, scale, scale);
     };
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
+    /* ================= CLEANUP ================= */
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
-      if (container && renderer.domElement) {
-        container.removeChild(renderer.domElement);
-      }
+      container.removeChild(renderer.domElement);
+      renderer.dispose();
     };
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div style={{ width: '100%', height: '117%', position: 'relative' }}>
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
     </div>
   );
