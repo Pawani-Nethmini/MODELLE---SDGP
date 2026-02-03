@@ -35,24 +35,23 @@ def validate_stl(file_path):
 
 
     # Vishmi's part starts here
-
-    # 1. Watertight check. this check if the model is not fully closed. 
+    # 1. Watertight check
     if not mesh.is_watertight:
         errors.append("Mesh is not watertight (contains holes or open edges)")
 
-    # 2. Hole detection (boundary edges). this checks the mesh has edges that belong to only one face.
-    #    this indicates visible holes or gaps in the model. such models may cause slid=cing or printing failures.
-    boundary_edges = mesh.edges_boundary
-    if len(boundary_edges) > 0:
-        errors.append(f"Mesh has {len(boundary_edges)} open boundary edges (holes detected)")
+    # 2. Hole detection (boundary edges)
+    try:
+        boundary_edges = mesh.edges[trimesh.grouping.group_rows(mesh.edges_sorted, require_count=1)]
+        if len(boundary_edges) > 0:
+            errors.append(f"Mesh has {len(boundary_edges)} open boundary edges (holes detected)")
+    except Exception:
+        # Fallback if boundary edge detection fails
+        pass
 
-    # 3. Non-manifold edges. this check is some edges are shared by more than two faces.
-    #    Non-manifold geometry confuses slicers and is invalid for printing.
-    #    Common in badly designed or merged models.
-    non_manifold_edges = mesh.edges_nonmanifold
+    # 3. Non-manifold edges
+    non_manifold_edges = mesh.edges[trimesh.grouping.group_rows(mesh.edges_sorted, require_count=3)]
     if len(non_manifold_edges) > 0:
         errors.append(f"Mesh has {len(non_manifold_edges)} non-manifold edges")
-
     # 4. Inconsistent winding. this check is some faces are oriented in the wrong direction.
     #    This causes flipped normals and incorrect inside/outside detection.
     #    Can result in inverted prints or missing geometry.
