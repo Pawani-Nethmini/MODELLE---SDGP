@@ -3,6 +3,8 @@ import "../theme/theme.css";
 import CTA from "./CTA";
 import STLPreview from "./STLPreview";
 import { validateSTL } from "../../../backend/api/src/services/validationService";
+import PrintabilityReport from "./PrintabilityReport";
+
 
 export default function STLValidatorPanel({ file, onFileUpload }) {
   const [purpose, setPurpose] = useState("");
@@ -57,7 +59,9 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
       <div style={styles.container}>
         {/* LEFT COLUMN */}
         <div style={styles.column}>
-          <h2 className="header-gradient" style={styles.heading}>Uploaded STL File</h2>
+          <h2 className="header-gradient" style={styles.heading}>
+            Uploaded STL File
+          </h2>
 
           <p style={styles.text}>Name: {file?.name || "No file selected"}</p>
           <p style={styles.text}>
@@ -77,7 +81,9 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
 
         {/* RIGHT COLUMN */}
         <div style={styles.column}>
-          <h2 className="header-gradient" style={styles.heading}>Model Purpose</h2>
+          <h2 className="header-gradient" style={styles.heading}>
+            Model Purpose
+          </h2>
 
           <select
             value={purpose}
@@ -101,7 +107,9 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
             style={{
               ...styles.select,
               opacity: purpose ? 1 : "var(--opacity-disabled)",
-              cursor: purpose ? "var(--cursor-pointer)" : "var(--cursor-disabled)"
+              cursor: purpose
+                ? "var(--cursor-pointer)"
+                : "var(--cursor-disabled)",
             }}
           >
             <option value="">Select a Printer Profile</option>
@@ -116,7 +124,7 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
             <div style={styles.selectedInfo}>
               <p style={styles.infoLabel}>Selected Configuration:</p>
               <p style={styles.infoValue}>
-                {purposes.find(p => p.value === purpose)?.label}
+                {purposes.find((p) => p.value === purpose)?.label}
               </p>
               <p style={styles.infoValue}>
                 {printerProfileMap[printerProfile]}
@@ -125,17 +133,17 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
           )}
         </div>
       </div>
-      
+
       <div style={styles.buttonContainer}>
-        <CTA 
-          text="Check Printability" 
-          variant="secondary" 
+        <CTA
+          text="Check Printability"
+          variant="secondary"
           // onClick={() => onFileUpload(file)}
           onClick={async () => {
             if (!file || !printerProfile) {
               alert("Please select a purpose and printer profile.");
               return;
-            } 
+            }
             try {
               // pass the file object to the Node.js validation service
               setLoading(true);
@@ -146,19 +154,20 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
               const response = await validateSTL(file, printerProfile);
 
               setValidationResult(response);
-
             } catch (error) {
               console.error("Validation Error:", error);
-              setError("Error during STL validation. Check console for details.");
+              setError(
+                "Error during STL validation. Check console for details.",
+              );
             } finally {
               setLoading(false);
             }
           }}
         />
-        <CTA 
-          text="Estimate Print Cost" 
-          variant="secondary" 
-          onClick={() => console.log("Estimate cost")} 
+        <CTA
+          text="Estimate Print Cost"
+          variant="secondary"
+          onClick={() => console.log("Estimate cost")}
         />
       </div>
 
@@ -181,13 +190,15 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
         {loading && <p>Validating STL, please wait...</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
         {validationResult && (
-          <div className="validation-result">
-            <h3>Validation Results:</h3>
-            <pre>{JSON.stringify(validationResult, null, 2)}</pre>
-          </div>
+          <PrintabilityReport
+            result={{
+              score: validationResult.score || 74,
+              profile: printerProfile,
+              issues: validationResult.issues || {},
+            }}
+          />
         )}
       </div>
-
     </>
   );
 }
