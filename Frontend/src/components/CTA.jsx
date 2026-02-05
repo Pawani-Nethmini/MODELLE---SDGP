@@ -54,7 +54,7 @@ export default function CTA({
         </button>
       )}
 
-      <style jsx>{`
+      <style>{`
         .cta-button {
           margin-top: 1rem;
           padding: 12px 30px;

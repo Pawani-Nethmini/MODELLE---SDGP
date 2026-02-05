@@ -6,7 +6,7 @@ import { validateSTL } from "../../../backend/api/src/services/validationService
 import PrintabilityReport from "./PrintabilityReport";
 
 
-export default function STLValidatorPanel({ file, onFileUpload }) {
+export default function STLValidatorPanel({ file, onEstimateCost }) {
   const [purpose, setPurpose] = useState("");
   const [printerProfile, setPrinterProfile] = useState("");
   const [availablePrinters, setAvailablePrinters] = useState([]);
@@ -167,8 +167,9 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
         <CTA
           text="Estimate Print Cost"
           variant="secondary"
-          onClick={() => console.log("Estimate cost")}
+          onClick={onEstimateCost}
         />
+
       </div>
 
       <style>{`

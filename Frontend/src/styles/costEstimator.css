@@ -1,0 +1,51 @@
+.cost-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* 🔥 FORCE TOP LAYER */
+  z-index: 99999;
+}
+
+
+.cost-card {
+  background: #0f0f0f;
+  padding: 24px;
+  width: 360px;
+  border-radius: 14px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cost-card select,
+.cost-card input {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+.cost-card button {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.cost-result {
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.cost-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}

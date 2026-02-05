@@ -9,6 +9,9 @@ from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 
 from validator.validation_pipeline import run_validation_pipeline
+from validator.cost_estimator import estimate_print_cost
+
+
 
 app = FastAPI()
 app.add_middleware(
@@ -134,3 +137,50 @@ async def health_check():
         "temp_dir_exists": os.path.exists(TEMP_DIR),
         "temp_files_count": len(os.listdir(TEMP_DIR)) if os.path.exists(TEMP_DIR) else 0
     }
+
+
+@app.post("/estimate-cost")
+async def estimate_cost(
+    stl_file: UploadFile = File(...),
+    material: str = Form(...),
+    technology: str = Form(...),
+    infill: float = Form(...)
+):
+    """
+    Estimate print cost based on STL file and printing parameters
+    """
+
+    temp_filename = f"{uuid.uuid4()}_{stl_file.filename}"
+    temp_filepath = os.path.join(TEMP_DIR, temp_filename)
+
+    try:
+        # Save uploaded STL
+        with open(temp_filepath, "wb") as buffer:
+            shutil.copyfileobj(stl_file.file, buffer)
+
+        # Run cost estimation
+        cost_result = estimate_print_cost(
+            file_path=temp_filepath,
+            material=material,
+            technology=technology,
+            infill=infill
+        )
+
+        return {
+            "success": True,
+            "cost_estimation": cost_result
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+    finally:
+        # Clean up temp file
+        if os.path.exists(temp_filepath):
+            try:
+                os.remove(temp_filepath)
+            except Exception as cleanup_error:
+                print(f"Warning: Failed to delete temp file {temp_filepath}: {cleanup_error}")
