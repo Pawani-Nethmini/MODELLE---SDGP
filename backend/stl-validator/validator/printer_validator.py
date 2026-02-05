@@ -103,6 +103,7 @@ def validator_against_printer(stl_data, printer_id):
     return {
         "success": True,
         "issues": issues,
-        "compatible": not any(i["type"] == "error" for i in issues),
+        "compatible":len(issues) == 0,
         "printer_id": printer["id"]
     }
+    

@@ -8,6 +8,7 @@ export default function STLValidationPage() {
   const [uploadedFile, setUploadedFile] = useState(null);
   return (
     <>
+      
       {/* Robot section */}
       <section
         style={{

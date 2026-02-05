@@ -189,7 +189,7 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
       <div style={{ marginTop: "1rem" }}>
         {loading && <p>Validating STL, please wait...</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
-        {validationResult && (
+        {/* {validationResult && (
           <PrintabilityReport
             result={{
               score: validationResult.score || 74,
@@ -197,7 +197,11 @@ export default function STLValidatorPanel({ file, onFileUpload }) {
               issues: validationResult.issues || {},
             }}
           />
+        )} */}
+        {validationResult && (
+          <PrintabilityReport result={validationResult} />
         )}
+
       </div>
     </>
   );
