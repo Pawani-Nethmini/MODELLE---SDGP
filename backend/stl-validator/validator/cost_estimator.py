@@ -8,9 +8,9 @@ MATERIAL_DENSITY = {
 }
 
 MATERIAL_PRICE_PER_GRAM = {
-    "PLA": 10,     # LKR
-    "ABS": 12,
-    "PETG": 15,
+    "PLA": 20,     # LKR
+    "ABS": 22,
+    "PETG": 25,
     "RESIN": 20
 }
 
@@ -21,7 +21,7 @@ MACHINE_RATE = {
 }
 
 PRINT_SPEED = {
-    "FDM": 30,     # cm³ per hour
+    "FDM": 30,     # cm3 per hour
     "SLA": 20,
     "SLS": 15
 }

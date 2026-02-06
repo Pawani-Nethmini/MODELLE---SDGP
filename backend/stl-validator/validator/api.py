@@ -139,6 +139,7 @@ async def health_check():
     }
 
 
+# Cost estimation endpoint
 @app.post("/estimate-cost")
 async def estimate_cost(
     stl_file: UploadFile = File(...),
