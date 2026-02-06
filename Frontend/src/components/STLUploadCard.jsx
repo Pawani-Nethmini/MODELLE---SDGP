@@ -3,7 +3,7 @@ import "../styles/upload.css";
 import CTA from "./CTA";
 import STLValidatorPanel from "./STLValidatorPanel";
 
-export default function STLUploadCard({onFileUpload}) {
+export default function STLUploadCard({ onFileUpload }) {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
 
@@ -65,8 +65,8 @@ export default function STLUploadCard({onFileUpload}) {
         {/* Validator Panel */}
         {file && !error && (
           <div className="validator-section">
-            <STLValidatorPanel file={file} onFileUpload={onFileUpload} />
-          </div>
+              <STLValidatorPanel file={file} onFileUpload={onFileUpload} />
+            </div>
         )}
       </div>
     </section>

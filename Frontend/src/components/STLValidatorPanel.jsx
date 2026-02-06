@@ -4,15 +4,17 @@ import CTA from "./CTA";
 import STLPreview from "./STLPreview";
 import { validateSTL } from "../../../backend/api/src/services/validationService";
 import PrintabilityReport from "./PrintabilityReport";
+import CostEstimator from "./CostEstimator";
 
 
-export default function STLValidatorPanel({ file, onEstimateCost }) {
+export default function STLValidatorPanel({ file }) {
   const [purpose, setPurpose] = useState("");
   const [printerProfile, setPrinterProfile] = useState("");
   const [availablePrinters, setAvailablePrinters] = useState([]);
   const [validationResult, setValidationResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showEstimator, setShowEstimator] = useState(false);
 
   const purposes = [
     {
@@ -69,14 +71,14 @@ export default function STLValidatorPanel({ file, onEstimateCost }) {
           </p>
 
           <div style={styles.preview}>
-            {file ? (
-              <STLPreview file={file} />
-            ) : (
-              <div style={styles.previewContent}>
-                <span style={styles.previewText}>No STL loaded</span>
-              </div>
-            )}
-          </div>
+              {file ? (
+                <STLPreview file={file} />
+              ) : (
+                <div style={styles.previewContent}>
+                  <span style={styles.previewText}>No STL loaded</span>
+                </div>
+              )}
+            </div>
         </div>
 
         {/* RIGHT COLUMN */}
@@ -134,6 +136,13 @@ export default function STLValidatorPanel({ file, onEstimateCost }) {
         </div>
       </div>
 
+      {/* Inline Cost Estimator appears BELOW the entire panel */}
+      {showEstimator && (
+        <div style={{ marginTop: 12 }}>
+          <CostEstimator file={file} onClose={() => setShowEstimator(false)} />
+        </div>
+      )}
+
       <div style={styles.buttonContainer}>
         <CTA
           text="Check Printability"
@@ -167,7 +176,13 @@ export default function STLValidatorPanel({ file, onEstimateCost }) {
         <CTA
           text="Estimate Print Cost"
           variant="secondary"
-          onClick={onEstimateCost}
+          onClick={() => {
+            if (!purpose) {
+              alert("Please select a model purpose before estimating cost.");
+              return;
+            }
+            setShowEstimator(true);
+          }}
         />
 
       </div>
