@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import CTA from "../../components/CTA";
-import PaymentCard from "../../components/Printer/payment";
+import PaymentCard from "../components/PaymentCard";
+import CTA from "../components/CTA";
 
 export default function OrderPage() {
   const [showPayment, setShowPayment] = useState(false);
@@ -14,6 +14,7 @@ export default function OrderPage() {
 
   return (
     <div style={{ padding: "40px" }}>
+      {/* Order info */}
       <h1 style={{ color: "#e2e8f0" }}>Your Order</h1>
       <p style={{ color: "#94a3b8" }}>
         Review your order and proceed to payment
@@ -34,7 +35,7 @@ export default function OrderPage() {
           printerDetails={printerDetails}
           onPaymentComplete={(result) => {
             console.log("Payment result:", result);
-            // later: navigate("/payment-success")
+            // navigate to success page / show confirmation
           }}
         />
       )}
