@@ -18,6 +18,7 @@ export default function Header() {
         <Link to="/customer/upload-stl">Upload STL</Link>
         <Link to="/customer/printers">Printers</Link>
         <Link to="/customer/designers">Designers</Link>
+        <Link to="/customer/showroom">Showroom</Link>
         <Link to="/customer/my-projects">My Projects</Link>
         <Link to="/customer/my-orders">My Orders</Link>
       </nav>

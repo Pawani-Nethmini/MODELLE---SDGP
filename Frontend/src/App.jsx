@@ -20,6 +20,9 @@ import MyProjects from "./pages/customer/MyProjects";
 import MyOrders from "./pages/customer/MyOrders";
 import UserProfile from "./pages/customer/UserProfile";
 
+/* Showroom page */
+import Showroom from "./pages/Showroom";
+
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
 
@@ -46,6 +49,7 @@ export default function App() {
           <Route path="upload-stl" element={<STLValidationPage />} />
           <Route path="printers" element={<Printers />} />
           <Route path="designers" element={<Designers />} />
+          <Route path="showroom" element={<Showroom />} />
           <Route path="my-projects" element={<MyProjects />} />
           <Route path="my-orders" element={<MyOrders />} />
           <Route path="profile" element={<UserProfile />} />
