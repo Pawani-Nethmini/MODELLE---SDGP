@@ -1,4 +1,4 @@
-import "../styles/Capabilities.css";
+import "../../styles/Capabilities.css";
 
 export default function PlatformCapabilities() {
   const capabilities = [

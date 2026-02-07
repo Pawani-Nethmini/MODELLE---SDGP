@@ -1,10 +1,10 @@
 import { useState } from "react";
-import "../theme/theme.css";
-import CTA from "./CTA";
+import "../../theme/theme.css";
+import CTA from "../CTA";
 import STLPreview from "./STLPreview";
-import { validateSTL } from "../../../backend/api/src/services/validationService";
+import { validateSTL } from "../../../../backend/api/src/services/validationService";
 import PrintabilityReport from "./PrintabilityReport";
-import CostEstimator from "./CostEstimator";
+import CostEstimator from "../CostEstimator";
 
 
 export default function STLValidatorPanel({ file }) {

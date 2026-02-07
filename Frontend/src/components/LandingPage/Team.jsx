@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import "../styles/Team.css";
-import ganguly from "../assets/team-ganguly.jpg"; 
-import nethmi from "../assets/team-Nethmi.jpeg";
-import vishmi from "../assets/team-vishmi.jpg";
-import pawani from "../assets/team-pawani.jpeg";
-import pamudu from "../assets/team-pamudu.jpeg";
-import sasindi from "../assets/team-sasindi.jpeg";
+import "../../styles/Team.css";
+import ganguly from "../../assets/team-ganguly.jpg"; 
+import nethmi from "../../assets/team-Nethmi.jpeg";
+import vishmi from "../../assets/team-vishmi.jpg";
+import pawani from "../../assets/team-pawani.jpeg";
+import pamudu from "../../assets/team-pamudu.jpeg";
+import sasindi from "../../assets/team-sasindi.jpeg";
 
 export default function Team() {
   const [currentIndex, setCurrentIndex] = useState(0);

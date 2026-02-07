@@ -1,7 +1,7 @@
 import React from "react";
-import dragon from "../assets/dragon-vector.svg";
-import CTA from "./CTA";
-import "../styles/Hero.css";
+import dragon from "../../assets/dragon-vector.svg";
+import CTA from "../CTA";
+import "../../styles/Hero.css";
 // modelle_landing_page\src\styles\Hero.css
 
 export default function Hero() {

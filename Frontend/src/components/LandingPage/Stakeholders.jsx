@@ -1,8 +1,8 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html, Stars } from "@react-three/drei";
 import { useRef, useState, useEffect } from "react";
-import "../styles/Stakeholders.css";
-import CTA from "./CTA";
+import "../../styles/Stakeholders.css";
+import CTA from "../CTA";
 
 function FloatingCard({ position, title, points, iconColor, size, isActive, isMobile }) {
   const groupRef = useRef();

@@ -1,7 +1,9 @@
 import { useState } from "react";
-import STLUploadCard from "../../components/STLUploadCard";
+import STLUploadCard from "../../components/Customer/STLUploadCard";
 import InteractiveRobot from "../../components/InteractiveRobot";
-import STLValidatorPanel from "../../components/STLValidatorPanel";
+import STLValidatorPanel from "../../components/Customer/STLValidatorPanel";
+import BackgroundShapes from "../../components/BackgroundShapes";
+
 import "../../styles/stlValidator.css";
 
 export default function STLValidationPage() {
@@ -9,6 +11,7 @@ export default function STLValidationPage() {
 
   return (
     <>
+      {/* <BackgroundShapes /> */}
       <section
         style={{
           height: "50vh",
@@ -17,8 +20,7 @@ export default function STLValidationPage() {
           overflow: "hidden",
           pointerEvents: "none",
           marginTop: "-150px",
-        }}
-      >
+        }}      >
         <InteractiveRobot />
       </section>
 

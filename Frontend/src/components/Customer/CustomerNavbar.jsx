@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import ProfileIcon from "./ProfileIcon";
-import logo from "../assets/Modelle-logo.png";
-import "../styles/header.css";
+import ProfileIcon from "../ProfileIcon";
+import logo from "../../assets/Modelle-logo.png";
+import "../../styles/header.css";
 
 export default function Header() {
   return (

@@ -1,11 +1,11 @@
 // import Navbar from "../components/Navbar";
 // Frontend\src\components\Navbar.jsx
-import Hero from "../components/Hero";
-import About from "../components/About";
-import HowItWorks3D from "../components/HowItWorks3D";
-import Capabilities from "../components/Capabilities";
-import Stakeholders from "../components/Stakeholders";
-import Team from "../components/Team";
+import Hero from "../components/LandingPage/Hero";
+import About from "../components/LandingPage/About";
+import HowItWorks3D from "../components/LandingPage/HowItWorks3D";
+import Capabilities from "../components/LandingPage/Capabilities";
+import Stakeholders from "../components/LandingPage/Stakeholders";
+import Team from "../components/LandingPage/Team";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
 

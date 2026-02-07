@@ -1,4 +1,4 @@
-import "../styles/HowItWorks.css";
+import "../../styles/HowItWorks.css";
 export default function HowItWorks() {
   const steps = [
     { id: 1, title: "Upload Model", desc: "Upload your 3D STL or OBJ file" },

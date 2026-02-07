@@ -4,14 +4,14 @@ import { useState } from "react";
 import Splash from "./components/Splash";
 
 /* Public pages */
-import LandingLayout from "./components/LandingLayout";
+import LandingLayout from "./components/LandingPage/LandingLayout";
 import Home from "./pages/Home";
-import About from "./components/About";
-import Features from "./components/HowItWorks3D";
+import About from "./components/LandingPage/About";
+import Features from "./components/LandingPage/HowItWorks3D";
 import Contact from "./components/Footer";
 
 /* Customer layout & pages */
-import CustomerLayout from "./components/CustomerLayout";
+import CustomerLayout from "./components/Customer/CustomerLayout";
 import CustomerDashboard from "./pages/customer/Dashboard";
 import STLValidationPage from "./pages/customer/STLValidationPage";
 import Printers from "./pages/customer/Printers";

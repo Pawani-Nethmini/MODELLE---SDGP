@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../styles/upload.css";
-import CTA from "./CTA";
+import "../../styles/upload.css";
+import CTA from "../CTA";
 import STLValidatorPanel from "./STLValidatorPanel";
 
 export default function STLUploadCard({ onFileUpload }) {
