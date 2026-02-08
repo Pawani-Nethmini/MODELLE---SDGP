@@ -2,6 +2,8 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI()
 
@@ -11,6 +13,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# serve static showroom assets at /static
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 DATA_FILE = os.path.join("data", "showroom_items.json")
 

@@ -19,9 +19,12 @@ import Designers from "./pages/customer/Designers";
 import MyProjects from "./pages/customer/MyProjects";
 import MyOrders from "./pages/customer/MyOrders";
 import UserProfile from "./pages/customer/UserProfile";
+import ShowroomPage from "./pages/showroom/ShowroomPage";
 
-/* Showroom page */
-import Showroom from "./pages/Showroom";
+/* Printer pages */
+import PrinterLoginPage from "./pages/printer/PrinterLoginPage";
+
+
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -49,11 +52,14 @@ export default function App() {
           <Route path="upload-stl" element={<STLValidationPage />} />
           <Route path="printers" element={<Printers />} />
           <Route path="designers" element={<Designers />} />
-          <Route path="showroom" element={<Showroom />} />
+          <Route path="showroom" element={<ShowroomPage />} />
           <Route path="my-projects" element={<MyProjects />} />
           <Route path="my-orders" element={<MyOrders />} />
           <Route path="profile" element={<UserProfile />} />
         </Route>
+
+        {/* PRINTER ROUTES */}
+        <Route path="/printer-login" element={<PrinterLoginPage />} />
 
       </Routes>
     </BrowserRouter>

@@ -2,7 +2,7 @@
   {
     "id": "item_001",
     "title": "Low-Poly Submarine",
-    "image_url": "/static/showroom/submarine.jpg",
+    "image_url": "http://127.0.0.1:8002/static/showroom/submarine.jpg",
     "material": "PLA",
     "print_type": "FDM",
     "color": "Yellow",
@@ -12,7 +12,7 @@
   {
     "id": "item_002",
     "title": "Geometric Lattice Vase",
-    "image_url": "/static/showroom/vase.jpg",
+    "image_url": "http://127.0.0.1:8002/static/showroom/vase.jpg",
     "material": "PLA",
     "print_type": "FDM",
     "color": "White",
