@@ -49,12 +49,7 @@ export default function PaymentCard({ printerDetails, onPaymentComplete }) {
     }
   };
 
-  /**
-   * CORRECT PAYMENT FLOW (3-Tier Architecture)
-   * 1. Frontend validates & collects data
-   * 2. Backend creates order + generates hash
-   * 3. Frontend starts PayHere payment using backend response
-   */
+ 
   const handlePayment = async () => {
     if (!validateForm()) return;
 
@@ -62,8 +57,7 @@ export default function PaymentCard({ printerDetails, onPaymentComplete }) {
     setErrors({});
 
     try {
-      // STEP 1: Request payment details from backend
-      const response = await fetch("/api/payment/create", {
+      const response = await fetch("http://localhost:5000/api/payment/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,7 +72,6 @@ export default function PaymentCard({ printerDetails, onPaymentComplete }) {
 
       const paymentData = await response.json();
 
-      // STEP 2: Start PayHere payment using backend-generated data
       window.payhere.startPayment({
         sandbox: true,
         merchant_id: paymentData.merchant_id,
@@ -101,7 +94,6 @@ export default function PaymentCard({ printerDetails, onPaymentComplete }) {
         country: formData.country
       });
 
-      // STEP 3: PayHere event listeners (UI feedback only)
       window.payhere.onCompleted = function (orderId) {
         setIsProcessing(false);
         if (onPaymentComplete) {
@@ -211,13 +203,7 @@ export default function PaymentCard({ printerDetails, onPaymentComplete }) {
               <div style={styles.paymentActions}>
                 <CTA
                   text={isProcessing ? "Processing..." : "Pay with PayHere"}
-                  onClick={() => {
-                    setShowPayment(true);
-                    setTimeout(() => {
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }, 100);
-                  }}
-
+                  onClick={handlePayment}
                   disabled={isProcessing}
                 />
               </div>
