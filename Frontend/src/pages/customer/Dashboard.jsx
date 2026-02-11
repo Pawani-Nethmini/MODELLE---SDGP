@@ -1,8 +1,36 @@
 export default function CustomerDashboard() {
   return (
     <div style={styles.page}>
+
+
+      {/* HERO SECTION */}
+      <div style={styles.hero}>
+        <div style={styles.heroLeft}>
+          <span style={styles.heroBadge}>OUR VISION</span>
+
+          <h1 style={styles.heroTitle}>
+            Empowering your <span style={styles.heroHighlight}>imagination</span>
+            <br /> through precise engineering.
+          </h1>
+
+          <p style={styles.heroText}>
+            Bringing your digital dreams to physical reality. Connecting designers
+            with high-precision print shops to turn ideas into masterpieces.
+          </p>
+
+          <div style={styles.heroButtons}>
+            <button style={styles.primaryBtn}>Get Started</button>
+            <button style={styles.secondaryBtn}>View Showroom</button>
+          </div>
+        </div>
+
+        <div style={styles.heroRight}>
+          <div style={styles.glowCircle}></div>
+        </div>
+      </div>
+              
       {/* Header */}
-      <h1 style={styles.title}>Welcome back, Alex 👋</h1>
+      <h1 style={styles.title}>Welcome back 👋</h1>
       <p style={styles.subtitle}>Here’s what’s happening with your projects today.</p>
 
       <div style={styles.grid}>
@@ -110,6 +138,100 @@ function Notification({ text }) {
 
 /* Inline Styles with Animations */
 const styles = {
+
+  hero: {
+    display: "grid",
+    gridTemplateColumns: "1.4fr 1fr",
+    gap: "2rem",
+    background: "linear-gradient(135deg, #0c0c16, #050509)",
+    border: "1px solid #222",
+    borderRadius: "22px",
+    padding: "2.5rem",
+    marginBottom: "2rem",
+    position: "relative",
+    overflow: "hidden"
+  },
+
+  heroLeft: {
+    zIndex: 2
+  },
+
+  heroBadge: {
+    display: "inline-block",
+    padding: "0.3rem 0.8rem",
+    borderRadius: "20px",
+    background: "rgba(0,255,255,0.1)",
+    color: "#4deeea",
+    fontSize: "0.75rem",
+    marginBottom: "1rem"
+  },
+
+  heroTitle: {
+    fontSize: "2.4rem",
+    fontWeight: "700",
+    lineHeight: "1.2"
+  },
+
+  heroHighlight: {
+    color: "#4deeea"
+  },
+
+  heroText: {
+    marginTop: "0.8rem",
+    opacity: 0.7,
+    maxWidth: "480px",
+    fontSize: "0.95rem"
+  },
+
+  heroButtons: {
+    display: "flex",
+    gap: "1rem",
+    marginTop: "1.5rem"
+  },
+
+  primaryBtn: {
+    background: "linear-gradient(135deg, #00f2ff, #00b3ff)",
+    border: "none",
+    padding: "0.7rem 1.4rem",
+    borderRadius: "10px",
+    color: "black",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "0.3s"
+  },
+
+  secondaryBtn: {
+    background: "transparent",
+    border: "1px solid #333",
+    padding: "0.7rem 1.4rem",
+    borderRadius: "10px",
+    color: "white",
+    cursor: "pointer",
+    transition: "0.3s"
+  },
+
+  heroRight: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+
+  glowCircle: {
+    width: "280px",
+    height: "280px",
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(0,255,255,0.25), transparent 60%)",
+    filter: "blur(10px)",
+    animation: "pulseGlow 3s infinite alternate"
+  },
+
+  "@keyframes pulseGlow": {
+    "0%": { transform: "scale(0.9)", opacity: 0.6 },
+    "100%": { transform: "scale(1.1)", opacity: 1 }
+  },
+
+
   page: {
     background: "linear-gradient(180deg, #0b0b12, #050509)",
     minHeight: "100vh",
