@@ -1,0 +1,363 @@
+/* CSS Custom Properties for theming */
+:root {
+  --primary-bg: rgba(20, 20, 20, 0.911);
+  --accent-color: #00f5ff;
+  --text-color: #ffffff;
+  --shadow-color: rgba(0, 245, 255, 0.2);
+}
+
+.stakeholders-section {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  padding: 2rem 2rem 6rem 2rem;
+  position: relative;
+}
+
+.stakeholder-html {
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stakeholder-card {
+  width: clamp(200px, 70vw, 280px);
+  height: auto;
+  margin-top: 2rem;
+  background: var(--primary-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-radius: 20px;
+  color: var(--text-color);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  box-shadow: 0 10px 40px var(--shadow-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.8s ease-out;
+  text-align: center;
+}
+
+.stakeholder-card.hovered {
+  box-shadow: 0 15px 50px #a3b5f05b;
+  transform: translateY(-5px);
+}
+
+.stakeholder-card.active {
+  opacity: 1;
+  transform: translateY(0);
+  box-shadow: 0 20px 60px rgba(0, 245, 255, 0.3);
+}
+
+.stakeholder-card.inactive {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+.stakeholder-card h3 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+  justify-content: center;
+  background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.stakeholder-card .text {
+  flex: 1;
+  min-width: 0;
+}
+
+.stakeholder-card ul {
+  list-style: none;
+  padding: 0;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  line-height: 1.6;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+.stakeholder-card li {
+  margin: 0.8rem 0;
+  display: flex;
+  align-items: flex-start;
+  animation: slideInLeft 0.5s ease-out;
+  animation-fill-mode: both;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.stakeholder-card li:nth-child(1) { animation-delay: 0.1s; }
+.stakeholder-card li:nth-child(2) { animation-delay: 0.2s; }
+.stakeholder-card li:nth-child(3) { animation-delay: 0.3s; }
+.stakeholder-card li:nth-child(4) { animation-delay: 0.4s; }
+.stakeholder-card li:nth-child(5) { animation-delay: 0.5s; }
+
+.stakeholder-card .icon {
+  color: var(--accent-color);
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+  animation: pulse 2s infinite;
+}
+
+.section-title {
+  font-weight: 700;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 600px;
+}
+
+.btn-join-community {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25rem;
+}
+
+/* Canvas Scroll Wrapper */
+.canvas-scroll-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Navigation Arrows */
+.scroll-arrow {
+  background: rgba(139, 92, 246, 0.15);
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  color: var(--accent-color);
+  font-size: 3rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  line-height: 1;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scroll-arrow:hover {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: var(--accent-color);
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(0, 245, 255, 0.4);
+}
+
+.scroll-arrow:active {
+  transform: scale(0.95);
+  background: rgba(139, 92, 246, 0.4);
+}
+
+/* Card Indicators */
+.card-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.indicator.active {
+  width: 30px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
+
+canvas {
+  position: relative;
+  z-index: 1;
+}
+
+/* Media Queries for Fine-Tuning */
+@media (max-width: 1024px) {
+  .canvas-wrapper {
+    height: 70vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stakeholder-card {
+    width: clamp(180px, 25vw, 280px);
+    padding: 1.2rem;
+  }
+
+  .stakeholder-card h3 {
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    text-align: center;
+  }
+
+  .stakeholder-card ul {
+    font-size: clamp(0.85rem, 2.3vw, 1.1rem);
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .stakeholders-section {
+    padding: 2rem 1rem 4rem 1rem;
+  }
+
+  .canvas-wrapper {
+    height: 500px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .canvas-scroll-wrapper {
+    padding: 0;
+    gap: 0.5rem;
+  }
+
+  .scroll-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 2.5rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 101;
+  }
+
+  .scroll-arrow.left {
+    left: -10px;
+  }
+
+  .scroll-arrow.right {
+    right: -10px;
+  }
+
+  .stakeholder-card {
+    width: 90%;
+    max-width: 320px;
+    margin: 1rem auto;
+    padding: 1.2rem;
+    text-align: center;
+  }
+
+  .stakeholder-card h3 {
+    font-size: 1.6rem;
+  }
+
+  .stakeholder-card ul {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .stakeholder-card li {
+    animation: none;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-join-community {
+    margin-top: 3rem;
+  }
+
+  .card-indicators {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .canvas-wrapper {
+    height: 500px;
+  }
+
+  .scroll-arrow {
+    width: 45px;
+    height: 45px;
+    font-size: 2rem;
+  }
+
+  .scroll-arrow.left {
+    left: -5px;
+  }
+
+  .scroll-arrow.right {
+    right: -5px;
+  }
+
+  .stakeholder-card {
+    width: 95%;
+    max-width: 280px;
+    padding: 1rem;
+    border-radius: 15px;
+  }
+
+  .stakeholder-card h3 {
+    font-size: 1.4rem;
+  }
+
+  .stakeholder-card ul {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}

@@ -7,13 +7,14 @@
 
 .upload-container h1 {
   font-size: 32px;
-  margin-bottom: 10px;
-  color: #00f5ff
+  margin-top: 55px;
+  margin-bottom: 25px;
+  color: #00f5ff;
 }
 
 .subtitle {
   color: #94a3b8;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .upload-box {
@@ -41,10 +42,15 @@
 
 .upload-icon {
   width: 42px;   
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   opacity: 0.9;
 }
 
+.upload-box:hover .upload-icon {
+  opacity: 1;
+  transform: scale(1.05);
+  transition: 0.25s ease;
+}
 
 .hint {
   font-size: 14px;
@@ -53,7 +59,7 @@
 
 .success {
   margin-top: 20px;
-  color: #22c55e;
+  color: #00f5ff;
 }
 
 .error {
@@ -61,12 +67,23 @@
   color: #ef4444;
 }
 
+.file-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.file-size {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
 .action-buttons {
   margin-top: 40px;
   display: flex;
   justify-content: center;
   gap: 20px;
-
+  flex-wrap: wrap;
 }
 
 button {
@@ -79,25 +96,101 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.upload-icon {
-  width: 40px;      
-  height: auto;
-  margin-bottom: 12px;
-  opacity: 0.85;
-}
-
-.upload-box:hover .upload-icon {
-  opacity: 1;
-  transform: scale(1.05);
-  transition: 0.25s ease;
-}
-
-/* Robot */
 .robot-canvas {
   width: 420px;
   height: 420px;
   pointer-events: none;
 }
 
+/* Tablet */
+@media (max-width: 1024px) {
+  .upload-container h1 {
+    font-size: 28px;
+  }
 
+  .upload-box {
+    padding: 40px 20px;
+  }
 
+  .action-buttons {
+    gap: 15px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .upload-container {
+    padding: 0 16px;
+  }
+
+  .upload-container h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .upload-box {
+    padding: 32px 16px;
+    border-radius: 12px;
+  }
+
+  .upload-icon {
+    width: 36px;
+    margin-bottom: 12px;
+  }
+
+  .upload-content p {
+    font-size: 15px;
+  }
+
+  .hint {
+    font-size: 13px;
+  }
+
+  .action-buttons {
+    margin-top: 30px;
+    gap: 12px;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .upload-container {
+    padding: 0 12px;
+  }
+
+  .upload-container h1 {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .upload-box {
+    padding: 24px 12px;
+  }
+
+  .upload-icon {
+    width: 32px;
+  }
+
+  .upload-content p {
+    font-size: 14px;
+  }
+
+  .hint {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,17 @@
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Uploaded STL files (temporary)
+backend/api/uploads/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS
+.DS_Store
+Thumbs.db

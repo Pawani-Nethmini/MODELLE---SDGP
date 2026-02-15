@@ -1,0 +1,159 @@
+.splash-container {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at top,
+    #111122,
+    #0a0a0a 60%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 10000;
+  transition: 
+  opacity 0.8s ease,
+  transform 0.8s ease,
+  filter 0.8s ease;
+}
+
+.splash-container.exit {
+  opacity: 0;
+  transform: scale(1.02);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* Center line */
+.line-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow: hidden;
+}
+
+/* Animated gradient line */
+.reveal-line {
+  height: 2px;
+  width: 0%;
+  margin: auto;
+  background: linear-gradient(
+    90deg,mrket
+    transparent,
+    #00f5ff,
+    #7d98f3,
+    #8b5cf6,
+    transparent
+  );
+  transition: width 1.4s ease;
+}
+
+.reveal-line.draw {
+  width: 100%;
+}
+
+/* Logo + text */
+.splash-content {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.splash-content.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.splash-content img {
+  height: 70px;
+  margin-bottom: 12px;
+}
+
+.splash-content p {
+  color: #cfcfcf;
+  font-size: 0.9rem;
+  letter-spacing: 0.4px;
+}
+/* Cube positioning */
+.cube-wrapper {
+  position: absolute;
+  z-index: 2;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cube-wrapper.fade-out {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.brand-core {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: corePulse 4s ease-in-out infinite;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.brand-core.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.splash-logo-overlay {
+  position: absolute;
+  width: 70px;
+  pointer-events: none;
+
+  filter: drop-shadow(0 0 12px rgba(0, 245, 255, 0.8))
+          drop-shadow(0 0 24px rgba(139, 92, 246, 0.6));
+}
+
+@keyframes corePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 18px rgba(0, 245, 255, 0.4))
+            drop-shadow(0 0 36px rgba(139, 92, 246, 0.3));
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 28px rgba(0, 245, 255, 0.8))
+            drop-shadow(0 0 56px rgba(139, 92, 246, 0.6));
+  }
+}
+
+.splash-tagline {
+  position: absolute;
+  text-align: center;
+  bottom: 30%;
+  font-size: 1rem;
+  color: #ccc;
+  letter-spacing: 0.4px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.splash-tagline.show {
+  opacity: 1;
+}
+
+.home {
+  opacity: 0;
+  animation: homeFade 0.8s ease forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes homeFade {
+  to {
+    opacity: 1;
+  }
+}
+

@@ -40,3 +40,18 @@
 .read-the-docs {
   color: #888;
 }
+.home-wrapper {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.home-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.25s;
+}
+
+.home-wrapper.hidden {
+  pointer-events: none;
+}
