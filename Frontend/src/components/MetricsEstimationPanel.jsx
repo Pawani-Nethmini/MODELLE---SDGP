@@ -1,4 +1,3 @@
-// Frontend/src/components/MetricsEstimationPanel.jsx
 import { useEffect, useMemo, useState } from "react";
 import { computeSTLMetrics, loadSTLGeometryFromFile } from "../utils/stlMetrics";
 
