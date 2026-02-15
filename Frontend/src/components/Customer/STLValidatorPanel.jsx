@@ -5,6 +5,7 @@ import STLPreview from "./STLPreview";
 import { validateSTL } from "../../../../backend/api/src/services/validationService";
 import PrintabilityReport from "./PrintabilityReport";
 import CostEstimator from "../CostEstimator";
+import MetricsEstimationPanel from "../MetricsEstimationPanel";
 
 
 export default function STLValidatorPanel({ file }) {
@@ -15,6 +16,7 @@ export default function STLValidatorPanel({ file }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showEstimator, setShowEstimator] = useState(false);
+  const [showMetrics, setShowMetrics] = useState(false);
 
   const purposes = [
     {
@@ -143,6 +145,13 @@ export default function STLValidatorPanel({ file }) {
         </div>
       )}
 
+      {/* Metrics & Estimation Engine appears below Cost Estimator */}
+      {showMetrics && (
+        <div style={{ marginTop: 12 }}>
+          <MetricsEstimationPanel file={file} onClose={() => setShowMetrics(false)} />
+        </div>
+      )}
+
       <div style={styles.buttonContainer}>
         <CTA
           text="Check Printability"
@@ -184,6 +193,18 @@ export default function STLValidatorPanel({ file }) {
             setShowEstimator(true);
           }}
         />
+        <CTA
+          text="View Metrics & Estimation"
+          variant="secondary"
+          onClick={() => {
+            if (!file) {
+              alert("Upload an STL file first.");
+              return;
+            }
+            setShowMetrics(true);
+          }}
+        />
+
 
       </div>
 
