@@ -1,4 +1,3 @@
-// Frontend/src/utils/stlMetrics.js
 import * as THREE from "three";
 import { STLLoader } from "three-stdlib";
 
