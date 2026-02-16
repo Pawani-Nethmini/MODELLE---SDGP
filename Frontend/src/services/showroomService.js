@@ -21,6 +21,7 @@ export async function fetchShowroomItems(filters = {}) {
     printType: it.print_type || it.printType || "",
     color: it.color,
     price: it.price,
+    category: it.category || "",
     printerId: it.printer_id || it.printerId,
   }));
 }

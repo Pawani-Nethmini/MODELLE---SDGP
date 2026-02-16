@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CTA({
   text,
@@ -6,11 +7,13 @@ export default function CTA({
   variant = "primary",
   style,
 }) {
+  const navigate = useNavigate();
+
   // Preset CTA definitions (used by file #2)
   const presetButtons = {
     getStarted: {
       text: "Get Started",
-      link: "/customer",
+      link: "/register",
       style: "primary",
     },
     joinCommunity: {
@@ -20,8 +23,9 @@ export default function CTA({
     },
     exploreFeatures: {
       text: "Explore Features",
-      link: "/HowItWorks3D",
+      link: "/",
       style: "secondary",
+      scrollTarget: "#features",
     },
     login: {
       text: "Log In",
@@ -32,17 +36,29 @@ export default function CTA({
 
   const preset = presetButtons[variant];
 
+  const handlePresetClick = (e) => {
+    if (preset.scrollTarget) {
+      e.preventDefault();
+      const element = document.querySelector(preset.scrollTarget);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate(preset.link);
+    }
+  };
+
   return (
     <>
-      {/* --- Mode 1: Preset CTA (anchor link) --- */}
+      {/* --- Mode 1: Preset CTA (Link or button) --- */}
       {preset ? (
-        <a
-          href={preset.link}
+        <button
+          onClick={handlePresetClick}
           className={`cta-button ${preset.style}`}
           style={style}
         >
           {preset.text}
-        </a>
+        </button>
       ) : (
         /* --- Mode 2: Custom CTA (button with onClick) --- */
         <button
@@ -66,6 +82,10 @@ export default function CTA({
           text-align: center;
           display: inline-block;
           text-decoration: none;
+          border: none;
+          font-family: inherit;
+          background: inherit;
+          color: inherit;
         }
 
         .cta-button.primary {
