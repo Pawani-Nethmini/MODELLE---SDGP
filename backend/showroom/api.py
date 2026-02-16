@@ -28,6 +28,7 @@ def get_showroom_items(
     material: str | None = Query(None),
     print_type: str | None = Query(None),
     color: str | None = Query(None),
+    category: str | None = Query(None),
 ):
     items = load_items()
 
@@ -37,5 +38,7 @@ def get_showroom_items(
         items = [i for i in items if i["print_type"] == print_type]
     if color:
         items = [i for i in items if i["color"] == color]
+    if category:
+        items = [i for i in items if i["category"] == category]
 
     return items
