@@ -1,3 +1,8 @@
+import modelleImage from "../../assets/dash_modelle.png";
+
+
+
+
 export default function CustomerDashboard() {
   return (
     <div style={styles.page}>
@@ -24,8 +29,9 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
+
         <div style={styles.heroRight}>
-          <div style={styles.glowCircle}></div>
+          <img src={modelleImage} alt="Modelle Cube" style={styles.heroImage} />
         </div>
       </div>
               
@@ -101,7 +107,7 @@ export default function CustomerDashboard() {
           <section style={styles.insightBox}>
             <h3 style={{ marginBottom: "0.5rem" }}>Project Insights</h3>
             <p style={{ fontSize: "0.9rem", opacity: 0.7 }}>TOTAL SPENT</p>
-            <h2>$1,240.00</h2>
+            <h2>$1,240</h2>
 
             <div style={styles.progressBar}>
               <div style={styles.progressFill}></div>
@@ -217,18 +223,11 @@ const styles = {
     justifyContent: "center"
   },
 
-  glowCircle: {
-    width: "280px",
-    height: "280px",
-    borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(0,255,255,0.25), transparent 60%)",
-    filter: "blur(10px)",
-    animation: "pulseGlow 3s infinite alternate"
-  },
-
-  "@keyframes pulseGlow": {
-    "0%": { transform: "scale(0.9)", opacity: 0.6 },
-    "100%": { transform: "scale(1.1)", opacity: 1 }
+  heroImage: {
+    width: "320px",
+    objectFit: "contain",
+    animation: "float 4s ease-in-out infinite",
+    filter: "drop-shadow(0 20px 40px rgba(0, 255, 255, 0.25))"
   },
 
 
@@ -398,5 +397,12 @@ const styles = {
   "@keyframes blinkYellow": {
     "0%": { opacity: 0.6 },
     "100%": { opacity: 1 }
+  },
+
+  "@keyframes float": {
+    "0%": { transform: "translateY(0px)" },
+    "50%": { transform: "translateY(-20px)" },
+    "100%": { transform: "translateY(0px)" }
   }
+
 };
