@@ -3,14 +3,13 @@
 import { useState } from "react";
 
 export default function ShowroomFilters({ onChange, onSearch }) {
-  const [activeFilter, setActiveFilter] = useState(null);
 
   return (
     <div className="showroom-filters-row">
       <div className="search-bar-container">
         <input
           type="text"
-          placeholder="Search items (e.g., Vase,)"
+          placeholder="Search items (e.g., Vase)"
           className="search-bar"
           onChange={(e) => onSearch(e.target.value)}
         />
@@ -32,8 +31,6 @@ export default function ShowroomFilters({ onChange, onSearch }) {
           <label className="filter-label">Material</label>
           <select
             className="filter-select"
-            onFocus={() => setActiveFilter("material")}
-            onBlur={() => setActiveFilter(null)}
             onChange={(e) => onChange({ material: e.target.value })}
           >
             <option value="">All Materials</option>
@@ -47,14 +44,28 @@ export default function ShowroomFilters({ onChange, onSearch }) {
           <label className="filter-label">Print Type</label>
           <select
             className="filter-select"
-            onFocus={() => setActiveFilter("type")}
-            onBlur={() => setActiveFilter(null)}
             onChange={(e) => onChange({ print_type: e.target.value })}
           >
             <option value="">All Print Types</option>
             <option value="FDM">FDM</option>
             <option value="SLA">SLA</option>
             <option value="SLS">SLS</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label className="filter-label">Category</label>
+          <select
+            className="filter-select"
+            onChange={(e) => onChange({ category: e.target.value })}
+          >
+            <option value="">All Category Types</option>
+            <option value="Toys">Toys</option>
+            <option value="Home Decor">Home Decor</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Prototypes">Prototypes</option>
+            <option value="Medical">Medical</option>
+            <option value="Jewellery">Jewellery</option>
           </select>
         </div>
       </div>

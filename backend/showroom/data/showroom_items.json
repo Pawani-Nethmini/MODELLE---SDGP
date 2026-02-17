@@ -7,6 +7,7 @@
     "print_type": "FDM",
     "color": "Yellow",
     "price": 2500,
+    "category": "Toys",
     "printer_id": "printer_001"
   },
   {
@@ -17,6 +18,74 @@
     "print_type": "FDM",
     "color": "White",
     "price": 8000,
+    "category": "Home Decor",
+    "printer_id": "printer_002"
+  },
+  {
+    "id": "item_003",
+    "title": "Super Confy Spanish Chair",
+    "image_url": "http://127.0.0.1:8002/static/showroom/SpanishChair.jpg",
+    "material": "ABS",
+    "print_type": "SLA",
+    "color": "Blue",
+    "price": 10000,
+    "category": "Furniture",
+    "printer_id": "printer_003"
+  },
+  {
+    "id": "item_004",
+    "title": "Robot Arm Prototype for University Project",
+    "image_url": "http://127.0.0.1:8002/static/showroom/robotArm.jpg",
+    "material": "PLA",
+    "print_type": "FDM",
+    "color": "Orange",
+    "price": 18000,
+    "category": "Prototypes",
+    "printer_id": "printer_001"
+  },
+  {
+    "id": "item_005",
+    "title": "Mecanical Robot Prototype",
+    "image_url": "http://127.0.0.1:8002/static/showroom/robot.jpg",
+    "material": "PLA",
+    "print_type": "ABS",
+    "color": "White",
+    "price": 8000,
+    "category": "Prototypes",
+    "printer_id": "printer_001"
+  },
+  {
+    "id": "item_006",
+    "title": "Resin Tree Luma Lamp",
+    "image_url": "http://127.0.0.1:8002/static/showroom/Lamp.jpg",
+    "material": "Resin",
+    "print_type": "FDM",
+    "color": "White",
+    "price": 2000,
+    "category": "Home Decor",
+    "printer_id": "printer_002"
+  },
+  {
+    "id": "item_007",
+    "title": "Xkelet 3D-printed orthopedic cast",
+    "image_url": "http://127.0.0.1:8002/static/showroom/robotHand.jpg",
+    "material": "PLA",
+    "print_type": "FDM",
+    "color": "White",
+    "price": 12000,
+    "category": "Medical",
+    "printer_id": "printer_001"
+  },
+  {
+    "id": "item_008",
+    "title": "Customized Jewellery (Earrings)",
+    "image_url": "http://127.0.0.1:8002/static/showroom/Jewellery.jpg",
+    "material": "PLA",
+    "print_type": "FDM",
+    "color": "Blue",
+    "price": 1000,
+    "category": "Jewellery",
     "printer_id": "printer_002"
   }
+
 ]

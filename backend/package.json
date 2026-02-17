@@ -6,11 +6,10 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
+    "mongoose": "^9.2.1",
     "uuid": "^13.0.0"
   },
   "scripts": {
     "dev": "node api/src/server.js"
   }
 }
-
-
