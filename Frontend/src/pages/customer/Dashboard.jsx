@@ -1,8 +1,5 @@
 import modelleImage from "../../assets/dash_modelle.png";
 
-
-
-
 export default function CustomerDashboard() {
   return (
     <div style={styles.page}>
