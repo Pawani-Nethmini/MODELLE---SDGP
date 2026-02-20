@@ -1,3 +1,4 @@
+import { useState } from "react";
 import modelleImage from "../../assets/dash_modelle.png";
 import { useNavigate } from "react-router-dom";
 
@@ -169,37 +170,44 @@ function Notification({ text }) {
 
 /* Feedback Card */
 function FeedbackCard() {
+  const [rating, setRating] = useState(5);
+
   return (
-    <div style={styles.feedbackCard}>
-      <div style={styles.feedbackLeft}>
-        <h3 style={{ marginBottom: "0.3rem" }}>How are we doing?</h3>
-        <p style={{ fontSize: "0.85rem", opacity: 0.8 }}>
-          Your feedback helps us build the future of 3D printing. Share your thoughts!
-        </p>
+    <div style={styles.newFeedbackCard}>
+      <h3 style={styles.feedbackTitle}>How are we doing?</h3>
+      <p style={styles.feedbackSubtitle}>
+        Your feedback helps us build the future of 3D printing.
+      </p>
 
-        <div style={styles.emojiRow}>
-          <span>😞</span>
-          <span>😐</span>
-          <span>🙂</span>
-          <span>🤩</span>
-        </div>
-
-        <div style={styles.emojiLabels}>
-          <span>Poor</span>
-          <span>Okay</span>
-          <span>Good</span>
-          <span>Amazing</span>
-        </div>
+      {/* Rating Circles */}
+      <div style={styles.ratingRow}>
+        {[1, 2, 3, 4, 5].map((num) => (
+          <div
+            key={num}
+            onClick={() => setRating(num)}
+            style={{
+              ...styles.ratingCircle,
+              ...(rating === num ? styles.activeRating : {})
+            }}
+          >
+            {num}
+          </div>
+        ))}
       </div>
 
-      <div style={styles.feedbackRight}>
-        <textarea
+      {/* Input + Send */}
+      <div style={styles.feedbackInputWrapper}>
+        <input
+          type="text"
           placeholder="Tell us more about your experience..."
-          style={styles.feedbackTextarea}
+          style={styles.feedbackInput}
         />
-        <button style={styles.feedbackBtn}>
-          Send Feedback 
-        </button>
+        <button style={styles.sendButton}>➤</button>
+      </div>
+
+      {/* Floating Support Button */}
+      <div style={styles.supportButton}>
+        🎧
       </div>
     </div>
   );
@@ -431,63 +439,102 @@ const styles = {
     animation: "fillBar 1s ease forwards"
   },
 
-  feedbackCard: {
-    marginTop: "2rem",
-    display: "grid",
-    gridTemplateColumns: "1.2fr 1fr",
-    gap: "1.5rem",
-    padding: "1.8rem",
-    borderRadius: "18px",
-    background: "linear-gradient(135deg, #7b2ff7, #9f44ff)",
-    boxShadow: "0 15px 40px rgba(155, 89, 255, 0.3)",
-    alignItems: "center"
-  },
+newFeedbackCard: {
+  position: "relative",
+  padding: "2rem",
+  borderRadius: "22px",
+  background: "linear-gradient(135deg, #0c1324, #0a1020)",
+  border: "1px solid rgba(255,255,255,0.08)",
+  boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+  overflow: "hidden"
+},
 
-  feedbackLeft: {},
+feedbackTitle: {
+  fontSize: "1.4rem",
+  fontWeight: "600",
+  marginBottom: "0.5rem"
+},
 
-  emojiRow: {
-    display: "flex",
-    gap: "1.2rem",
-    fontSize: "1.5rem",
-    marginTop: "1rem",
-    cursor: "pointer"
-  },
+feedbackSubtitle: {
+  fontSize: "0.9rem",
+  opacity: 0.6,
+  marginBottom: "1.8rem"
+},
 
-  emojiLabels: {
-    display: "flex",
-    gap: "1.4rem",
-    fontSize: "0.75rem",
-    marginTop: "0.3rem",
-    opacity: 0.8
-  },
+ratingRow: {
+  display: "flex",
+  gap: "1rem",
+  marginBottom: "1.8rem"
+},
 
-  feedbackRight: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.8rem"
-  },
+ratingCircle: {
+  width: "45px",
+  height: "45px",
+  borderRadius: "50%",
+  background: "#1a2238",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  fontWeight: "500",
+  transition: "all 0.3s ease",
+  color: "white"
+},
 
-  feedbackTextarea: {
-    background: "rgba(255,255,255,0.1)",
-    border: "none",
-    borderRadius: "10px",
-    padding: "0.8rem",
-    color: "white",
-    resize: "none",
-    height: "80px",
-    outline: "none"
-  },
+activeRating: {
+  background: "linear-gradient(135deg, #7b2ff7, #9f44ff)",
+  boxShadow: "0 0 20px rgba(155, 89, 255, 0.6)",
+  transform: "scale(1.1)"
+},
 
-  feedbackBtn: {
-    background: "white",
-    border: "none",
-    padding: "0.6rem",
-    borderRadius: "10px",
-    fontWeight: "600",
-    cursor: "pointer",
-    transition: "0.3s",
-    color: "#7b2ff7"
-  },
+feedbackInputWrapper: {
+  position: "relative",
+  display: "flex",
+  alignItems: "center"
+},
+
+feedbackInput: {
+  width: "100%",
+  padding: "0.9rem 1rem",
+  borderRadius: "14px",
+  border: "none",
+  outline: "none",
+  background: "#121a2f",
+  color: "white",
+  fontSize: "0.9rem"
+},
+
+sendButton: {
+  position: "absolute",
+  right: "6px",
+  width: "40px",
+  height: "40px",
+  borderRadius: "12px",
+  border: "none",
+  background: "linear-gradient(135deg, #7b2ff7, #9f44ff)",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "1rem",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  transition: "0.3s"
+},
+
+supportButton: {
+  position: "absolute",
+  right: "-25px",
+  bottom: "-25px",
+  width: "80px",
+  height: "80px",
+  borderRadius: "50%",
+  background: "linear-gradient(135deg, #7b2ff7, #9f44ff)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "1.4rem",
+  boxShadow: "0 10px 30px rgba(155, 89, 255, 0.6)"
+},
 
 
   // Keyframes
