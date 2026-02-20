@@ -1,8 +1,12 @@
 import modelleImage from "../../assets/dash_modelle.png";
+import { useNavigate } from "react-router-dom";
+
 
 export default function CustomerDashboard() {
-  return (
-    <div style={styles.page}>
+
+const navigate = useNavigate();  
+return (
+  <div style={styles.page}>
 
 
       {/* HERO SECTION */}
@@ -21,8 +25,12 @@ export default function CustomerDashboard() {
           </p>
 
           <div style={styles.heroButtons}>
-            <button style={styles.primaryBtn}>Get Started</button>
-            <button style={styles.secondaryBtn}>View Showroom</button>
+            <button 
+              style={styles.secondaryBtn}
+              onClick={() => navigate("/customer/showroom")}
+            >
+              View Showroom
+            </button>
           </div>
         </div>
 
@@ -44,8 +52,16 @@ export default function CustomerDashboard() {
             <h2 style={styles.sectionTitle}>⚡ Quick Actions</h2>
 
             <div style={styles.cardRow}>
-              <ActionCard title="New Project" desc="Upload a new STL file" />
-              <ActionCard title="My Orders" desc="Track current orders" />
+              <ActionCard 
+                title="New Project" 
+                desc="Upload a new STL file" 
+                path="upload-stl"
+              />
+              <ActionCard 
+                title="My Orders" 
+                desc="Track current orders" 
+                path="my-orders"
+              />
               <ActionCard title="Messages" desc="Contact designers" />
             </div>
           </section>
@@ -128,9 +144,14 @@ export default function CustomerDashboard() {
 }
 
 /* Action Card */
-function ActionCard({ title, desc }) {
+function ActionCard({ title, desc, path }) {
+  const navigate = useNavigate();
+
   return (
-    <div style={styles.actionCard}>
+    <div 
+      style={styles.actionCard}
+      onClick={() => navigate(path)}
+    >
       <h3>{title}</h3>
       <p style={{ opacity: 0.7 }}>{desc}</p>
     </div>
