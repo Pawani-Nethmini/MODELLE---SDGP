@@ -1,6 +1,7 @@
 import { useState } from "react";
 import modelleImage from "../../assets/dash_modelle.png";
 import { useNavigate } from "react-router-dom";
+import callcenter from "../../assets/callcenter.png";
 
 
 export default function CustomerDashboard() {
@@ -16,8 +17,8 @@ return (
           <span style={styles.heroBadge}>OUR VISION</span>
 
           <h1 style={styles.heroTitle}>
-            Empowering your <span style={styles.heroHighlight}>imagination</span>
-            <br /> through precise engineering.
+            Feel Seen <span style={styles.heroHighlight}>Without</span>
+            <br /> Being Seen
           </h1>
 
           <p style={styles.heroText}>
@@ -111,9 +112,17 @@ return (
             <h2 style={styles.sectionTitle}>🔔 Notifications</h2>
 
             <div style={styles.notifyBox}>
-              <Notification text="Designer uploaded a new revision" />
-              <Notification text="Payment was successful" />
-              <Notification text="New message from StudioX" />
+              <Notification text="Project #1023 is 50% done" time="2 hours ago" isNew />
+              <Notification text="New quote received" time="5 hours ago" />
+              <Notification text="Designer uploaded a new revision" time="8 hours ago" />
+              <Notification text="Payment was successful" time="1 day ago" />
+              <Notification text="New message from StudioX" time="2 days ago" />
+              
+              <div style={styles.viewAll}>
+                <a href="/customer/notifications" style={styles.viewAllLink}>
+                  View all notifications
+                </a>
+              </div>
             </div>
           </section>
 
@@ -160,10 +169,16 @@ function ActionCard({ title, desc, path }) {
 }
 
 /* Notification */
-function Notification({ text }) {
+function Notification({ text ,time, isNew}) {
   return (
     <div style={styles.notifyItem}>
-      <p>{text}</p>
+      <div style={styles.notifyContent}>
+        {isNew && <div style={styles.notifyDot}></div>}
+        <div>
+          <p style={styles.notifyText}>{text}</p>
+          <span style={styles.notifyTime}>{time}</span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -207,7 +222,7 @@ function FeedbackCard() {
 
       {/* Floating Support Button */}
       <div style={styles.supportButton}>
-        🎧
+        <img src={callcenter} alt="Support" style={styles.supportImage} />
       </div>
     </div>
   );
@@ -401,15 +416,65 @@ const styles = {
     borderRadius: "14px",
     padding: "1rem",
     border: "1px solid #222",
-    animation: "fadeIn 1s ease 0.5s forwards"
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.8rem"
   },
 
   notifyItem: {
-    padding: "0.6rem 0",
-    borderBottom: "1px solid #222",
+    display: "flex",
+    flexDirection: "column",
+    padding: "0.8rem 1rem",
+    borderRadius: "12px",
+    background: "#121426",
+    cursor: "pointer",
+    transition: "0.3s background",
+    "&:hover": {
+      background: "#1b1c2b"
+    }
+  },
+
+  notifyContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.8rem"
+  },
+
+  notifyDot: {
+    width: "10px",
+    height: "10px",
+    borderRadius: "50%",
+    background: "#4deeea",
+    flexShrink: 0
+  },
+
+  notifyText: {
     fontSize: "0.95rem",
-    animation: "slideRight 0.5s ease forwards",
-    opacity: 0
+    fontWeight: "500",
+    color: "white",
+    margin: 0
+  },
+
+  notifyTime: {
+    fontSize: "0.75rem",
+    color: "rgba(255,255,255,0.5)",
+    marginTop: "2px"
+  },
+
+  viewAll: {
+    marginTop: "0.8rem",
+    textAlign: "center"
+  },
+
+  viewAllLink: {
+    color: "#8b8bff",
+    fontSize: "0.85rem",
+    textDecoration: "none",
+    cursor: "pointer",
+    transition: "0.2s",
+    "&:hover": {
+      textDecoration: "underline"
+    }
   },
 
   insightBox: {
@@ -534,6 +599,12 @@ supportButton: {
   justifyContent: "center",
   fontSize: "1.4rem",
   boxShadow: "0 10px 30px rgba(155, 89, 255, 0.6)"
+},
+
+supportImage: {
+  width: "28px",
+  height: "28px",
+  objectFit: "contain",
 },
 
 
