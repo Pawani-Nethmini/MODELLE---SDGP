@@ -1,50 +1,44 @@
-.how-section {
-    background: rgba(15, 23, 42, 0.55);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 5rem 2rem;
-    color: white;
-    margin: 3rem;
-    border-radius: 15px;
-}
-
 .how-title {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 4rem;
-  background: linear-gradient(90deg, #00f5ff 10%, #8b5cf6 100%);
+  background: linear-gradient(90deg, #ffffff 10%, #eae6f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  padding: 3rem;
+  margin-top: 8rem;
 }
 
 .card-container {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  perspective: 1200px; /* enables 3D */
+
 }
 
 .step-card {
   width: 240px;
   height: 300px;
-  background: linear-gradient(145deg, #141428, #0e0e1a);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: 20px;
+  border: 1px solid rgba(138, 92, 246, 0.25);
   padding: 2rem;
-  transform-style: preserve-3d;
-  transform: rotateY(-12deg);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   cursor: pointer;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
-.step-card:hover {
-  box-shadow: 0 35px 60px rgba(0, 245, 255, 0.25);
+.step-card {
+    transform: translateY(-6px);
+    border-color: rgba(138, 92, 246, 0.7);
+    box-shadow: 0 15px 35px rgba(138, 92, 246, 0.2);
+    background: rgba(255, 255, 255, 0.04);
 }
+
 
 .step-number {
   font-size: 3rem;
   font-weight: 700;
-  color: #00f5ff;
+  color: #b2e76e;
   margin-bottom: 1rem;
   transform: translateZ(40px); /* depth */
 }
@@ -55,7 +49,7 @@
 }
 
 .step-card p {
-  color: #b8b8ff;
+  color: #d3d3e1;
   line-height: 1.5;
   transform: translateZ(20px);
 }

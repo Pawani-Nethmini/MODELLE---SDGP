@@ -1,57 +1,59 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 import Splash from "./components/Splash";
-
-/* Public pages */
+import IridescenceBackground from "./components/IridescenceBackground";
+// Layouts
 import LandingLayout from "./components/LandingLayout";
-import Home from "./pages/Home";
-import About from "./components/About";
-import Features from "./components/HowItWorks3D";
-import Contact from "./components/Footer";
-
-/* Customer layout & pages */
 import CustomerLayout from "./components/CustomerLayout";
-import CustomerDashboard from "./pages/customer/Dashboard";
+// Pages
+import Home from "./pages/Home";
 import STLValidationPage from "./pages/customer/STLValidationPage";
-import Printers from "./pages/customer/Printers";
+import Dashboard from "./pages/customer/Dashboard";
 import Designers from "./pages/customer/Designers";
-import MyProjects from "./pages/customer/MyProjects";
 import MyOrders from "./pages/customer/MyOrders";
+import MyProjects from "./pages/customer/MyProjects";
+import Printers from "./pages/customer/Printers";
 import UserProfile from "./pages/customer/UserProfile";
 
-export default function App() {
+
+function App() {
   const [showSplash, setShowSplash] = useState(true);
 
-  if (showSplash) {
-    return <Splash onFinish={() => setShowSplash(false)} />;
-  }
-
   return (
-    <BrowserRouter>
-      <Routes>
+    <Router>
+      {/* Iridescence Background - Fixed behind all content */}
+      <IridescenceBackground />
 
-        {/* PUBLIC / LANDING ROUTES */}
-        <Route element={<LandingLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/contact" element={<Contact />} />
-        </Route>
+      {/* Splash Screen */}
+      {showSplash && <Splash onFinish={() => setShowSplash(false)} />}
 
+      {/* Main Content */}
+      {!showSplash && (
+        <div className="home-wrapper visible">
+          <Routes>
+            {/* Landing pages */}
+            <Route path="/" element={<LandingLayout />}>
+              <Route index element={<Home />} />
+            </Route>
 
-        {/* CUSTOMER ROUTES */}
-        <Route path="/customer" element={<CustomerLayout />}>
-          <Route index element={<CustomerDashboard />} />
-          <Route path="upload-stl" element={<STLValidationPage />} />
-          <Route path="printers" element={<Printers />} />
-          <Route path="designers" element={<Designers />} />
-          <Route path="my-projects" element={<MyProjects />} />
-          <Route path="my-orders" element={<MyOrders />} />
-          <Route path="profile" element={<UserProfile />} />
-        </Route>
+            {/* Customer portal */}
+            <Route path="/customer" element={<CustomerLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="upload-stl" element={<STLValidationPage />} />
+              <Route path="printers" element={<Printers />} />
+              <Route path="designers" element={<Designers />} />
+              <Route path="my-projects" element={<MyProjects />} />
+              <Route path="my-orders" element={<MyOrders />} />
+              <Route path="profile" element={<UserProfile />} />
+            </Route>
+          </Routes>
 
-      </Routes>
-    </BrowserRouter>
+          
+        </div>
+      )}
+    </Router>
   );
 }
+
+export default App;

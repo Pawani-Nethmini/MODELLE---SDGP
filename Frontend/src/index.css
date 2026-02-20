@@ -7,27 +7,26 @@
 body {
   font-family: 'Inter', sans-serif;
   color: white;
-
-  /* Animated gradient background */
-  background: linear-gradient(-45deg, #0a0a0a, #150e1f, #0a0a0a, #150e1f);
-  background-size: 400% 400%;
-  animation: gradientAnimation 30s ease infinite;
+  
+  /* Transparent to show Iridescence background */
+  background: transparent;
   margin: 0;
   padding: 0;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* Optional: Add a subtle overlay for text readability if needed */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.1);  /* Very subtle dark overlay */
+  z-index: -1;
+  pointer-events: none;
 }
 
 button {
@@ -41,14 +40,15 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
 html {
   scroll-behavior: smooth;
 }
-
 
 @media (max-width: 768px) {
   html,
@@ -66,4 +66,32 @@ html {
   }
 }
 
+/* ==================== IRIDESCENCE BACKGROUND STYLES ==================== */
 
+.iridescence-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.iridescence-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fixed background wrapper for entire site */
+.iridescence-background-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.iridescence-background-wrapper .iridescence-container {
+  width: 100%;
+  height: 100%;
+}
