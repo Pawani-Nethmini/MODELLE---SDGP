@@ -58,6 +58,37 @@ export default function STLValidatorPanel({ file }) {
     setPrinterProfile(selected.suggestedPrinters[0]);
   };
 
+  const handleAutoFix = async () => {
+  try {
+    setLoading(true);
+    setError("");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("http://localhost:8000/autofix", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name.replace(/\.stl$/i, "") + "_fixed.stl";
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch (e) {
+    setError(e.message || "Auto-fix failed.");
+  } finally {
+    setLoading(false);
+  }
+  };
+
   return (
     <>
       <div style={styles.container}>
@@ -238,6 +269,15 @@ export default function STLValidatorPanel({ file }) {
         {validationResult && (
           <PrintabilityReport result={validationResult} />
         )}
+        {validationResult && validationResult.fixableMinor && (
+          <div style={{ marginTop: 12 }}>
+            <CTA
+            text="Auto-fix Minor Issues"
+            variant="secondary"
+            onClick={handleAutoFix}
+            />
+          </div>
+      )}
 
       </div>
     </>
