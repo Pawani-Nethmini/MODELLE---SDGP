@@ -56,7 +56,7 @@ export default function RegisterPrinter() {
     return (
       <div className="auth-container">
         <div className="auth-card success-container">
-          <div className="success-icon">✨</div>
+          {/* <div className="success-icon"></div> */}
           <h2 className="success-title">Registration Successful!</h2>
           <p className="success-message">
             Welcome to Modelle, {form.shopName}! Your printing shop has been registered.

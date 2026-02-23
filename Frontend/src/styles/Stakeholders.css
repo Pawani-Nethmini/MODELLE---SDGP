@@ -6,13 +6,6 @@
   --shadow-color: rgba(0, 245, 255, 0.2);
 }
 
-.stakeholders-section {
-  margin-top: clamp(2rem, 4vw, 3rem);
-  margin-bottom: clamp(2rem, 4vw, 3rem);
-  padding: 2rem 2rem 6rem 2rem;
-  position: relative;
-}
-
 .stakeholder-html {
   pointer-events: none;
   z-index: 1;
