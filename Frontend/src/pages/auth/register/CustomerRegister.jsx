@@ -81,7 +81,7 @@ export default function CustomerRegister() {
         <form onSubmit={handleSubmit}>
           {error && (
             <div className="auth-error">
-              {/* <span>error logo</span> */}
+              <span>⚠️</span>
               <span>{error}</span>
             </div>
           )}

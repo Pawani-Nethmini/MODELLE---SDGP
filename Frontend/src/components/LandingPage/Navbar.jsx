@@ -1,15 +1,9 @@
 import { useState } from "react";
-<<<<<<< HEAD:Frontend/src/components/LandingPage/Navbar.jsx
 import CTA from "../CTA";
 import { Link, NavLink } from "react-router-dom";
-=======
-import CTA from "./CTA";
-import { useNavigate } from "react-router-dom";
->>>>>>> 898b3fa9580ff4931925b819aae21bbf66e3f4bf:Frontend/src/components/Navbar.jsx
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <>
@@ -23,22 +17,22 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Desktop Links - Liquid Glass Container */}
-        <div style={styles.glassContainer} className="desktop-only">
-          <a href="#hero" className="nav-link">Home</a>
-          <a href="#about" className="nav-link">About us</a>
-          <a href="#features" className="nav-link">Features</a>
-          <a href="#contact" className="nav-link">Contact</a>
-        </div>
+        {/* Desktop Links */}
+        <ul style={styles.links} className="desktop-only">
+          <li><a href="#hero" className="nav-link">Home</a></li>
+          <li><a href="#about" className="nav-link">About us</a></li>
+          <li><a href="#features" className="nav-link">Features</a></li>
+          <li><a href="#contact" className="nav-link">Contact</a></li>
+        </ul>
 
         {/* Desktop Actions */}
         <div style={styles.actions} className="desktop-only">
           <CTA
             variant="login"
             style={{
-              padding: "10px 24px",
+              padding: "8px 20px",
               margin: 0,
-              borderRadius: "25px",
+              borderRadius: "20px",
               fontWeight: "600",
               display: "flex",
               alignItems: "center",
@@ -48,9 +42,9 @@ export default function Navbar() {
           <CTA
             variant="getStarted"
             style={{
-              padding: "10px 24px",
+              padding: "8px 20px",
               margin: 0,
-              borderRadius: "25px",
+              borderRadius: "20px",
               border: "none",
               fontWeight: "600",
               display: "flex",
@@ -111,9 +105,9 @@ export default function Navbar() {
             <CTA
               variant="login"
               style={{
-                padding: "10px 24px",
+                padding: "8px 20px",
                 margin: 0,
-                borderRadius: "25px",
+                borderRadius: "20px",
                 fontWeight: "600",
                 display: "flex",
                 alignItems: "center",
@@ -123,22 +117,15 @@ export default function Navbar() {
             <CTA
               variant="getStarted"
               style={{
-                padding: "10px 24px",
+                padding: "8px 20px",
                 margin: 0,
-                borderRadius: "25px",
+                borderRadius: "20px",
                 border: "none",
                 fontWeight: "600",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
-<<<<<<< HEAD:Frontend/src/components/LandingPage/Navbar.jsx
-=======
-              onClick={() => {
-                setMenuOpen(false);
-                navigate("/customer");
-              }}
->>>>>>> 898b3fa9580ff4931925b819aae21bbf66e3f4bf:Frontend/src/components/Navbar.jsx
             />
           </div>
         </div>
@@ -162,81 +149,62 @@ export default function Navbar() {
           }
         }
 
-        /* Liquid Glass Navigation Links */
+        /* Desktop Navigation Links */
         .nav-link {
-          color: rgba(255, 255, 255, 0.95);
+          color: #9ca3af;
           text-decoration: none;
           font-weight: 500;
-          font-size: 0.95rem;
           position: relative;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          padding: 0.8rem 1.5rem;
-          border-radius: 18px;
+          transition: color 0.3s ease;
+          padding: 0.5rem 0;
         }
 
-        .nav-link::before {
+        .nav-link::after {
           content: '';
           position: absolute;
-          inset: 0;
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.08);
-          opacity: 0;
-          transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-link:hover::before {
-          opacity: 1;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #00f5ff, #0ea5e9);
+          transition: width 0.3s ease;
         }
 
         .nav-link:hover {
-          color: #ffffff;
-          transform: translateY(-2px);
+          color: #00f5ff;
+        }
+
+        .nav-link:hover::after {
+          width: 100%;
         }
 
         .nav-link:active {
-          transform: translateY(0);
+          color: #06b6d4;
+          transform: translateY(1px);
         }
 
         .nav-link.active {
           color: #00f5ff;
-        }
-
-        .nav-link.active::before {
-          background: rgba(0, 245, 255, 0.12);
-          opacity: 1;
+          font-weight: 600;
         }
 
         .nav-link.active::after {
-          content: '';
-          position: absolute;
-          bottom: 0.4rem;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 30px;
-          height: 2px;
-          background: linear-gradient(90deg, #00f5ff, #8b5cf6);
-          border-radius: 2px;
-          box-shadow: 0 0 12px rgba(0, 245, 255, 0.6);
+          width: 100%;
         }
 
-        /* Mobile Menu - Liquid Glass */
+        /* Mobile Menu */
         .mobileMenu {
           position: fixed;
           top: 0;
           right: 0;
-          width: 75%;
-          max-width: 400px;
+          width: 70%;
           height: 100%;
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(40px) saturate(150%);
-          -webkit-backdrop-filter: blur(40px) saturate(150%);
-          border-left: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 32px 0 0 32px;
-          box-shadow: -10px 0 50px rgba(31, 38, 135, 0.2);
+          background-color: rgba(15, 15, 15, 0.95);
+          backdrop-filter: blur(10px);
           padding: 2rem 1.5rem;
           z-index: 10000;
           transform: translateX(100%);
-          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: transform 0.3s ease;
           cursor: pointer;
         }
 
@@ -247,24 +215,21 @@ export default function Navbar() {
         .mobileMenuContent {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 1.5rem;
           height: 100%;
         }
 
         /* Mobile Navigation Links */
         .mobileLink {
-          color: rgba(255, 255, 255, 0.95);
+          color: #9ca3af;
           text-decoration: none;
-          font-size: 1.1rem;
-          padding: 1rem 1.2rem;
+          font-size: 1.2rem;
+          padding: 0.75rem 1rem;
           cursor: pointer;
-          border-radius: 18px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border-radius: 8px;
+          transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .mobileLink::before {
@@ -273,20 +238,16 @@ export default function Navbar() {
           left: 0;
           top: 0;
           height: 100%;
-          width: 4px;
-          background: linear-gradient(180deg, #00f5ff, #8b5cf6);
+          width: 3px;
+          background: linear-gradient(180deg, #00f5ff, #0ea5e9);
           transform: scaleY(0);
-          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 0 12px rgba(0, 245, 255, 0.6);
+          transition: transform 0.3s ease;
         }
 
         .mobileLink:hover {
           color: #00f5ff;
-          background: rgba(0, 245, 255, 0.12);
-          border-color: rgba(0, 245, 255, 0.35);
-          padding-left: 1.6rem;
-          box-shadow: 0 4px 20px rgba(0, 245, 255, 0.25);
-          transform: translateX(4px);
+          background-color: rgba(0, 245, 255, 0.05);
+          padding-left: 1.5rem;
         }
 
         .mobileLink:hover::before {
@@ -295,11 +256,10 @@ export default function Navbar() {
 
         .mobileLink.active {
           color: #00f5ff;
-          background: rgba(0, 245, 255, 0.18);
-          border-color: rgba(0, 245, 255, 0.45);
+          background-color: rgba(0, 245, 255, 0.1);
           font-weight: 600;
-          padding-left: 1.6rem;
-          box-shadow: 0 4px 24px rgba(0, 245, 255, 0.35);
+          padding-left: 1.5rem;
+          box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
         }
 
         .mobileLink.active::before {
@@ -311,7 +271,6 @@ export default function Navbar() {
           flex-direction: column;
           gap: 1rem;
           margin-top: auto;
-          padding-top: 1rem;
         }
 
         .mobileActions button {
@@ -325,74 +284,42 @@ export default function Navbar() {
 const styles = {
   nav: {
     position: "sticky",
-    top: "1.5rem",
+    top: 0,
     left: 0,
     right: 0,
     zIndex: 9999,
+    margin: -2,
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: "1rem 3rem",
-    
-    /* Liquid Glass Effect - Matching Reference */
-    background: "rgba(255, 255, 255, 0.08)",
-    backdropFilter: "blur(40px) saturate(150%)",
-    WebkitBackdropFilter: "blur(40px) saturate(150%)",
-    
-    /* Fully Rounded Pill */
-    borderRadius: "60px",
-    margin: "0 auto",
-    maxWidth: "92%",
-    
-    /* Professional Liquid Glass Border */
-    border: "1px solid rgba(255, 255, 255, 0.18)",
-    boxShadow: `
-      0 8px 32px rgba(31, 38, 135, 0.15),
-      0 2px 8px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.05)
-    `,
-    
-    width: "auto",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    padding: "1rem 5vw",
+    backgroundColor: "rgba(15, 15, 15, 0.75)",
+    backdropFilter: "blur(10px)",
+    borderBottom: "1px solid #222",
+    width: "100%",
+    border: "none",
   },
   logo: {
     display: "flex",
     alignItems: "center",
-    filter: "drop-shadow(0 2px 8px rgba(0, 245, 255, 0.3))",
-    transition: "filter 0.3s ease",
   },
   logoImg: {
-    height: "42px",
+    height: "50px",
     width: "auto",
   },
-  glassContainer: {
+  links: {
     display: "flex",
-    alignItems: "center",
-    gap: "0.5rem",
-    padding: "0.3rem",
-    
-    /* Inner Liquid Glass Container for Nav Links */
-    background: "rgba(255, 255, 255, 0.05)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-    borderRadius: "50px",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
+    gap: "2rem",
+    listStyle: "none",
+    cursor: "pointer",
   },
   actions: {
     display: "flex",
-    gap: "0.8rem",
+    gap: "1rem",
   },
   hamburger: {
-    fontSize: "22px",
-    color: "rgba(255, 255, 255, 0.95)",
+    fontSize: "24px",
+    color: "#ccc",
     cursor: "pointer",
-    padding: "0.8rem 1rem",
-    borderRadius: "18px",
-    background: "rgba(255, 255, 255, 0.08)",
-    backdropFilter: "blur(20px)",
-    border: "1px solid rgba(255, 255, 255, 0.15)",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
   },
 };
