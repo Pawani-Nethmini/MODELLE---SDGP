@@ -140,9 +140,7 @@ const EmptyState = ({ onReset }) => (
     <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔍</div>
     <h3 style={{ color: '#fff', marginBottom: '8px' }}>No services match your criteria</h3>
     <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '20px' }}>Try adjusting your filters or search terms to find more results.</p>
-    <button onClick={onReset} style={{ padding: '10px 24px', backgroundColor: '#3b82f6', border: 'none', color: '#fff', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
-      Reset Filters
-    </button>
+    <button onClick={onReset} style={{ padding: '10px 24px', backgroundColor: '#3b82f6', border: 'none', color: '#fff', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Reset Filters</button>
   </div>
 );
 
@@ -156,26 +154,12 @@ const Printers = () => {
   const [sortBy, setSortBy] = useState('recommended');
   const [visibleCount, setVisibleCount] = useState(4);
 
-  const toggleMaterial = (mat) => {
-    setSelectedMaterials(prev =>
-      prev.includes(mat) ? prev.filter(m => m !== mat) : [...prev, mat]
-    );
-  };
-
-  const toggleTech = (tech) => {
-    setSelectedTechs(prev =>
-      prev.includes(tech) ? prev.filter(t => t !== tech) : [...prev, tech]
-    );
-  };
-
+  const toggleMaterial = (mat) => setSelectedMaterials(prev => prev.includes(mat) ? prev.filter(m => m !== mat) : [...prev, mat]);
+  const toggleTech = (tech) => setSelectedTechs(prev => prev.includes(tech) ? prev.filter(t => t !== tech) : [...prev, tech]);
   const resetFilters = () => {
-    setSelectedIndustry('Automotive');
-    setSearchTerm('');
-    setPriceRange(1500);
-    setSelectedMaterials(['PLA (Polylactic Acid)']);
-    setSelectedTechs(['FDM']);
-    setSortBy('recommended');
-    setVisibleCount(4);
+    setSelectedIndustry('Automotive'); setSearchTerm(''); setPriceRange(1500);
+    setSelectedMaterials(['PLA (Polylactic Acid)']); setSelectedTechs(['FDM']);
+    setSortBy('recommended'); setVisibleCount(4);
   };
 
   const filteredPrinters = useMemo(() => {
@@ -197,7 +181,44 @@ const Printers = () => {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#0d0d0d', color: '#ffffff', fontFamily: "'Segoe UI', sans-serif" }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px', display: 'flex', gap: '24px' }}>
+
+      {/* Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #0d0d1a 0%, #1a1a3e 50%, #0d0d0d 100%)',
+        borderBottom: '1px solid #1e1e3e',
+        padding: '48px 20px 36px',
+        textAlign: 'center',
+      }}>
+        <style>{`
+          @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+        `}</style>
+        <h1 style={{
+          fontSize: '2.8rem',
+          fontWeight: 900,
+          margin: 0,
+          lineHeight: 1.2,
+        }}>
+          Find the Perfect{' '}
+          <span style={{
+            background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)',
+            backgroundSize: '200% auto',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            animation: 'gradientShift 3s ease infinite',
+          }}>
+            3D Printing Service
+          </span>
+        </h1>
+        <p style={{ color: '#aaa', marginTop: '14px', fontSize: '1rem', maxWidth: '500px', margin: '14px auto 0' }}>
+          Connect with top-tier additive manufacturing partners worldwide. Filter by technology, material, and lead time.
+        </p>
+      </div>
+
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px', display: 'flex', gap: '24px' }}>
 
         {/* Sidebar */}
         <div style={{ width: '220px', flexShrink: 0 }}>
@@ -236,12 +257,7 @@ const Printers = () => {
 
         {/* Main */}
         <div style={{ flex: 1 }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
-            Find the Perfect <span style={{ color: '#3b82f6' }}>3D Printing Service</span>
-          </h1>
-          <p style={{ color: '#aaa', marginTop: '8px' }}>Connect with top-tier additive manufacturing partners worldwide.</p>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <p style={{ color: '#888', fontSize: '0.85rem' }}>Showing <strong style={{ color: '#fff' }}>{filteredPrinters.length}</strong> printing services</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '0.8rem', color: '#888' }}>Sort by:</span>
@@ -265,10 +281,7 @@ const Printers = () => {
 
           {hasMore && (
             <div style={{ textAlign: 'center', marginTop: '32px' }}>
-              <button
-                onClick={() => setVisibleCount(prev => prev + 4)}
-                style={{ padding: '12px 36px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}
-              >
+              <button onClick={() => setVisibleCount(prev => prev + 4)} style={{ padding: '12px 36px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}>
                 ↓ Load More Services
               </button>
             </div>
