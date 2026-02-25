@@ -1,6 +1,5 @@
 import { useState } from "react";
 import CTA from "../CTA";
-import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {

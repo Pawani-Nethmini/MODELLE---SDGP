@@ -4,8 +4,8 @@ import "./App.css";
 import Splash from "./components/Splash";
 import IridescenceBackground from "./components/IridescenceBackground";
 // Layouts
-import LandingLayout from "./components/LandingLayout";
-import CustomerLayout from "./components/CustomerLayout";
+import LandingLayout from "./components/LandingPage/LandingLayout";
+import CustomerLayout from "./components/Customer/CustomerLayout";
 // Pages
 import Home from "./pages/Home";
 import STLValidationPage from "./pages/customer/STLValidationPage";

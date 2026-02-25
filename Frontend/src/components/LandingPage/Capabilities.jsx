@@ -1,5 +1,5 @@
 import "../../styles/Capabilities.css";
-import SpotlightCard from "./SpotlightCard";
+import SpotlightCard from "../SpotlightCard";
 
 export default function PlatformCapabilities() {
   const capabilities = [
