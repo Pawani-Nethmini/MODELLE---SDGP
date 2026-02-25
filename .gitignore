@@ -2571,3 +2571,6 @@ backend/.venv/lib/python3.12/site-packages/uvicorn-0.40.0.dist-info/RECORD
 backend/.venv/lib/python3.12/site-packages/uvicorn-0.40.0.dist-info/REQUESTED
 backend/.venv/lib/python3.12/site-packages/uvicorn-0.40.0.dist-info/WHEEL
 backend/.venv/lib/python3.12/site-packages/uvicorn-0.40.0.dist-info/licenses/LICENSE.md
+backend/.env
+backend/.env
+backend/.env
