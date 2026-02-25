@@ -82,6 +82,105 @@ const MOCK_PRINTERS = [
   },
 ];
 
+const badgeColors = {
+  "FAST TURNAROUND": "#f59e0b",
+  "LOCAL PICKUP": "#10b981",
+  "CERTIFIED LAB": "#8b5cf6",
+  "VOLUME SPECIALIST": "#3b82f6",
+};
+
+const PrinterCard = ({ printer, onClick }) => (
+  <div
+    onClick={onClick}
+    style={{
+      backgroundColor: '#1a1a2e',
+      borderRadius: '14px',
+      overflow: 'hidden',
+      cursor: 'pointer',
+      border: '1px solid #2a2a3e',
+      transition: 'transform 0.2s, border-color 0.2s',
+    }}
+    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#3b82f6'; }}
+    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#2a2a3e'; }}
+  >
+    {/* Image */}
+    <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
+      <img
+        src={printer.image}
+        alt={printer.name}
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+      {/* Badges */}
+      <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+        {printer.badges.map(badge => (
+          <span key={badge} style={{
+            backgroundColor: badgeColors[badge] || '#3b82f6',
+            color: '#fff',
+            fontSize: '0.65rem',
+            fontWeight: 700,
+            padding: '3px 8px',
+            borderRadius: '4px',
+            letterSpacing: '0.5px'
+          }}>{badge}</span>
+        ))}
+      </div>
+      {/* Rating */}
+      <div style={{
+        position: 'absolute', bottom: '10px', right: '10px',
+        backgroundColor: 'rgba(0,0,0,0.75)',
+        borderRadius: '20px',
+        padding: '4px 10px',
+        fontSize: '0.75rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px'
+      }}>
+        ⭐ {printer.rating} <span style={{ color: '#888' }}>({printer.reviews})</span>
+      </div>
+    </div>
+
+    {/* Card Body */}
+    <div style={{ padding: '14px 16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{printer.name}</h3>
+          <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>📍 {printer.location}</p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <span style={{ fontSize: '0.65rem', color: '#888' }}>STARTS AT</span>
+          <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#3b82f6' }}>${printer.startingPrice}.00</p>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', fontSize: '0.75rem', color: '#aaa' }}>
+        <div>
+          <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>DELIVERY</span>
+          {printer.delivery}
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>TECH</span>
+          {printer.tech.join(', ')}
+        </div>
+      </div>
+
+      <button style={{
+        marginTop: '14px',
+        width: '100%',
+        padding: '9px',
+        backgroundColor: 'transparent',
+        border: '1px solid #3b82f6',
+        color: '#3b82f6',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '0.8rem',
+        fontWeight: 600,
+      }}>
+        View Details →
+      </button>
+    </div>
+  </div>
+);
+
 const Printers = () => {
   const navigate = useNavigate();
   const [selectedIndustry, setSelectedIndustry] = useState('Automotive');
@@ -129,91 +228,41 @@ const Printers = () => {
   }, [searchTerm, priceRange, selectedMaterials, selectedTechs, sortBy]);
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#0d0d0d',
-      color: '#ffffff',
-      fontFamily: "'Segoe UI', sans-serif",
-    }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#0d0d0d', color: '#ffffff', fontFamily: "'Segoe UI', sans-serif" }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px', display: 'flex', gap: '24px' }}>
 
         {/* Sidebar */}
         <div style={{ width: '220px', flexShrink: 0 }}>
           <div style={{ backgroundColor: '#1a1a2e', borderRadius: '12px', padding: '20px' }}>
             <h3 style={{ color: '#3b82f6', marginBottom: '16px', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Questionnaire</h3>
-
             <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '6px' }}>INDUSTRY</label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
               {['Automotive', 'Jewelry', 'Medical', 'Prototyping'].map(tag => (
-                <span key={tag} onClick={() => setSelectedIndustry(tag)} style={{
-                  backgroundColor: selectedIndustry === tag ? '#3b82f6' : '#2a2a3e',
-                  padding: '4px 10px',
-                  borderRadius: '20px',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer'
-                }}>{tag}</span>
+                <span key={tag} onClick={() => setSelectedIndustry(tag)} style={{ backgroundColor: selectedIndustry === tag ? '#3b82f6' : '#2a2a3e', padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', cursor: 'pointer' }}>{tag}</span>
               ))}
             </div>
-
             <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '6px' }}>PRIMARY PURPOSE?</label>
             <select style={{ width: '100%', backgroundColor: '#2a2a3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', marginBottom: '20px' }}>
               <option>Select purpose</option>
             </select>
-
             <h3 style={{ color: '#3b82f6', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Manual Filters</h3>
-
-            <input
-              placeholder="Search service name..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              style={{ width: '100%', backgroundColor: '#2a2a3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', marginBottom: '16px', boxSizing: 'border-box' }}
-            />
-
+            <input placeholder="Search service name..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ width: '100%', backgroundColor: '#2a2a3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', marginBottom: '16px', boxSizing: 'border-box' }} />
             <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '6px' }}>PRICE RANGE: $0 – ${priceRange}</label>
-            <input
-              type="range" min="0" max="1500"
-              value={priceRange}
-              onChange={e => setPriceRange(e.target.value)}
-              style={{ width: '100%', marginBottom: '16px', accentColor: '#3b82f6' }}
-            />
-
+            <input type="range" min="0" max="1500" value={priceRange} onChange={e => setPriceRange(e.target.value)} style={{ width: '100%', marginBottom: '16px', accentColor: '#3b82f6' }} />
             <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '8px' }}>MATERIALS</label>
             {['PLA (Polylactic Acid)', 'ABS', 'Resin (Photopolymer)', 'PETG'].map(mat => (
               <label key={mat} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontSize: '0.8rem', cursor: 'pointer' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedMaterials.includes(mat)}
-                  onChange={() => toggleMaterial(mat)}
-                  style={{ accentColor: '#3b82f6' }}
-                />
+                <input type="checkbox" checked={selectedMaterials.includes(mat)} onChange={() => toggleMaterial(mat)} style={{ accentColor: '#3b82f6' }} />
                 {mat}
               </label>
             ))}
-
             <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', margin: '16px 0 8px' }}>TECHNOLOGY</label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
               {['FDM', 'SLA', 'SLS', 'MJF'].map(tech => (
-                <span key={tech} onClick={() => toggleTech(tech)} style={{
-                  backgroundColor: selectedTechs.includes(tech) ? '#3b82f6' : '#2a2a3e',
-                  padding: '4px 12px',
-                  borderRadius: '20px',
-                  fontSize: '0.75rem',
-                  cursor: 'pointer'
-                }}>{tech}</span>
+                <span key={tech} onClick={() => toggleTech(tech)} style={{ backgroundColor: selectedTechs.includes(tech) ? '#3b82f6' : '#2a2a3e', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', cursor: 'pointer' }}>{tech}</span>
               ))}
             </div>
-
-            <button onClick={resetFilters} style={{
-              width: '100%',
-              padding: '10px',
-              backgroundColor: 'transparent',
-              border: '1px solid #3b82f6',
-              color: '#3b82f6',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.8rem',
-              letterSpacing: '1px'
-            }}>⟳ RESET ALL FILTERS</button>
+            <button onClick={resetFilters} style={{ width: '100%', padding: '10px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', letterSpacing: '1px' }}>⟳ RESET ALL FILTERS</button>
           </div>
         </div>
 
@@ -222,22 +271,13 @@ const Printers = () => {
           <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
             Find the Perfect <span style={{ color: '#3b82f6' }}>3D Printing Service</span>
           </h1>
-          <p style={{ color: '#aaa', marginTop: '8px' }}>
-            Connect with top-tier additive manufacturing partners worldwide.
-          </p>
+          <p style={{ color: '#aaa', marginTop: '8px' }}>Connect with top-tier additive manufacturing partners worldwide.</p>
 
-          {/* Results header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '24px', marginBottom: '16px' }}>
-            <p style={{ color: '#888', fontSize: '0.85rem' }}>
-              Showing <strong style={{ color: '#fff' }}>{filteredPrinters.length}</strong> printing services
-            </p>
+            <p style={{ color: '#888', fontSize: '0.85rem' }}>Showing <strong style={{ color: '#fff' }}>{filteredPrinters.length}</strong> printing services</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '0.8rem', color: '#888' }}>Sort by:</span>
-              <select
-                value={sortBy}
-                onChange={e => setSortBy(e.target.value)}
-                style={{ backgroundColor: '#1a1a2e', color: '#fff', border: '1px solid #2a2a3e', padding: '6px 10px', borderRadius: '8px', fontSize: '0.8rem' }}
-              >
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ backgroundColor: '#1a1a2e', color: '#fff', border: '1px solid #2a2a3e', padding: '6px 10px', borderRadius: '8px', fontSize: '0.8rem' }}>
                 <option value="recommended">Recommended</option>
                 <option value="rating">Top Rated</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -246,16 +286,9 @@ const Printers = () => {
             </div>
           </div>
 
-          {/* Grid placeholder */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '20px'
-          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             {filteredPrinters.map(p => (
-              <div key={p.id} style={{ backgroundColor: '#1a1a2e', borderRadius: '12px', padding: '16px', color: '#aaa', fontSize: '0.85rem' }}>
-                {p.name} — ${p.startingPrice}
-              </div>
+              <PrinterCard key={p.id} printer={p} onClick={() => navigate(`/printers/${p.id}`)} />
             ))}
           </div>
         </div>
