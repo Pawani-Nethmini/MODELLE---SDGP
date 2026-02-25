@@ -154,6 +154,7 @@ const Printers = () => {
   const [selectedMaterials, setSelectedMaterials] = useState(['PLA (Polylactic Acid)']);
   const [selectedTechs, setSelectedTechs] = useState(['FDM']);
   const [sortBy, setSortBy] = useState('recommended');
+  const [visibleCount, setVisibleCount] = useState(4);
 
   const toggleMaterial = (mat) => {
     setSelectedMaterials(prev =>
@@ -174,6 +175,7 @@ const Printers = () => {
     setSelectedMaterials(['PLA (Polylactic Acid)']);
     setSelectedTechs(['FDM']);
     setSortBy('recommended');
+    setVisibleCount(4);
   };
 
   const filteredPrinters = useMemo(() => {
@@ -189,6 +191,9 @@ const Printers = () => {
     if (sortBy === 'rating') results = [...results].sort((a, b) => b.rating - a.rating);
     return results;
   }, [searchTerm, priceRange, selectedMaterials, selectedTechs, sortBy]);
+
+  const visiblePrinters = filteredPrinters.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredPrinters.length;
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#0d0d0d', color: '#ffffff', fontFamily: "'Segoe UI', sans-serif" }}>
@@ -252,11 +257,22 @@ const Printers = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             {filteredPrinters.length === 0
               ? <EmptyState onReset={resetFilters} />
-              : filteredPrinters.map(p => (
+              : visiblePrinters.map(p => (
                   <PrinterCard key={p.id} printer={p} onClick={() => navigate(`/printers/${p.id}`)} />
                 ))
             }
           </div>
+
+          {hasMore && (
+            <div style={{ textAlign: 'center', marginTop: '32px' }}>
+              <button
+                onClick={() => setVisibleCount(prev => prev + 4)}
+                style={{ padding: '12px 36px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}
+              >
+                ↓ Load More Services
+              </button>
+            </div>
+          )}
         </div>
 
       </div>
