@@ -1,7 +1,86 @@
-// src/pages/Printers.jsx
-
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+
+const MOCK_PRINTERS = [
+  {
+    id: 1,
+    name: "ProtoFab SF",
+    location: "San Francisco, CA",
+    rating: 4.9,
+    reviews: 124,
+    startingPrice: 45,
+    delivery: "2-3 Business Days",
+    tech: ["FDM", "SLA", "SLS"],
+    materials: ["PLA (Polylactic Acid)", "Resin (Photopolymer)"],
+    badges: ["FAST TURNAROUND", "LOCAL PICKUP"],
+    image: "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&q=80",
+  },
+  {
+    id: 2,
+    name: "Precision Resin Labs",
+    location: "Oakland, CA",
+    rating: 4.7,
+    reviews: 89,
+    startingPrice: 78,
+    delivery: "1 Business Day",
+    tech: ["MJF", "PolyJet"],
+    materials: ["Resin (Photopolymer)", "ABS"],
+    badges: ["CERTIFIED LAB"],
+    image: "https://images.unsplash.com/photo-1631544822062-4b7e3cee1aba?w=400&q=80",
+  },
+  {
+    id: 3,
+    name: "Bay Area Additive",
+    location: "San Jose, CA",
+    rating: 5.0,
+    reviews: 202,
+    startingPrice: 32,
+    delivery: "4-5 Business Days",
+    tech: ["FDM", "SLS"],
+    materials: ["PLA (Polylactic Acid)", "PETG", "ABS"],
+    badges: ["VOLUME SPECIALIST"],
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&q=80",
+  },
+  {
+    id: 4,
+    name: "NorCal Makers",
+    location: "Sacramento, CA",
+    rating: 4.5,
+    reviews: 61,
+    startingPrice: 28,
+    delivery: "3-4 Business Days",
+    tech: ["FDM"],
+    materials: ["PLA (Polylactic Acid)", "PETG"],
+    badges: [],
+    image: "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=400&q=80",
+  },
+  {
+    id: 5,
+    name: "ResinCraft Studio",
+    location: "Berkeley, CA",
+    rating: 4.8,
+    reviews: 147,
+    startingPrice: 95,
+    delivery: "2 Business Days",
+    tech: ["SLA", "PolyJet"],
+    materials: ["Resin (Photopolymer)"],
+    badges: ["CERTIFIED LAB", "LOCAL PICKUP"],
+    image: "https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?w=400&q=80",
+  },
+  {
+    id: 6,
+    name: "MetalForm Pro",
+    location: "Fremont, CA",
+    rating: 4.6,
+    reviews: 33,
+    startingPrice: 120,
+    delivery: "5-7 Business Days",
+    tech: ["SLS", "MJF"],
+    materials: ["ABS", "PETG"],
+    badges: ["VOLUME SPECIALIST"],
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80",
+  },
+];
 
 const Printers = () => {
   const navigate = useNavigate();
