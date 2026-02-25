@@ -4,6 +4,15 @@ import { useNavigate } from "react-router-dom";
 const Printers = () => {
   const navigate = useNavigate();
   const [selectedIndustry, setSelectedIndustry] = useState('Automotive');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priceRange, setPriceRange] = useState(1500);
+  const [selectedMaterials, setSelectedMaterials] = useState(['PLA (Polylactic Acid)']);
+
+  const toggleMaterial = (mat) => {
+    setSelectedMaterials(prev =>
+      prev.includes(mat) ? prev.filter(m => m !== mat) : [...prev, mat]
+    );
+  };
 
   return (
     <div style={{
@@ -33,9 +42,40 @@ const Printers = () => {
             </div>
 
             <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '6px' }}>PRIMARY PURPOSE?</label>
-            <select style={{ width: '100%', backgroundColor: '#2a2a3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', marginBottom: '16px' }}>
+            <select style={{ width: '100%', backgroundColor: '#2a2a3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', marginBottom: '20px' }}>
               <option>Select purpose</option>
             </select>
+
+            {/* Manual Filters */}
+            <h3 style={{ color: '#3b82f6', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Manual Filters</h3>
+
+            <input
+              placeholder="Search service name..."
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              style={{ width: '100%', backgroundColor: '#2a2a3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', marginBottom: '16px', boxSizing: 'border-box' }}
+            />
+
+            <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '6px' }}>PRICE RANGE: $0 – ${priceRange}</label>
+            <input
+              type="range" min="0" max="1500"
+              value={priceRange}
+              onChange={e => setPriceRange(e.target.value)}
+              style={{ width: '100%', marginBottom: '16px', accentColor: '#3b82f6' }}
+            />
+
+            <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', marginBottom: '8px' }}>MATERIALS</label>
+            {['PLA (Polylactic Acid)', 'ABS', 'Resin (Photopolymer)', 'PETG'].map(mat => (
+              <label key={mat} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontSize: '0.8rem', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={selectedMaterials.includes(mat)}
+                  onChange={() => toggleMaterial(mat)}
+                  style={{ accentColor: '#3b82f6' }}
+                />
+                {mat}
+              </label>
+            ))}
           </div>
         </div>
 
