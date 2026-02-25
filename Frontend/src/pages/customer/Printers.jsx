@@ -1,3 +1,5 @@
+// src/pages/Printers.jsx
+
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,11 +9,26 @@ const Printers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState(1500);
   const [selectedMaterials, setSelectedMaterials] = useState(['PLA (Polylactic Acid)']);
+  const [selectedTechs, setSelectedTechs] = useState(['FDM']);
 
   const toggleMaterial = (mat) => {
     setSelectedMaterials(prev =>
       prev.includes(mat) ? prev.filter(m => m !== mat) : [...prev, mat]
     );
+  };
+
+  const toggleTech = (tech) => {
+    setSelectedTechs(prev =>
+      prev.includes(tech) ? prev.filter(t => t !== tech) : [...prev, tech]
+    );
+  };
+
+  const resetFilters = () => {
+    setSelectedIndustry('Automotive');
+    setSearchTerm('');
+    setPriceRange(1500);
+    setSelectedMaterials(['PLA (Polylactic Acid)']);
+    setSelectedTechs(['FDM']);
   };
 
   return (
@@ -46,7 +63,6 @@ const Printers = () => {
               <option>Select purpose</option>
             </select>
 
-            {/* Manual Filters */}
             <h3 style={{ color: '#3b82f6', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Manual Filters</h3>
 
             <input
@@ -76,6 +92,31 @@ const Printers = () => {
                 {mat}
               </label>
             ))}
+
+            <label style={{ fontSize: '0.75rem', color: '#888', display: 'block', margin: '16px 0 8px' }}>TECHNOLOGY</label>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
+              {['FDM', 'SLA', 'SLS', 'MJF'].map(tech => (
+                <span key={tech} onClick={() => toggleTech(tech)} style={{
+                  backgroundColor: selectedTechs.includes(tech) ? '#3b82f6' : '#2a2a3e',
+                  padding: '4px 12px',
+                  borderRadius: '20px',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
+                }}>{tech}</span>
+              ))}
+            </div>
+
+            <button onClick={resetFilters} style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: 'transparent',
+              border: '1px solid #3b82f6',
+              color: '#3b82f6',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '0.8rem',
+              letterSpacing: '1px'
+            }}>⟳ RESET ALL FILTERS</button>
           </div>
         </div>
 
