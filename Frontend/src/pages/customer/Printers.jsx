@@ -29,7 +29,7 @@ const MOCK_PRINTERS = [
     materials: ["Resin", "ABS"],
     badges: ["CERTIFIED LAB"],
     certified: true,
-    image: "https://images.unsplash.com/photo-1631544822062-4b7e3cee1aba?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1705475025559-ad8efdedc74f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     accentColor: "#8b5cf6",
   },
   {
@@ -104,7 +104,7 @@ const MOCK_PRINTERS = [
     materials: ["Resin", "PLA"],
     badges: ["FAST TURNAROUND", "CERTIFIED LAB"],
     certified: true,
-    image: "https://images.unsplash.com/photo-1565087168882-b4f8c3bf3d28?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1603380353725-f8a4d39cc41e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     accentColor: "#3b82f6",
   },
   {
