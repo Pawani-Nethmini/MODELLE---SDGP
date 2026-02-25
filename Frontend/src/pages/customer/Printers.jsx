@@ -92,54 +92,21 @@ const badgeColors = {
 const PrinterCard = ({ printer, onClick }) => (
   <div
     onClick={onClick}
-    style={{
-      backgroundColor: '#1a1a2e',
-      borderRadius: '14px',
-      overflow: 'hidden',
-      cursor: 'pointer',
-      border: '1px solid #2a2a3e',
-      transition: 'transform 0.2s, border-color 0.2s',
-    }}
+    style={{ backgroundColor: '#1a1a2e', borderRadius: '14px', overflow: 'hidden', cursor: 'pointer', border: '1px solid #2a2a3e', transition: 'transform 0.2s, border-color 0.2s' }}
     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#3b82f6'; }}
     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#2a2a3e'; }}
   >
-    {/* Image */}
     <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
-      <img
-        src={printer.image}
-        alt={printer.name}
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-      />
-      {/* Badges */}
+      <img src={printer.image} alt={printer.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
         {printer.badges.map(badge => (
-          <span key={badge} style={{
-            backgroundColor: badgeColors[badge] || '#3b82f6',
-            color: '#fff',
-            fontSize: '0.65rem',
-            fontWeight: 700,
-            padding: '3px 8px',
-            borderRadius: '4px',
-            letterSpacing: '0.5px'
-          }}>{badge}</span>
+          <span key={badge} style={{ backgroundColor: badgeColors[badge] || '#3b82f6', color: '#fff', fontSize: '0.65rem', fontWeight: 700, padding: '3px 8px', borderRadius: '4px', letterSpacing: '0.5px' }}>{badge}</span>
         ))}
       </div>
-      {/* Rating */}
-      <div style={{
-        position: 'absolute', bottom: '10px', right: '10px',
-        backgroundColor: 'rgba(0,0,0,0.75)',
-        borderRadius: '20px',
-        padding: '4px 10px',
-        fontSize: '0.75rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px'
-      }}>
+      <div style={{ position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(0,0,0,0.75)', borderRadius: '20px', padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
         ⭐ {printer.rating} <span style={{ color: '#888' }}>({printer.reviews})</span>
       </div>
     </div>
-
-    {/* Card Body */}
     <div style={{ padding: '14px 16px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
@@ -151,7 +118,6 @@ const PrinterCard = ({ printer, onClick }) => (
           <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#3b82f6' }}>${printer.startingPrice}.00</p>
         </div>
       </div>
-
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', fontSize: '0.75rem', color: '#aaa' }}>
         <div>
           <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>DELIVERY</span>
@@ -162,22 +128,21 @@ const PrinterCard = ({ printer, onClick }) => (
           {printer.tech.join(', ')}
         </div>
       </div>
-
-      <button style={{
-        marginTop: '14px',
-        width: '100%',
-        padding: '9px',
-        backgroundColor: 'transparent',
-        border: '1px solid #3b82f6',
-        color: '#3b82f6',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontSize: '0.8rem',
-        fontWeight: 600,
-      }}>
+      <button style={{ marginTop: '14px', width: '100%', padding: '9px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
         View Details →
       </button>
     </div>
+  </div>
+);
+
+const EmptyState = ({ onReset }) => (
+  <div style={{ gridColumn: 'span 2', textAlign: 'center', padding: '60px 20px', backgroundColor: '#1a1a2e', borderRadius: '14px', border: '1px dashed #2a2a3e' }}>
+    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔍</div>
+    <h3 style={{ color: '#fff', marginBottom: '8px' }}>No services match your criteria</h3>
+    <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '20px' }}>Try adjusting your filters or search terms to find more results.</p>
+    <button onClick={onReset} style={{ padding: '10px 24px', backgroundColor: '#3b82f6', border: 'none', color: '#fff', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+      Reset Filters
+    </button>
   </div>
 );
 
@@ -219,11 +184,9 @@ const Printers = () => {
       const matchesTech = selectedTechs.length === 0 || p.tech.some(t => selectedTechs.includes(t));
       return matchesSearch && matchesPrice && matchesMaterial && matchesTech;
     });
-
     if (sortBy === 'price_asc') results = [...results].sort((a, b) => a.startingPrice - b.startingPrice);
     if (sortBy === 'price_desc') results = [...results].sort((a, b) => b.startingPrice - a.startingPrice);
     if (sortBy === 'rating') results = [...results].sort((a, b) => b.rating - a.rating);
-
     return results;
   }, [searchTerm, priceRange, selectedMaterials, selectedTechs, sortBy]);
 
@@ -287,9 +250,12 @@ const Printers = () => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
-            {filteredPrinters.map(p => (
-              <PrinterCard key={p.id} printer={p} onClick={() => navigate(`/printers/${p.id}`)} />
-            ))}
+            {filteredPrinters.length === 0
+              ? <EmptyState onReset={resetFilters} />
+              : filteredPrinters.map(p => (
+                  <PrinterCard key={p.id} printer={p} onClick={() => navigate(`/printers/${p.id}`)} />
+                ))
+            }
           </div>
         </div>
 
