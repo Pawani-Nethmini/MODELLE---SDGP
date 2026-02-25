@@ -5,7 +5,7 @@ const MOCK_PRINTERS = [
   {
     id: 1,
     name: "ProtoFab SF",
-    location: "San Francisco, CA",
+    location: "Colombo 07",
     rating: 4.9,
     reviews: 124,
     startingPrice: 45,
@@ -18,7 +18,7 @@ const MOCK_PRINTERS = [
   {
     id: 2,
     name: "Precision Resin Labs",
-    location: "Oakland, CA",
+    location: "Gampaha",
     rating: 4.7,
     reviews: 89,
     startingPrice: 78,
@@ -31,7 +31,7 @@ const MOCK_PRINTERS = [
   {
     id: 3,
     name: "Bay Area Additive",
-    location: "San Jose, CA",
+    location: "Galle",
     rating: 5.0,
     reviews: 202,
     startingPrice: 32,
@@ -44,7 +44,7 @@ const MOCK_PRINTERS = [
   {
     id: 4,
     name: "NorCal Makers",
-    location: "Sacramento, CA",
+    location: "Battaramulla",
     rating: 4.5,
     reviews: 61,
     startingPrice: 28,
@@ -57,7 +57,7 @@ const MOCK_PRINTERS = [
   {
     id: 5,
     name: "ResinCraft Studio",
-    location: "Berkeley, CA",
+    location: "Maharagama",
     rating: 4.8,
     reviews: 147,
     startingPrice: 95,
@@ -70,7 +70,7 @@ const MOCK_PRINTERS = [
   {
     id: 6,
     name: "MetalForm Pro",
-    location: "Fremont, CA",
+    location: "Kaduwela",
     rating: 4.6,
     reviews: 33,
     startingPrice: 120,
@@ -109,6 +109,16 @@ const Printers = () => {
     setSelectedMaterials(['PLA (Polylactic Acid)']);
     setSelectedTechs(['FDM']);
   };
+
+  const filteredPrinters = useMemo(() => {
+    return MOCK_PRINTERS.filter(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPrice = p.startingPrice <= priceRange;
+      const matchesMaterial = selectedMaterials.length === 0 || p.materials.some(m => selectedMaterials.includes(m));
+      const matchesTech = selectedTechs.length === 0 || p.tech.some(t => selectedTechs.includes(t));
+      return matchesSearch && matchesPrice && matchesMaterial && matchesTech;
+    });
+  }, [searchTerm, priceRange, selectedMaterials, selectedTechs]);
 
   return (
     <div style={{
@@ -206,6 +216,9 @@ const Printers = () => {
           </h1>
           <p style={{ color: '#aaa', marginTop: '8px' }}>
             Connect with top-tier additive manufacturing partners worldwide.
+          </p>
+          <p style={{ color: '#666', fontSize: '0.85rem', marginTop: '8px' }}>
+            Showing {filteredPrinters.length} printing services
           </p>
         </div>
 
