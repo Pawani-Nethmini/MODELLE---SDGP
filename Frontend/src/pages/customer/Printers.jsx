@@ -89,51 +89,73 @@ const badgeColors = {
   "VOLUME SPECIALIST": "#3b82f6",
 };
 
-const PrinterCard = ({ printer, onClick }) => (
-  <div
-    onClick={onClick}
-    style={{ backgroundColor: '#1a1a2e', borderRadius: '14px', overflow: 'hidden', cursor: 'pointer', border: '1px solid #2a2a3e', transition: 'transform 0.2s, border-color 0.2s' }}
-    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#3b82f6'; }}
-    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#2a2a3e'; }}
-  >
-    <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
-      <img src={printer.image} alt={printer.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-        {printer.badges.map(badge => (
-          <span key={badge} style={{ backgroundColor: badgeColors[badge] || '#3b82f6', color: '#fff', fontSize: '0.65rem', fontWeight: 700, padding: '3px 8px', borderRadius: '4px', letterSpacing: '0.5px' }}>{badge}</span>
-        ))}
+const PrinterCard = ({ printer, onClick }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        backgroundColor: '#1a1a2e',
+        borderRadius: '14px',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        border: `1px solid ${hovered ? '#3b82f6' : '#2a2a3e'}`,
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'transform 0.2s, border-color 0.2s',
+      }}
+    >
+      <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
+        <img
+          src={printer.image}
+          alt={printer.name}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transform: hovered ? 'scale(1.08)' : 'scale(1)',
+            transition: 'transform 0.4s ease',
+          }}
+        />
+        <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {printer.badges.map(badge => (
+            <span key={badge} style={{ backgroundColor: badgeColors[badge] || '#3b82f6', color: '#fff', fontSize: '0.65rem', fontWeight: 700, padding: '3px 8px', borderRadius: '4px', letterSpacing: '0.5px' }}>{badge}</span>
+          ))}
+        </div>
+        <div style={{ position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(0,0,0,0.75)', borderRadius: '20px', padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          ⭐ {printer.rating} <span style={{ color: '#888' }}>({printer.reviews})</span>
+        </div>
       </div>
-      <div style={{ position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(0,0,0,0.75)', borderRadius: '20px', padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-        ⭐ {printer.rating} <span style={{ color: '#888' }}>({printer.reviews})</span>
+      <div style={{ padding: '14px 16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{printer.name}</h3>
+            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>📍 {printer.location}</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <span style={{ fontSize: '0.65rem', color: '#888' }}>STARTS AT</span>
+            <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#3b82f6' }}>${printer.startingPrice}.00</p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', fontSize: '0.75rem', color: '#aaa' }}>
+          <div>
+            <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>DELIVERY</span>
+            {printer.delivery}
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>TECH</span>
+            {printer.tech.join(', ')}
+          </div>
+        </div>
+        <button style={{ marginTop: '14px', width: '100%', padding: '9px', backgroundColor: hovered ? '#3b82f6' : 'transparent', border: '1px solid #3b82f6', color: '#fff', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'background-color 0.2s' }}>
+          View Details →
+        </button>
       </div>
     </div>
-    <div style={{ padding: '14px 16px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{printer.name}</h3>
-          <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#888' }}>📍 {printer.location}</p>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <span style={{ fontSize: '0.65rem', color: '#888' }}>STARTS AT</span>
-          <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#3b82f6' }}>${printer.startingPrice}.00</p>
-        </div>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', fontSize: '0.75rem', color: '#aaa' }}>
-        <div>
-          <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>DELIVERY</span>
-          {printer.delivery}
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <span style={{ color: '#666', display: 'block', fontSize: '0.65rem', marginBottom: '2px' }}>TECH</span>
-          {printer.tech.join(', ')}
-        </div>
-      </div>
-      <button style={{ marginTop: '14px', width: '100%', padding: '9px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
-        View Details →
-      </button>
-    </div>
-  </div>
-);
+  );
+};
 
 const EmptyState = ({ onReset }) => (
   <div style={{ gridColumn: 'span 2', textAlign: 'center', padding: '60px 20px', backgroundColor: '#1a1a2e', borderRadius: '14px', border: '1px dashed #2a2a3e' }}>
@@ -181,35 +203,18 @@ const Printers = () => {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#0d0d0d', color: '#ffffff', fontFamily: "'Segoe UI', sans-serif" }}>
+      <style>{`
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
 
-      {/* Hero Banner */}
-      <div style={{
-        background: 'linear-gradient(135deg, #0d0d1a 0%, #1a1a3e 50%, #0d0d0d 100%)',
-        borderBottom: '1px solid #1e1e3e',
-        padding: '48px 20px 36px',
-        textAlign: 'center',
-      }}>
-        <style>{`
-          @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-        `}</style>
-        <h1 style={{
-          fontSize: '2.8rem',
-          fontWeight: 900,
-          margin: 0,
-          lineHeight: 1.2,
-        }}>
+      <div style={{ background: 'linear-gradient(135deg, #0d0d1a 0%, #1a1a3e 50%, #0d0d0d 100%)', borderBottom: '1px solid #1e1e3e', padding: '48px 20px 36px', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '2.8rem', fontWeight: 900, margin: 0, lineHeight: 1.2 }}>
           Find the Perfect{' '}
-          <span style={{
-            background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)',
-            backgroundSize: '200% auto',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            animation: 'gradientShift 3s ease infinite',
-          }}>
+          <span style={{ background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6)', backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', animation: 'gradientShift 3s ease infinite' }}>
             3D Printing Service
           </span>
         </h1>
@@ -219,8 +224,6 @@ const Printers = () => {
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 20px', display: 'flex', gap: '24px' }}>
-
-        {/* Sidebar */}
         <div style={{ width: '220px', flexShrink: 0 }}>
           <div style={{ backgroundColor: '#1a1a2e', borderRadius: '12px', padding: '20px' }}>
             <h3 style={{ color: '#3b82f6', marginBottom: '16px', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Questionnaire</h3>
@@ -255,7 +258,6 @@ const Printers = () => {
           </div>
         </div>
 
-        {/* Main */}
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <p style={{ color: '#888', fontSize: '0.85rem' }}>Showing <strong style={{ color: '#fff' }}>{filteredPrinters.length}</strong> printing services</p>
@@ -269,16 +271,12 @@ const Printers = () => {
               </select>
             </div>
           </div>
-
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             {filteredPrinters.length === 0
               ? <EmptyState onReset={resetFilters} />
-              : visiblePrinters.map(p => (
-                  <PrinterCard key={p.id} printer={p} onClick={() => navigate(`/printers/${p.id}`)} />
-                ))
+              : visiblePrinters.map(p => <PrinterCard key={p.id} printer={p} onClick={() => navigate(`/printers/${p.id}`)} />)
             }
           </div>
-
           {hasMore && (
             <div style={{ textAlign: 'center', marginTop: '32px' }}>
               <button onClick={() => setVisibleCount(prev => prev + 4)} style={{ padding: '12px 36px', backgroundColor: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}>
@@ -287,7 +285,6 @@ const Printers = () => {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
