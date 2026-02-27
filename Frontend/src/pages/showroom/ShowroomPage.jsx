@@ -55,19 +55,17 @@ export default function ShowroomPage() {
 
   useEffect(() => {
     let cancelled = false;
-
     async function load() {
       setLoading(true);
       try {
         const data = await fetchShowroomItems(filters);
         if (!cancelled) setItems(data);
-      } catch (e) {
-        console.error("showroom fetch failed", e);
+      } catch (err) {
+        console.error("Failed to load showroom items", err);
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
-
     load();
     return () => {
       cancelled = true;
@@ -98,11 +96,7 @@ export default function ShowroomPage() {
       <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
 
       <div className="showroom-content">
-        {/* When filters change we merge with the previous state so multiple selectors can be used */}
-      <ShowroomFilters
-        onChange={(u) => setFilters((prev) => ({ ...prev, ...u }))}
-        onSearch={setSearch}
-      />
+        <ShowroomFilters onChange={setFilters} onSearch={setSearch} />
 
         {loading ? (
           <p>Loading showroom...</p>

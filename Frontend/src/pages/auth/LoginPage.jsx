@@ -6,6 +6,7 @@ import "../../styles/auth.css";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [roleChoice, setRoleChoice] = useState("customer");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,9 +20,18 @@ export default function LoginPage() {
       const user = await login(email, password);
       const role = await getUserRole(user.uid);
 
-      if (role === "customer") navigate("/customer");
-      if (role === "designer") navigate("/designer");
-      if (role === "printer") navigate("/printer");
+      // if actual stored role doesn't match chosen role we still proceed to chosen destination
+      if (role !== roleChoice) {
+        setError(
+          `Your account role is '${role}', but you selected '${roleChoice}'. ` +
+            `Proceeding to the ${roleChoice} portal.`
+        );
+      }
+
+      // navigate based on user selection rather than actual
+      if (roleChoice === "customer") navigate("/customer");
+      else if (roleChoice === "designer") navigate("/designer");
+      else if (roleChoice === "printer") navigate("/printer");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -36,6 +46,17 @@ export default function LoginPage() {
         <p className="auth-subtitle">Sign in to your Modelle account</p>
 
         <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <select
+              className="auth-form-select"
+              value={roleChoice}
+              onChange={(e) => setRoleChoice(e.target.value)}
+            >
+              <option value="customer">Customer</option>
+              <option value="designer">Designer</option>
+              <option value="printer">Printer</option>
+            </select>
+          </div>
           {error && (
             <div className="auth-error">
               <span>⚠️</span>

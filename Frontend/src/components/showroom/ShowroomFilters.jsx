@@ -1,6 +1,5 @@
 // filtering UI with search
 // tasks: search bar, interactive dropdowns, emits filter state upward
-import { useState } from "react";
 
 export default function ShowroomFilters({ onChange, onSearch }) {
 

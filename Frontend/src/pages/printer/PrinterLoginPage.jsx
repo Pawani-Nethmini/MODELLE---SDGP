@@ -24,7 +24,7 @@ export default function PrinterLoginPage() {
         setError("You must sign in with a printer account to upload.");
         await import("../../services/authService").then(mod => mod.logout());
       } else {
-        navigate("/customer/showroom");
+        navigate("/printer");
       }
     } catch (err) {
       setError(err.message);
@@ -81,7 +81,7 @@ export default function PrinterLoginPage() {
           </form>
 
           <div className="login-footer">
-            <p>Don't have an account? <a href="/printer-signup">Sign up here</a></p>
+            <p>Don't have an account? <a href="/register/printer">Sign up here</a></p>
             <button className="back-btn" onClick={() => navigate("/customer/showroom")}>
               ← Back to Showroom
             </button>
