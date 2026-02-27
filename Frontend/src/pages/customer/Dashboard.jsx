@@ -323,13 +323,13 @@ const styles = {
     padding: "2.5rem",
     color: "white",
     fontFamily: "Arial, sans-serif",
-    animation: "fadeIn 1s ease forwards" // Fade in page
+    animation: "fadeIn 1s ease forwards" 
   },
 
   title: {
     fontSize: "2rem",
     fontWeight: "600",
-    animation: "slideDown 0.8s ease forwards" // Slide down title
+    animation: "slideDown 0.8s ease forwards" 
   },
 
   subtitle: {
@@ -362,7 +362,7 @@ const styles = {
     borderRadius: "14px",
     width: "200px",
     cursor: "pointer",
-    transition: "0.3s transform, 0.3s box-shadow", // Smooth hover
+    transition: "0.3s transform, 0.3s box-shadow", 
     "&:hover": {
       transform: "translateY(-5px)",
       boxShadow: "0 8px 20px rgba(255, 255, 255, 0.1)"
@@ -497,7 +497,7 @@ const styles = {
   },
 
   progressFill: {
-    width: "0%", // Start from 0 for animation
+    width: "0%", 
     height: "100%",
     background: "white",
     borderRadius: "10px",
