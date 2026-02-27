@@ -54,6 +54,21 @@ export default function ShowroomFilters({ onChange, onSearch }) {
         </div>
 
         <div className="filter-group">
+          <label className="filter-label">Color</label>
+          <select
+            className="filter-select"
+            onChange={(e) => onChange({ color: e.target.value })}
+          >
+            <option value="">All Colors</option>
+            <option value="Red">Red</option>
+            <option value="Blue">Blue</option>
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Transparent">Transparent</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
           <label className="filter-label">Category</label>
           <select
             className="filter-select"

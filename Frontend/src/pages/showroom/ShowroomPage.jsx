@@ -54,10 +54,24 @@ export default function ShowroomPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    fetchShowroomItems(filters)
-      .then(setItems)
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      try {
+        const data = await fetchShowroomItems(filters);
+        if (!cancelled) setItems(data);
+      } catch (e) {
+        console.error("showroom fetch failed", e);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [filters]);
 
   // Client-side filtering by search term (title/name)
@@ -84,7 +98,11 @@ export default function ShowroomPage() {
       <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
 
       <div className="showroom-content">
-        <ShowroomFilters onChange={setFilters} onSearch={setSearch} />
+        {/* When filters change we merge with the previous state so multiple selectors can be used */}
+      <ShowroomFilters
+        onChange={(u) => setFilters((prev) => ({ ...prev, ...u }))}
+        onSearch={setSearch}
+      />
 
         {loading ? (
           <p>Loading showroom...</p>

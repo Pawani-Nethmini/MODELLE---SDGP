@@ -4,8 +4,9 @@ const BASE_URL = "http://127.0.0.1:8002"; // showroom backend port
 
 export async function fetchShowroomItems(filters = {}) {
   const query = new URLSearchParams(filters).toString();
+  const url = query ? `${BASE_URL}/showroom?${query}` : `${BASE_URL}/showroom`;
 
-  const res = await fetch(`${BASE_URL}/showroom?${query}`);
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error("Failed to fetch showroom items");
   }
