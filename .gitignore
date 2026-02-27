@@ -552,3 +552,5 @@ Thumbs.db
 .venv/Scripts/python.exe
 .venv/Scripts/pythonw.exe
 Frontend/src/components/STLAutoFixPanel.jsx
+
+.venv/
