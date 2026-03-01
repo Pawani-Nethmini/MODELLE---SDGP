@@ -15,6 +15,7 @@ node backend/dashboard-backend/src/server.js
 - `GET /health`
 - `GET /api/dashboard/notifications`
 - `GET /api/dashboard/orders`
+- `GET /api/dashboard/insights`
 - `GET /api/dashboard/feedback`
 - `POST /api/dashboard/feedback`
 

@@ -1,4 +1,10 @@
 export const dashboardData = {
+  insights: {
+    totalSpent: 1240,
+    monthlyBudget: 1900,
+    budgetUsedPercent: 66,
+    currency: "USD",
+  },
   activeOrders: [
     {
       orderId: "#1023",

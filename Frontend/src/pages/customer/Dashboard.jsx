@@ -9,6 +9,7 @@ const API_BASE = "http://localhost:5051/api/dashboard";
 
 const [orders, setOrders] = useState([]);
 const [notifications, setNotifications] = useState([]);
+const [insights, setInsights] = useState(null);
 const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
 const [dashboardError, setDashboardError] = useState("");
 const [feedbackStatus, setFeedbackStatus] = useState("");
@@ -19,20 +20,23 @@ useEffect(() => {
       setIsLoadingDashboard(true);
       setDashboardError("");
 
-      const [ordersRes, notificationsRes] = await Promise.all([
+      const [ordersRes, notificationsRes, insightsRes] = await Promise.all([
         fetch(`${API_BASE}/orders`),
         fetch(`${API_BASE}/notifications`),
+        fetch(`${API_BASE}/insights`),
       ]);
 
-      if (!ordersRes.ok || !notificationsRes.ok) {
+      if (!ordersRes.ok || !notificationsRes.ok || !insightsRes.ok) {
         throw new Error("Failed to load dashboard data.");
       }
 
       const ordersJson = await ordersRes.json();
       const notificationsJson = await notificationsRes.json();
+      const insightsJson = await insightsRes.json();
 
       setOrders(ordersJson.data || []);
       setNotifications(notificationsJson.data || []);
+      setInsights(insightsJson.data || null);
     } catch (error) {
       setDashboardError(error?.message || "Unable to load dashboard data.");
     } finally {
@@ -215,14 +219,23 @@ return (
           <section style={styles.insightBox}>
             <h3 style={{ marginBottom: "0.5rem" }}>Project Insights</h3>
             <p style={{ fontSize: "0.9rem", opacity: 0.7 }}>TOTAL SPENT</p>
-            <h2>$1,240</h2>
+            <h2>
+              {insights?.currency === "USD" ? "$" : ""}
+              {insights?.totalSpent ?? 0}
+            </h2>
 
             <div style={styles.progressBar}>
-              <div style={styles.progressFill}></div>
+              <div
+                style={{
+                  ...styles.progressFill,
+                  width: `${insights?.budgetUsedPercent ?? 0}%`,
+                  animation: "none",
+                }}
+              ></div>
             </div>
 
             <p style={{ fontSize: "0.85rem", marginTop: "0.5rem", opacity: 0.8 }}>
-              66% of monthly budget utilized
+              {insights?.budgetUsedPercent ?? 0}% of monthly budget utilized
             </p>
           </section>
 
