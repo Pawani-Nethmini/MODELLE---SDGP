@@ -436,7 +436,7 @@ const styles = {
 
 
   page: {
-    background: "linear-gradient(180deg, #0b0b12, #050509)",
+    background: "transparent",
     minHeight: "100vh",
     padding: "2.5rem",
     color: "white",
