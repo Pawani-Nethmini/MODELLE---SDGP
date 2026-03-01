@@ -1,10 +1,71 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import modelleImage from "../../assets/dash_modelle.png";
 import { useNavigate } from "react-router-dom";
 import callcenter from "../../assets/callcenter.png";
 
 
 export default function CustomerDashboard() {
+const API_BASE = "http://localhost:5051/api/dashboard";
+
+const [orders, setOrders] = useState([]);
+const [notifications, setNotifications] = useState([]);
+const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
+const [dashboardError, setDashboardError] = useState("");
+const [feedbackStatus, setFeedbackStatus] = useState("");
+
+useEffect(() => {
+  const fetchDashboardData = async () => {
+    try {
+      setIsLoadingDashboard(true);
+      setDashboardError("");
+
+      const [ordersRes, notificationsRes] = await Promise.all([
+        fetch(`${API_BASE}/orders`),
+        fetch(`${API_BASE}/notifications`),
+      ]);
+
+      if (!ordersRes.ok || !notificationsRes.ok) {
+        throw new Error("Failed to load dashboard data.");
+      }
+
+      const ordersJson = await ordersRes.json();
+      const notificationsJson = await notificationsRes.json();
+
+      setOrders(ordersJson.data || []);
+      setNotifications(notificationsJson.data || []);
+    } catch (error) {
+      setDashboardError(error?.message || "Unable to load dashboard data.");
+    } finally {
+      setIsLoadingDashboard(false);
+    }
+  };
+
+  fetchDashboardData();
+}, []);
+
+const submitFeedback = async ({ rating, message }) => {
+  try {
+    setFeedbackStatus("");
+
+    const response = await fetch(`${API_BASE}/feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ rating, message }),
+    });
+
+    const json = await response.json();
+
+    if (!response.ok || !json.success) {
+      throw new Error(json?.message || "Failed to submit feedback.");
+    }
+
+    setFeedbackStatus("Feedback sent successfully.");
+  } catch (error) {
+    setFeedbackStatus(error?.message || "Feedback submission failed.");
+  }
+};
 
 const navigate = useNavigate();  
 return (
@@ -83,22 +144,33 @@ return (
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={styles.td}>#1023</td>
-                    <td style={styles.td}>
-                      <span style={styles.statusGreen}>Printing</span>
-                    </td>
-                    <td style={styles.td}>PrintHub SL-400</td>
-                    <td style={styles.td}>2 days</td>
-                  </tr>
-                  <tr>
-                    <td style={styles.td}>#1024</td>
-                    <td style={styles.td}>
-                      <span style={styles.statusYellow}>Design Review</span>
-                    </td>
-                    <td style={styles.td}>—</td>
-                    <td style={styles.td}>Pending</td>
-                  </tr>
+                  {isLoadingDashboard && (
+                    <tr>
+                      <td style={styles.td} colSpan="4">Loading active orders...</td>
+                    </tr>
+                  )}
+                  {!isLoadingDashboard && dashboardError && (
+                    <tr>
+                      <td style={styles.td} colSpan="4">{dashboardError}</td>
+                    </tr>
+                  )}
+                  {!isLoadingDashboard && !dashboardError && orders.length === 0 && (
+                    <tr>
+                      <td style={styles.td} colSpan="4">No active orders.</td>
+                    </tr>
+                  )}
+                  {!isLoadingDashboard && !dashboardError && orders.map((order) => (
+                    <tr key={order.orderId}>
+                      <td style={styles.td}>{order.orderId}</td>
+                      <td style={styles.td}>
+                        <span style={order.status === "Printing" ? styles.statusGreen : styles.statusYellow}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td style={styles.td}>{order.printer || "-"}</td>
+                      <td style={styles.td}>{order.eta}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -112,11 +184,24 @@ return (
             <h2 style={styles.sectionTitle}>🔔 Notifications</h2>
 
             <div style={styles.notifyBox}>
-              <Notification text="Project #1023 is 50% done" time="2 hours ago" isNew />
-              <Notification text="New quote received" time="5 hours ago" />
-              <Notification text="Designer uploaded a new revision" time="8 hours ago" />
-              <Notification text="Payment was successful" time="1 day ago" />
-              <Notification text="New message from StudioX" time="2 days ago" />
+              {isLoadingDashboard && (
+                <div style={styles.notifyItem}>
+                  <p style={styles.notifyText}>Loading notifications...</p>
+                </div>
+              )}
+              {!isLoadingDashboard && dashboardError && (
+                <div style={styles.notifyItem}>
+                  <p style={styles.notifyText}>{dashboardError}</p>
+                </div>
+              )}
+              {!isLoadingDashboard && !dashboardError && notifications.length === 0 && (
+                <div style={styles.notifyItem}>
+                  <p style={styles.notifyText}>No notifications yet.</p>
+                </div>
+              )}
+              {!isLoadingDashboard && !dashboardError && notifications.map((item) => (
+                <Notification key={item.id} text={item.text} time={item.time} isNew={item.isNew} />
+              ))}
               
               <div style={styles.viewAll}>
                 <a href="/customer/notifications" style={styles.viewAllLink}>
@@ -143,7 +228,7 @@ return (
 
           {/* Feedback Section */}
           <section style={{ marginTop: "2rem" }}>
-            <FeedbackCard />
+            <FeedbackCard onSubmit={submitFeedback} feedbackStatus={feedbackStatus} />
           </section>
 
 
@@ -184,8 +269,20 @@ function Notification({ text ,time, isNew}) {
 }
 
 /* Feedback Card */
-function FeedbackCard() {
+function FeedbackCard({ onSubmit, feedbackStatus }) {
   const [rating, setRating] = useState(5);
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      await onSubmit({ rating, message });
+      setMessage("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div style={styles.newFeedbackCard}>
@@ -216,9 +313,18 @@ function FeedbackCard() {
           type="text"
           placeholder="Tell us more about your experience..."
           style={styles.feedbackInput}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
-        <button style={styles.sendButton}>➤</button>
+        <button
+          style={styles.sendButton}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "..." : "Send"}
+        </button>
       </div>
+      {feedbackStatus && <p style={styles.feedbackStatus}>{feedbackStatus}</p>}
 
       {/* Floating Support Button */}
       <div style={styles.supportButton}>
@@ -227,7 +333,6 @@ function FeedbackCard() {
     </div>
   );
 }
-
 /* Inline Styles with Animations */
 const styles = {
 
@@ -607,6 +712,12 @@ supportImage: {
   objectFit: "contain",
 },
 
+feedbackStatus: {
+  fontSize: "0.8rem",
+  marginTop: "0.7rem",
+  opacity: 0.8,
+},
+
 
   // Keyframes
   "@keyframes fadeIn": {
@@ -646,3 +757,5 @@ supportImage: {
   }
 
 };
+
+
