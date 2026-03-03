@@ -1,6 +1,6 @@
-import CTA from "../CTA";
-import "../../styles/Hero.css";
 import React, { useState, useEffect } from "react";
+import CTA from "./CTA";
+import "../styles/Hero.css";
 
 // ─── YOUR 3D PRINTING IMAGES ─────────────────────────────────────────────────
 const SLIDES = [
