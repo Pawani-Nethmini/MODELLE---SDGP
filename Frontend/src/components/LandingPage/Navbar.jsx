@@ -24,6 +24,13 @@ export default function Navbar() {
           <a href="#about" className="nav-link">About us</a>
           <a href="#features" className="nav-link">Features</a>
           <a href="#contact" className="nav-link">Contact</a>
+          <a
+            className="nav-link"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/showroom")}
+          >
+            Showroom
+          </a>
         </div>
 
         {/* Desktop Actions */}
@@ -102,6 +109,13 @@ export default function Navbar() {
           >
             Contact
           </a>
+          <a
+            className="mobileLink"
+            style={{ cursor: "pointer" }}
+            onClick={() => { setMenuOpen(false); navigate("/showroom"); }}
+          >
+            Showroom
+          </a>
           <div className="mobileActions">
             <CTA
               variant="login"
@@ -129,7 +143,7 @@ export default function Navbar() {
               }}
               onClick={() => {
                 setMenuOpen(false);
-                navigate("/customer");
+                navigate("/register");
               }}
             />
           </div>

@@ -54,10 +54,22 @@ export default function ShowroomPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    fetchShowroomItems(filters)
-      .then(setItems)
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      try {
+        const data = await fetchShowroomItems(filters);
+        if (!cancelled) setItems(data);
+      } catch (err) {
+        console.error("Failed to load showroom items", err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [filters]);
 
   // Client-side filtering by search term (title/name)
