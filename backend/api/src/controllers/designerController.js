@@ -1,4 +1,4 @@
-import DesignerProfile from "../models/DesignerProfile.js";
+import DesignerProfile from "../models/DesignerProfiles.js";
 
 export const getDesigners = async (req, res) => {
   try {

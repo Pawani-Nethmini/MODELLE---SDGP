@@ -34,18 +34,9 @@
 
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
 import paymentRoutes from "./routes/payment.js";
 import designerRoutes from "./routes/designerRoutes.js";
 import customDesignRoutes from "./routes/customDesignRoutes.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-dotenv.config({
-  path: path.resolve(__dirname, "../../.env"), // ← also fix: was ../../../ (3 levels), should be ../../ (2 levels)
-});
 
 const app = express();
 

@@ -6,21 +6,25 @@
 //   console.log(`Payment service running on port ${PORT}`);
 // });
 
-import dotenv from "dotenv";
-dotenv.config(); 
+import mongoose from "mongoose";
 
-import app from "./app.js";
-import connectDB from "./config/db.js";
+const designerProfileSchema = new mongoose.Schema(
+  {
+    firebaseUid: { type: String, required: true, unique: true },
+    fullName: { type: String, required: true },
+    username: { type: String, default: "" },
+    email: { type: String, required: true },
+    phone: { type: String, default: "" },
+    bio: { type: String, default: "" },
+    skills: [{ type: String }],
+    software: [{ type: String }],
+    portfolioFile: { type: String, default: null },
+    hourlyRate: { type: Number, default: 15 },
+    rating: { type: Number, default: 4.5 },
+    completedProjects: { type: Number, default: 0 },
+    isAvailable: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
 
-const PORT = process.env.PORT || 5000;
-
-console.log("ENV CHECK:", {
-  MERCHANT_ID: process.env.PAYHERE_MERCHANT_ID,
-  SECRET: process.env.PAYHERE_MERCHANT_SECRET
-});
-
-connectDB();
-
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-});
+export default mongoose.model("DesignerProfile", designerProfileSchema);
