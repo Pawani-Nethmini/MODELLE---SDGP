@@ -26,3 +26,18 @@ export async function fetchShowroomItems(filters = {}) {
     printerId: it.printer_id || it.printerId,
   }));
 }
+
+export async function uploadShowroomItem(formData) {
+  const res = await fetch(`${BASE_URL}/showroom/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.detail || "Failed to upload item");
+  }
+
+  const data = await res.json();
+  return data;
+}
