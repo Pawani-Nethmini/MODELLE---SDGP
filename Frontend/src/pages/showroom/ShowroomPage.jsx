@@ -40,18 +40,20 @@
 
 
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/useAuth";
 import ShowroomGrid from "../../components/showroom/ShowroomGrid";
 import ShowroomFilters from "../../components/showroom/ShowroomFilters";
-import UploadModal from "../../components/showroom/UploadModal";
 import "../../styles/showroom.css";
 import { fetchShowroomItems } from "../../services/showroomService";
 
 export default function ShowroomPage() {
+  const navigate = useNavigate();
+  const { role, loading: authLoading } = useAuth();
   const [items, setItems] = useState([]);
   const [filters, setFilters] = useState({});
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  const [showUploadModal, setShowUploadModal] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -80,20 +82,30 @@ export default function ShowroomPage() {
     );
   }, [items, search]);
 
+  const handleUploadClick = () => {
+    if (role === "printer") {
+      navigate("/printer/showroom");
+    } else {
+      navigate("/printer-signin");
+    }
+  };
+
   return (
     <div className="showroom-page">
       <div className="showroom-hero">
         <div className="hero-content">
           <h1 className="hero-title">Explore the Frontiers of 3D Printing</h1>
           <p className="hero-subtitle">Discover incredible creations from our community or showcase your own masterpieces.</p>
-          <button className="upload-work-btn" onClick={() => setShowUploadModal(true)}>
-            Upload Your Work
+          <button 
+            className="upload-work-btn" 
+            onClick={handleUploadClick}
+            disabled={authLoading}
+          >
+            {authLoading ? "Loading..." : "Upload Your Work"}
           </button>
         </div>
         <div className="hero-glow"></div>
       </div>
-
-      <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
 
       <div className="showroom-content">
         <ShowroomFilters onChange={setFilters} onSearch={setSearch} />

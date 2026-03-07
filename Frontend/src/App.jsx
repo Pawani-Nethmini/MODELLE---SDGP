@@ -24,10 +24,12 @@ import MyProjects from "./pages/customer/MyProjects";
 import Printers from "./pages/customer/Printers";
 import UserProfile from "./pages/customer/UserProfile";
 import ShowroomPage from "./pages/showroom/ShowroomPage";
+import PrinterSignInPage from "./pages/showroom/PrinterSignInPage";
 import PrinterLayout from "./components/Printer/PrinterLayout";
 import PrinterNotifications from "./pages/printer/Notifications";
 import PrinterJobs from "./pages/printer/MyJobs";
 import PrinterLoginPage from "./pages/printer/PrinterLoginPage";
+import PrinterShowroomUpload from "./pages/printer/ShowroomUpload";
 import RoleGuard from "./components/common/RoleGuard";
 
 
@@ -51,6 +53,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="printer-login" element={<PrinterLoginPage />} />
+              <Route path="printer-signin" element={<PrinterSignInPage />} />
               <Route path="register" element={<SignupPage />} />
               <Route path="showroom" element={<ShowroomPage />} />
               {/* in case the selection page is used elsewhere */}
@@ -83,7 +86,7 @@ function App() {
             >
               <Route index element={<PrinterNotifications />} />
               <Route path="jobs" element={<PrinterJobs />} />
-              {/* Inbox to showroom button lives in layout nav */}
+              <Route path="showroom" element={<PrinterShowroomUpload />} />
             </Route>
           </Routes>
 

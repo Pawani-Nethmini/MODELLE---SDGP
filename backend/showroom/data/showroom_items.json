@@ -86,6 +86,16 @@
     "price": 1000,
     "category": "Jewellery",
     "printer_id": "printer_002"
+  },
+  {
+    "id": "item_32d2d90c",
+    "title": "Vase",
+    "image_url": "http://127.0.0.1:8002/static/showroom/dbef4d07-affe-4eea-afa7-57b6362bf3bf.jpg",
+    "material": "PLA",
+    "print_type": "FDM",
+    "color": "green",
+    "price": 2000.0,
+    "category": "Home Decor",
+    "printer_id": "HvZXipKtPGd8tHqDoJba8CWLYP03"
   }
-
 ]
