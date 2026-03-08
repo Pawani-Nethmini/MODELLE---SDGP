@@ -5,20 +5,6 @@ export const dashboardData = {
     budgetUsedPercent: 66,
     currency: "USD",
   },
-  activeOrders: [
-    {
-      orderId: "#1023",
-      status: "Printing",
-      printer: "PrintHub SL-400",
-      eta: "2 days",
-    },
-    {
-      orderId: "#1024",
-      status: "Design Review",
-      printer: null,
-      eta: "Pending",
-    },
-  ],
   notifications: [
     {
       id: "n1",

@@ -18,15 +18,95 @@ const DASHBOARD_ACTIVE_ORDERS = MY_ORDERS_MOCK
   .filter((order) => ACTIVE_ORDER_STATUSES.includes(order.status))
   .sort((a, b) => new Date(b.date) - new Date(a.date));
 
+const DASHBOARD_NOTIFICATIONS_FALLBACK = [
+  {
+    id: "n1",
+    text: "Project #1023 is 50% done",
+    time: "2 hours ago",
+    isNew: true,
+  },
+  {
+    id: "n2",
+    text: "New quote received",
+    time: "5 hours ago",
+    isNew: false,
+  },
+  {
+    id: "n3",
+    text: "Designer uploaded a new revision",
+    time: "8 hours ago",
+    isNew: false,
+  },
+];
+
 export default function CustomerDashboard() {
 const API_BASE = "http://localhost:5051/api/dashboard";
 
 const [orders, setOrders] = useState(DASHBOARD_ACTIVE_ORDERS);
-const [notifications, setNotifications] = useState([]);
+const [notifications, setNotifications] = useState(DASHBOARD_NOTIFICATIONS_FALLBACK);
 const [insights, setInsights] = useState(null);
 const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
 const [dashboardError, setDashboardError] = useState("");
 const [feedbackStatus, setFeedbackStatus] = useState("");
+const [viewportWidth, setViewportWidth] = useState(
+  typeof window !== "undefined" ? window.innerWidth : 1200
+);
+
+useEffect(() => {
+  const handleResize = () => setViewportWidth(window.innerWidth);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+const isTablet = viewportWidth <= 1024;
+const isMobile = viewportWidth <= 768;
+const isSmallMobile = viewportWidth <= 480;
+
+const responsiveStyles = {
+  page: {
+    padding: isSmallMobile ? "1rem" : isMobile ? "1.4rem" : "2.5rem",
+  },
+  hero: {
+    gridTemplateColumns: isMobile ? "1fr" : "1.4fr 1fr",
+    padding: isSmallMobile ? "1.2rem" : isMobile ? "1.5rem" : "2.5rem",
+    gap: isMobile ? "1.2rem" : "2rem",
+  },
+  heroTitle: {
+    fontSize: isSmallMobile ? "1.5rem" : isMobile ? "1.8rem" : "2.4rem",
+  },
+  heroText: {
+    maxWidth: "100%",
+    fontSize: isSmallMobile ? "0.85rem" : "0.95rem",
+  },
+  heroButtons: {
+    flexWrap: "wrap",
+  },
+  heroImage: {
+    width: isSmallMobile ? "210px" : isMobile ? "250px" : "320px",
+  },
+  title: {
+    fontSize: isSmallMobile ? "1.4rem" : isMobile ? "1.7rem" : "2rem",
+  },
+  grid: {
+    gridTemplateColumns: isTablet ? "1fr" : "2fr 1fr",
+    gap: isMobile ? "1.2rem" : "2rem",
+  },
+  cardRow: {
+    flexDirection: isSmallMobile ? "column" : "row",
+    flexWrap: "wrap",
+    gap: isSmallMobile ? "0.7rem" : "1rem",
+  },
+  actionCard: {
+    width: isSmallMobile ? "100%" : "200px",
+    flex: isSmallMobile ? "1 1 100%" : "1 1 200px",
+  },
+  tableBox: {
+    overflowX: "auto",
+  },
+  table: {
+    minWidth: isMobile ? "560px" : "100%",
+  },
+};
 
 useEffect(() => {
   const fetchDashboardData = async () => {
@@ -34,21 +114,26 @@ useEffect(() => {
       setIsLoadingDashboard(true);
       setDashboardError("");
       setOrders(DASHBOARD_ACTIVE_ORDERS);
+      setNotifications(DASHBOARD_NOTIFICATIONS_FALLBACK);
 
-      const [notificationsRes, insightsRes] = await Promise.all([
+      const [notificationsRes, insightsRes] = await Promise.allSettled([
         fetch(`${API_BASE}/notifications`),
         fetch(`${API_BASE}/insights`),
       ]);
 
-      if (!notificationsRes.ok || !insightsRes.ok) {
-        throw new Error("Failed to load dashboard data.");
+      if (notificationsRes.status === "fulfilled" && notificationsRes.value.ok) {
+        const notificationsJson = await notificationsRes.value.json();
+        setNotifications(notificationsJson.data || DASHBOARD_NOTIFICATIONS_FALLBACK);
+      } else {
+        setNotifications(DASHBOARD_NOTIFICATIONS_FALLBACK);
       }
 
-      const notificationsJson = await notificationsRes.json();
-      const insightsJson = await insightsRes.json();
-
-      setNotifications(notificationsJson.data || []);
-      setInsights(insightsJson.data || null);
+      if (insightsRes.status === "fulfilled" && insightsRes.value.ok) {
+        const insightsJson = await insightsRes.value.json();
+        setInsights(insightsJson.data || null);
+      } else {
+        setDashboardError("Project insights are currently unavailable.");
+      }
     } catch (error) {
       setDashboardError(error?.message || "Unable to load dashboard data.");
     } finally {
@@ -85,25 +170,25 @@ const submitFeedback = async ({ rating, message }) => {
 
 const navigate = useNavigate();  
 return (
-  <div style={styles.page}>
+  <div style={{ ...styles.page, ...responsiveStyles.page }}>
 
 
       {/* HERO SECTION */}
-      <div style={styles.hero}>
+      <div style={{ ...styles.hero, ...responsiveStyles.hero }}>
         <div style={styles.heroLeft}>
           <span style={styles.heroBadge}>OUR VISION</span>
 
-          <h1 style={styles.heroTitle}>
+          <h1 style={{ ...styles.heroTitle, ...responsiveStyles.heroTitle }}>
             Feel Seen <span style={styles.heroHighlight}>Without</span>
             <br /> Being Seen
           </h1>
 
-          <p style={styles.heroText}>
+          <p style={{ ...styles.heroText, ...responsiveStyles.heroText }}>
             Bringing your digital dreams to physical reality. Connecting designers
             with high-precision print shops to turn ideas into masterpieces.
           </p>
 
-          <div style={styles.heroButtons}>
+          <div style={{ ...styles.heroButtons, ...responsiveStyles.heroButtons }}>
             <button 
               style={styles.secondaryBtn}
               onClick={() => navigate("/customer/showroom")}
@@ -115,33 +200,35 @@ return (
 
 
         <div style={styles.heroRight}>
-          <img src={modelleImage} alt="Modelle Cube" style={styles.heroImage} />
+          <img src={modelleImage} alt="Modelle Cube" style={{ ...styles.heroImage, ...responsiveStyles.heroImage }} />
         </div>
       </div>
               
       {/* Header */}
-      <h1 style={styles.title}>Welcome back 👋</h1>
+      <h1 style={{ ...styles.title, ...responsiveStyles.title }}>Welcome back 👋</h1>
       <p style={styles.subtitle}>Here’s what’s happening with your projects today.</p>
 
-      <div style={styles.grid}>
+      <div style={{ ...styles.grid, ...responsiveStyles.grid }}>
         {/* LEFT SIDE */}
         <div>
           {/* Quick Actions */}
           <section style={{ marginTop: "2rem" }}>
             <h2 style={styles.sectionTitle}>⚡ Quick Actions</h2>
 
-            <div style={styles.cardRow}>
+            <div style={{ ...styles.cardRow, ...responsiveStyles.cardRow }}>
               <ActionCard 
                 title="New Project" 
                 desc="Upload a new STL file" 
                 path="upload-stl"
+                style={responsiveStyles.actionCard}
               />
               <ActionCard 
                 title="My Orders" 
                 desc="Track current orders" 
                 path="my-orders"
+                style={responsiveStyles.actionCard}
               />
-              <ActionCard title="Messages" desc="Contact designers" />
+              <ActionCard title="Messages" desc="Contact designers" style={responsiveStyles.actionCard} />
             </div>
           </section>
 
@@ -149,8 +236,8 @@ return (
           <section style={{ marginTop: "2.5rem" }}>
             <h2 style={styles.sectionTitle}>📦 Active Orders</h2>
 
-            <div style={styles.tableBox}>
-              <table style={styles.table}>
+            <div style={{ ...styles.tableBox, ...responsiveStyles.tableBox }}>
+              <table style={{ ...styles.table, ...responsiveStyles.table }}>
                 <thead>
                   <tr>
                     <th style={styles.th}>ORDER ID</th>
@@ -190,22 +277,17 @@ return (
             <h2 style={styles.sectionTitle}>🔔 Notifications</h2>
 
             <div style={styles.notifyBox}>
-              {isLoadingDashboard && (
+              {isLoadingDashboard && notifications.length === 0 && (
                 <div style={styles.notifyItem}>
                   <p style={styles.notifyText}>Loading notifications...</p>
                 </div>
               )}
-              {!isLoadingDashboard && dashboardError && (
-                <div style={styles.notifyItem}>
-                  <p style={styles.notifyText}>{dashboardError}</p>
-                </div>
-              )}
-              {!isLoadingDashboard && !dashboardError && notifications.length === 0 && (
+              {!isLoadingDashboard && notifications.length === 0 && (
                 <div style={styles.notifyItem}>
                   <p style={styles.notifyText}>No notifications yet.</p>
                 </div>
               )}
-              {!isLoadingDashboard && !dashboardError && notifications.map((item) => (
+              {notifications.map((item) => (
                 <Notification key={item.id} text={item.text} time={item.time} isNew={item.isNew} />
               ))}
               
@@ -254,12 +336,12 @@ return (
 }
 
 /* Action Card */
-function ActionCard({ title, desc, path }) {
+function ActionCard({ title, desc, path, style }) {
   const navigate = useNavigate();
 
   return (
     <div 
-      style={styles.actionCard}
+      style={{ ...styles.actionCard, ...style }}
       onClick={() => navigate(path)}
     >
       <h3>{title}</h3>
