@@ -33,7 +33,9 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, role, loading };
+  // expose a simple boolean for convenience
+  const isAuthenticated = !!currentUser;
+  const value = { currentUser, role, loading, isAuthenticated };
 
   return (
     <AuthContext.Provider value={value}>

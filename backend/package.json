@@ -10,6 +10,7 @@
     "uuid": "^13.0.0"
   },
   "scripts": {
-    "dev": "node api/src/server.js"
+    "dev": "node api/src/server.js",
+    "start": "node api/src/server.js"
   }
 }

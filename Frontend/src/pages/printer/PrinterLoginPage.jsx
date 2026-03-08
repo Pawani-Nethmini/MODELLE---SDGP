@@ -7,16 +7,30 @@ export default function PrinterLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate login delay
-    setTimeout(() => {
-      alert("Login successful! (Placeholder)");
+    setError("");
+
+    try {
+      // reuse the shared auth service
+      const { login, getUserRole } = await import("../../services/authService");
+      const user = await login(email, password);
+      const role = await getUserRole(user.uid);
+
+      if (role !== "printer") {
+        setError("You must sign in with a printer account to upload.");
+        await import("../../services/authService").then(mod => mod.logout());
+      } else {
+        navigate("/printer");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setLoading(false);
-      navigate("/customer/showroom");
-    }, 1000);
+    }
   };
 
   return (
@@ -29,6 +43,12 @@ export default function PrinterLoginPage() {
           </div>
 
           <form onSubmit={handleLogin} className="login-form">
+            {error && (
+              <div className="auth-error" style={{ marginBottom: "1rem" }}>
+                ⚠️ {error}
+              </div>
+            )}
+
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
@@ -61,7 +81,7 @@ export default function PrinterLoginPage() {
           </form>
 
           <div className="login-footer">
-            <p>Don't have an account? <a href="/printer-signup">Sign up here</a></p>
+            <p>Don't have an account? <a href="/register/printer">Sign up here</a></p>
             <button className="back-btn" onClick={() => navigate("/customer/showroom")}>
               ← Back to Showroom
             </button>

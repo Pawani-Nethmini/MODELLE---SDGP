@@ -1,32 +1,194 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import modelleImage from "../../assets/dash_modelle.png";
 import { useNavigate } from "react-router-dom";
 import callcenter from "../../assets/callcenter.png";
 
+const MY_ORDERS_MOCK = [
+  { id: "MOD-2024-0091", printerName: "PrintHub Colombo", status: "Ongoing", eta: "Feb 25, 2025", date: "2025-02-18" },
+  { id: "MOD-2024-0090", printerName: "3D Factory Galle", status: "Completed", eta: "Delivered", date: "2025-02-10" },
+  { id: "MOD-2024-0089", printerName: "MakerSpace Kandy", status: "Completed", eta: "Delivered", date: "2025-02-05" },
+  { id: "MOD-2024-0088", printerName: "ResinPro Studio", status: "Cancelled", eta: "-", date: "2025-01-28" },
+  { id: "MOD-2024-0087", printerName: "PrintHub Colombo", status: "Completed", eta: "Delivered", date: "2025-01-20" },
+  { id: "MOD-2024-0086", printerName: "QuickPrint Negombo", status: "Pending", eta: "Awaiting acceptance", date: "2025-02-20" },
+  { id: "MOD-2024-0085", printerName: "3D Factory Galle", status: "Accepted", eta: "Mar 1, 2025", date: "2025-02-19" },
+];
+
+const ACTIVE_ORDER_STATUSES = ["Ongoing", "Pending", "Accepted"];
+const DASHBOARD_ACTIVE_ORDERS = MY_ORDERS_MOCK
+  .filter((order) => ACTIVE_ORDER_STATUSES.includes(order.status))
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const DASHBOARD_NOTIFICATIONS_FALLBACK = [
+  {
+    id: "n1",
+    text: "Project #1023 is 50% done",
+    time: "2 hours ago",
+    isNew: true,
+  },
+  {
+    id: "n2",
+    text: "New quote received",
+    time: "5 hours ago",
+    isNew: false,
+  },
+  {
+    id: "n3",
+    text: "Designer uploaded a new revision",
+    time: "8 hours ago",
+    isNew: false,
+  },
+];
 
 export default function CustomerDashboard() {
+const API_BASE = "http://localhost:5051/api/dashboard";
+
+const [orders, setOrders] = useState(DASHBOARD_ACTIVE_ORDERS);
+const [notifications, setNotifications] = useState(DASHBOARD_NOTIFICATIONS_FALLBACK);
+const [insights, setInsights] = useState(null);
+const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
+const [dashboardError, setDashboardError] = useState("");
+const [feedbackStatus, setFeedbackStatus] = useState("");
+const [viewportWidth, setViewportWidth] = useState(
+  typeof window !== "undefined" ? window.innerWidth : 1200
+);
+
+useEffect(() => {
+  const handleResize = () => setViewportWidth(window.innerWidth);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+const isTablet = viewportWidth <= 1024;
+const isMobile = viewportWidth <= 768;
+const isSmallMobile = viewportWidth <= 480;
+
+const responsiveStyles = {
+  page: {
+    padding: isSmallMobile ? "1rem" : isMobile ? "1.4rem" : "2.5rem",
+  },
+  hero: {
+    gridTemplateColumns: isMobile ? "1fr" : "1.4fr 1fr",
+    padding: isSmallMobile ? "1.2rem" : isMobile ? "1.5rem" : "2.5rem",
+    gap: isMobile ? "1.2rem" : "2rem",
+  },
+  heroTitle: {
+    fontSize: isSmallMobile ? "1.5rem" : isMobile ? "1.8rem" : "2.4rem",
+  },
+  heroText: {
+    maxWidth: "100%",
+    fontSize: isSmallMobile ? "0.85rem" : "0.95rem",
+  },
+  heroButtons: {
+    flexWrap: "wrap",
+  },
+  heroImage: {
+    width: isSmallMobile ? "210px" : isMobile ? "250px" : "320px",
+  },
+  title: {
+    fontSize: isSmallMobile ? "1.4rem" : isMobile ? "1.7rem" : "2rem",
+  },
+  grid: {
+    gridTemplateColumns: isTablet ? "1fr" : "2fr 1fr",
+    gap: isMobile ? "1.2rem" : "2rem",
+  },
+  cardRow: {
+    flexDirection: isSmallMobile ? "column" : "row",
+    flexWrap: "wrap",
+    gap: isSmallMobile ? "0.7rem" : "1rem",
+  },
+  actionCard: {
+    width: isSmallMobile ? "100%" : "200px",
+    flex: isSmallMobile ? "1 1 100%" : "1 1 200px",
+  },
+  tableBox: {
+    overflowX: "auto",
+  },
+  table: {
+    minWidth: isMobile ? "560px" : "100%",
+  },
+};
+
+useEffect(() => {
+  const fetchDashboardData = async () => {
+    try {
+      setIsLoadingDashboard(true);
+      setDashboardError("");
+      setOrders(DASHBOARD_ACTIVE_ORDERS);
+      setNotifications(DASHBOARD_NOTIFICATIONS_FALLBACK);
+
+      const [notificationsRes, insightsRes] = await Promise.allSettled([
+        fetch(`${API_BASE}/notifications`),
+        fetch(`${API_BASE}/insights`),
+      ]);
+
+      if (notificationsRes.status === "fulfilled" && notificationsRes.value.ok) {
+        const notificationsJson = await notificationsRes.value.json();
+        setNotifications(notificationsJson.data || DASHBOARD_NOTIFICATIONS_FALLBACK);
+      } else {
+        setNotifications(DASHBOARD_NOTIFICATIONS_FALLBACK);
+      }
+
+      if (insightsRes.status === "fulfilled" && insightsRes.value.ok) {
+        const insightsJson = await insightsRes.value.json();
+        setInsights(insightsJson.data || null);
+      } else {
+        setDashboardError("Project insights are currently unavailable.");
+      }
+    } catch (error) {
+      setDashboardError(error?.message || "Unable to load dashboard data.");
+    } finally {
+      setIsLoadingDashboard(false);
+    }
+  };
+
+  fetchDashboardData();
+}, []);
+
+const submitFeedback = async ({ rating, message }) => {
+  try {
+    setFeedbackStatus("");
+
+    const response = await fetch(`${API_BASE}/feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ rating, message }),
+    });
+
+    const json = await response.json();
+
+    if (!response.ok || !json.success) {
+      throw new Error(json?.message || "Failed to submit feedback.");
+    }
+
+    setFeedbackStatus("Feedback sent successfully.");
+  } catch (error) {
+    setFeedbackStatus(error?.message || "Feedback submission failed.");
+  }
+};
 
 const navigate = useNavigate();  
 return (
-  <div style={styles.page}>
+  <div style={{ ...styles.page, ...responsiveStyles.page }}>
 
 
       {/* HERO SECTION */}
-      <div style={styles.hero}>
+      <div style={{ ...styles.hero, ...responsiveStyles.hero }}>
         <div style={styles.heroLeft}>
           <span style={styles.heroBadge}>OUR VISION</span>
 
-          <h1 style={styles.heroTitle}>
+          <h1 style={{ ...styles.heroTitle, ...responsiveStyles.heroTitle }}>
             Feel Seen <span style={styles.heroHighlight}>Without</span>
             <br /> Being Seen
           </h1>
 
-          <p style={styles.heroText}>
+          <p style={{ ...styles.heroText, ...responsiveStyles.heroText }}>
             Bringing your digital dreams to physical reality. Connecting designers
             with high-precision print shops to turn ideas into masterpieces.
           </p>
 
-          <div style={styles.heroButtons}>
+          <div style={{ ...styles.heroButtons, ...responsiveStyles.heroButtons }}>
             <button 
               style={styles.secondaryBtn}
               onClick={() => navigate("/customer/showroom")}
@@ -38,33 +200,35 @@ return (
 
 
         <div style={styles.heroRight}>
-          <img src={modelleImage} alt="Modelle Cube" style={styles.heroImage} />
+          <img src={modelleImage} alt="Modelle Cube" style={{ ...styles.heroImage, ...responsiveStyles.heroImage }} />
         </div>
       </div>
               
       {/* Header */}
-      <h1 style={styles.title}>Welcome back 👋</h1>
+      <h1 style={{ ...styles.title, ...responsiveStyles.title }}>Welcome back 👋</h1>
       <p style={styles.subtitle}>Here’s what’s happening with your projects today.</p>
 
-      <div style={styles.grid}>
+      <div style={{ ...styles.grid, ...responsiveStyles.grid }}>
         {/* LEFT SIDE */}
         <div>
           {/* Quick Actions */}
           <section style={{ marginTop: "2rem" }}>
             <h2 style={styles.sectionTitle}>⚡ Quick Actions</h2>
 
-            <div style={styles.cardRow}>
+            <div style={{ ...styles.cardRow, ...responsiveStyles.cardRow }}>
               <ActionCard 
                 title="New Project" 
                 desc="Upload a new STL file" 
                 path="upload-stl"
+                style={responsiveStyles.actionCard}
               />
               <ActionCard 
                 title="My Orders" 
                 desc="Track current orders" 
                 path="my-orders"
+                style={responsiveStyles.actionCard}
               />
-              <ActionCard title="Messages" desc="Contact designers" />
+              <ActionCard title="Messages" desc="Contact designers" style={responsiveStyles.actionCard} />
             </div>
           </section>
 
@@ -72,8 +236,8 @@ return (
           <section style={{ marginTop: "2.5rem" }}>
             <h2 style={styles.sectionTitle}>📦 Active Orders</h2>
 
-            <div style={styles.tableBox}>
-              <table style={styles.table}>
+            <div style={{ ...styles.tableBox, ...responsiveStyles.tableBox }}>
+              <table style={{ ...styles.table, ...responsiveStyles.table }}>
                 <thead>
                   <tr>
                     <th style={styles.th}>ORDER ID</th>
@@ -83,22 +247,23 @@ return (
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={styles.td}>#1023</td>
-                    <td style={styles.td}>
-                      <span style={styles.statusGreen}>Printing</span>
-                    </td>
-                    <td style={styles.td}>PrintHub SL-400</td>
-                    <td style={styles.td}>2 days</td>
-                  </tr>
-                  <tr>
-                    <td style={styles.td}>#1024</td>
-                    <td style={styles.td}>
-                      <span style={styles.statusYellow}>Design Review</span>
-                    </td>
-                    <td style={styles.td}>—</td>
-                    <td style={styles.td}>Pending</td>
-                  </tr>
+                  {orders.length === 0 && (
+                    <tr>
+                      <td style={styles.td} colSpan="4">No active orders.</td>
+                    </tr>
+                  )}
+                  {orders.map((order) => (
+                    <tr key={order.orderId || order.id}>
+                      <td style={styles.td}>{order.orderId || order.id}</td>
+                      <td style={styles.td}>
+                        <span style={order.status === "Ongoing" ? styles.statusGreen : styles.statusYellow}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td style={styles.td}>{order.printer || order.printerName || "-"}</td>
+                      <td style={styles.td}>{order.eta}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -112,11 +277,19 @@ return (
             <h2 style={styles.sectionTitle}>🔔 Notifications</h2>
 
             <div style={styles.notifyBox}>
-              <Notification text="Project #1023 is 50% done" time="2 hours ago" isNew />
-              <Notification text="New quote received" time="5 hours ago" />
-              <Notification text="Designer uploaded a new revision" time="8 hours ago" />
-              <Notification text="Payment was successful" time="1 day ago" />
-              <Notification text="New message from StudioX" time="2 days ago" />
+              {isLoadingDashboard && notifications.length === 0 && (
+                <div style={styles.notifyItem}>
+                  <p style={styles.notifyText}>Loading notifications...</p>
+                </div>
+              )}
+              {!isLoadingDashboard && notifications.length === 0 && (
+                <div style={styles.notifyItem}>
+                  <p style={styles.notifyText}>No notifications yet.</p>
+                </div>
+              )}
+              {notifications.map((item) => (
+                <Notification key={item.id} text={item.text} time={item.time} isNew={item.isNew} />
+              ))}
               
               <div style={styles.viewAll}>
                 <a href="/customer/notifications" style={styles.viewAllLink}>
@@ -130,20 +303,29 @@ return (
           <section style={styles.insightBox}>
             <h3 style={{ marginBottom: "0.5rem" }}>Project Insights</h3>
             <p style={{ fontSize: "0.9rem", opacity: 0.7 }}>TOTAL SPENT</p>
-            <h2>$1,240</h2>
+            <h2>
+              {insights?.currency === "USD" ? "$" : ""}
+              {insights?.totalSpent ?? 0}
+            </h2>
 
             <div style={styles.progressBar}>
-              <div style={styles.progressFill}></div>
+              <div
+                style={{
+                  ...styles.progressFill,
+                  width: `${insights?.budgetUsedPercent ?? 0}%`,
+                  animation: "none",
+                }}
+              ></div>
             </div>
 
             <p style={{ fontSize: "0.85rem", marginTop: "0.5rem", opacity: 0.8 }}>
-              66% of monthly budget utilized
+              {insights?.budgetUsedPercent ?? 0}% of monthly budget utilized
             </p>
           </section>
 
           {/* Feedback Section */}
           <section style={{ marginTop: "2rem" }}>
-            <FeedbackCard />
+            <FeedbackCard onSubmit={submitFeedback} feedbackStatus={feedbackStatus} />
           </section>
 
 
@@ -154,12 +336,12 @@ return (
 }
 
 /* Action Card */
-function ActionCard({ title, desc, path }) {
+function ActionCard({ title, desc, path, style }) {
   const navigate = useNavigate();
 
   return (
     <div 
-      style={styles.actionCard}
+      style={{ ...styles.actionCard, ...style }}
       onClick={() => navigate(path)}
     >
       <h3>{title}</h3>
@@ -184,8 +366,20 @@ function Notification({ text ,time, isNew}) {
 }
 
 /* Feedback Card */
-function FeedbackCard() {
+function FeedbackCard({ onSubmit, feedbackStatus }) {
   const [rating, setRating] = useState(5);
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      await onSubmit({ rating, message });
+      setMessage("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div style={styles.newFeedbackCard}>
@@ -216,9 +410,18 @@ function FeedbackCard() {
           type="text"
           placeholder="Tell us more about your experience..."
           style={styles.feedbackInput}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
-        <button style={styles.sendButton}>➤</button>
+        <button
+          style={styles.sendButton}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "..." : "Send"}
+        </button>
       </div>
+      {feedbackStatus && <p style={styles.feedbackStatus}>{feedbackStatus}</p>}
 
       {/* Floating Support Button */}
       <div style={styles.supportButton}>
@@ -227,7 +430,6 @@ function FeedbackCard() {
     </div>
   );
 }
-
 /* Inline Styles with Animations */
 const styles = {
 
@@ -318,18 +520,18 @@ const styles = {
 
 
   page: {
-    background: "linear-gradient(180deg, #0b0b12, #050509)",
+    background: "transparent",
     minHeight: "100vh",
     padding: "2.5rem",
     color: "white",
     fontFamily: "Arial, sans-serif",
-    animation: "fadeIn 1s ease forwards" // Fade in page
+    animation: "fadeIn 1s ease forwards" 
   },
 
   title: {
     fontSize: "2rem",
     fontWeight: "600",
-    animation: "slideDown 0.8s ease forwards" // Slide down title
+    animation: "slideDown 0.8s ease forwards" 
   },
 
   subtitle: {
@@ -362,7 +564,7 @@ const styles = {
     borderRadius: "14px",
     width: "200px",
     cursor: "pointer",
-    transition: "0.3s transform, 0.3s box-shadow", // Smooth hover
+    transition: "0.3s transform, 0.3s box-shadow", 
     "&:hover": {
       transform: "translateY(-5px)",
       boxShadow: "0 8px 20px rgba(255, 255, 255, 0.1)"
@@ -497,7 +699,7 @@ const styles = {
   },
 
   progressFill: {
-    width: "0%", // Start from 0 for animation
+    width: "0%", 
     height: "100%",
     background: "white",
     borderRadius: "10px",
@@ -607,6 +809,12 @@ supportImage: {
   objectFit: "contain",
 },
 
+feedbackStatus: {
+  fontSize: "0.8rem",
+  marginTop: "0.7rem",
+  opacity: 0.8,
+},
+
 
   // Keyframes
   "@keyframes fadeIn": {
@@ -646,3 +854,5 @@ supportImage: {
   }
 
 };
+
+
