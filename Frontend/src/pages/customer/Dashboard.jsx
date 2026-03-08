@@ -3,11 +3,25 @@ import modelleImage from "../../assets/dash_modelle.png";
 import { useNavigate } from "react-router-dom";
 import callcenter from "../../assets/callcenter.png";
 
+const MY_ORDERS_MOCK = [
+  { id: "MOD-2024-0091", printerName: "PrintHub Colombo", status: "Ongoing", eta: "Feb 25, 2025", date: "2025-02-18" },
+  { id: "MOD-2024-0090", printerName: "3D Factory Galle", status: "Completed", eta: "Delivered", date: "2025-02-10" },
+  { id: "MOD-2024-0089", printerName: "MakerSpace Kandy", status: "Completed", eta: "Delivered", date: "2025-02-05" },
+  { id: "MOD-2024-0088", printerName: "ResinPro Studio", status: "Cancelled", eta: "-", date: "2025-01-28" },
+  { id: "MOD-2024-0087", printerName: "PrintHub Colombo", status: "Completed", eta: "Delivered", date: "2025-01-20" },
+  { id: "MOD-2024-0086", printerName: "QuickPrint Negombo", status: "Pending", eta: "Awaiting acceptance", date: "2025-02-20" },
+  { id: "MOD-2024-0085", printerName: "3D Factory Galle", status: "Accepted", eta: "Mar 1, 2025", date: "2025-02-19" },
+];
+
+const ACTIVE_ORDER_STATUSES = ["Ongoing", "Pending", "Accepted"];
+const DASHBOARD_ACTIVE_ORDERS = MY_ORDERS_MOCK
+  .filter((order) => ACTIVE_ORDER_STATUSES.includes(order.status))
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
 
 export default function CustomerDashboard() {
 const API_BASE = "http://localhost:5051/api/dashboard";
 
-const [orders, setOrders] = useState([]);
+const [orders, setOrders] = useState(DASHBOARD_ACTIVE_ORDERS);
 const [notifications, setNotifications] = useState([]);
 const [insights, setInsights] = useState(null);
 const [isLoadingDashboard, setIsLoadingDashboard] = useState(true);
@@ -19,22 +33,20 @@ useEffect(() => {
     try {
       setIsLoadingDashboard(true);
       setDashboardError("");
+      setOrders(DASHBOARD_ACTIVE_ORDERS);
 
-      const [ordersRes, notificationsRes, insightsRes] = await Promise.all([
-        fetch(`${API_BASE}/orders`),
+      const [notificationsRes, insightsRes] = await Promise.all([
         fetch(`${API_BASE}/notifications`),
         fetch(`${API_BASE}/insights`),
       ]);
 
-      if (!ordersRes.ok || !notificationsRes.ok || !insightsRes.ok) {
+      if (!notificationsRes.ok || !insightsRes.ok) {
         throw new Error("Failed to load dashboard data.");
       }
 
-      const ordersJson = await ordersRes.json();
       const notificationsJson = await notificationsRes.json();
       const insightsJson = await insightsRes.json();
 
-      setOrders(ordersJson.data || []);
       setNotifications(notificationsJson.data || []);
       setInsights(insightsJson.data || null);
     } catch (error) {
@@ -148,30 +160,20 @@ return (
                   </tr>
                 </thead>
                 <tbody>
-                  {isLoadingDashboard && (
-                    <tr>
-                      <td style={styles.td} colSpan="4">Loading active orders...</td>
-                    </tr>
-                  )}
-                  {!isLoadingDashboard && dashboardError && (
-                    <tr>
-                      <td style={styles.td} colSpan="4">{dashboardError}</td>
-                    </tr>
-                  )}
-                  {!isLoadingDashboard && !dashboardError && orders.length === 0 && (
+                  {orders.length === 0 && (
                     <tr>
                       <td style={styles.td} colSpan="4">No active orders.</td>
                     </tr>
                   )}
-                  {!isLoadingDashboard && !dashboardError && orders.map((order) => (
-                    <tr key={order.orderId}>
-                      <td style={styles.td}>{order.orderId}</td>
+                  {orders.map((order) => (
+                    <tr key={order.orderId || order.id}>
+                      <td style={styles.td}>{order.orderId || order.id}</td>
                       <td style={styles.td}>
-                        <span style={order.status === "Printing" ? styles.statusGreen : styles.statusYellow}>
+                        <span style={order.status === "Ongoing" ? styles.statusGreen : styles.statusYellow}>
                           {order.status}
                         </span>
                       </td>
-                      <td style={styles.td}>{order.printer || "-"}</td>
+                      <td style={styles.td}>{order.printer || order.printerName || "-"}</td>
                       <td style={styles.td}>{order.eta}</td>
                     </tr>
                   ))}
