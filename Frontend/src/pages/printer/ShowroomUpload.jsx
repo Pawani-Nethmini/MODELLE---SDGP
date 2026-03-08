@@ -197,11 +197,11 @@ export default function PrinterShowroomPage() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="image">Image File *</label>
+                <label htmlFor="image">Image File * (jpg, jpeg, png, gif, webp, bmp, tiff, svg only)</label>
                 <input
                   id="image"
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.gif,.webp,.bmp,.tiff,.svg"
                   onChange={handleFileChange}
                   required
                   disabled={uploading}
@@ -314,7 +314,7 @@ export default function PrinterShowroomPage() {
         )}
         
         <div className="showroom-content">
-          <ShowroomFilters onChange={setFilters} onSearch={setSearch} />
+          <ShowroomFilters filters={filters} onChange={setFilters} onSearch={setSearch} />
           
           {loading ? (
             <div className="loading-message">Loading showroom items...</div>

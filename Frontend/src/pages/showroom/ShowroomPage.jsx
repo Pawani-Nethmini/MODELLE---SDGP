@@ -108,7 +108,7 @@ export default function ShowroomPage() {
       </div>
 
       <div className="showroom-content">
-        <ShowroomFilters onChange={setFilters} onSearch={setSearch} />
+<ShowroomFilters filters={filters} onChange={setFilters} onSearch={setSearch} />
 
         {loading ? (
           <p>Loading showroom...</p>
