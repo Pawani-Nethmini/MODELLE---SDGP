@@ -8,102 +8,118 @@ def load_printer_validator_data():
         data = json.load(file)
     return data["printerProfiles"]  # your JSON has "printerProfiles" key
 
-def validator_against_printer(stl_data, printer_id):
+def compute_score(issues: list) -> int:
+    deductions = sum(40 if i["type"] == "error" else 10 for i in issues)
+    return max(0,100 - deductions)
 
-    profiles = load_printer_validator_data()
+def validator_single(stl_data: dict, printer: dict) -> dict:
+    issues =[]
+    dims = stl_data["dimensions"]
+    stats = stl_data["stats"]
 
-    # find printer profile from the JSON
-    printer = next(
-        (p for p in profiles if p["id"] == printer_id), None
-    )
+    bv = printer["maxBuildVolume"]
 
-    if printer is None:
-        raise ValueError(f"Printer profile '{printer_id}' not found")
-    
-    issues = []
-
-    print("Selected printer profile:", printer["id"])
-
-    # 1. Checking build volume
-    build_volume = printer["maxBuildVolume"]
-    model_dimensions = stl_data["dimensions"]
-
-    if (model_dimensions["x"] > build_volume["x"] or
-        model_dimensions["y"] > build_volume["y"] or
-        model_dimensions["z"] > build_volume["z"]):
+    if dims["x"] > bv["x"] or dims["y"] > bv["y"] or dims["z"] > bv["z"]:
         issues.append({
             "type": "error",
-            "message": "Model exceeds printer build volume"
+            "message": (
+                f"Model dimensions ({dims['x']:.1f} x {dims['y']:.1f} x {dims['z']:.1f}) mm)"
+                f" exceed printer build volume ({bv['x']:.1f} x {bv['y']:.1f} x {bv['z']:.1f}) mm"
+            ),
         })
 
-    # 2. Triangle count check
     triangle_limit = printer.get("triangleCountLimit")
-    model_triangles = stl_data["stats"]["faces"]
-
-    if triangle_limit and model_triangles > triangle_limit:
+    face_count = stats["faces"]
+    if triangle_limit and face_count > triangle_limit:
         issues.append({
             "type": "warning",
-            "message": f"High triangle count ({model_triangles}). "
-                       "Model may slice slowly or cause performance issues."
+            "message": (
+                f"High triangle count({face_count:,} faces, limit{triangle_limit:,}). "
+                f"Model may slice slowly or cause performance issues."
+            ),
         })
 
-    # 3. Overhang angle check
-    max_overhang = printer.get("maxOverhangAngle")
-    if max_overhang:
-        angle_value = max_overhang["value"]
-        if stl_data["stats"].get("maxOverhangAngle", 0) > angle_value:
+    min_feature = printer.get("minFeatureSize")
+    if min_feature:
+        min_size = min_feature["min"]
+        volume = stats["volume"]
+
+        if triangle_limit and face_count > triangle_limit * 0.5 and volume < (min_size**3):
             issues.append({
                 "type": "warning",
-                "message": f"Model has overhangs exceeding {angle_value} degrees. "
-                           "May require supports for successful printing."
+                "message": (
+                    f"Model may contain features smaller than {min_size} mm"
+                    f"(min feature size for {printer['id']}). "
+                    f"Fine details may not print correctly."
+                ),
             })
 
-    # 4. Minimum feature size check (heuristic)
-    min_feature_size = printer.get("minFeatureSize")
-    if min_feature_size:
-        min_size_value = min_feature_size["min"]
-        face_count = stl_data["stats"]["faces"]
-        volume = stl_data["stats"]["volume"]
-
-        if triangle_limit and face_count > triangle_limit * 0.5 and volume < (min_size_value**3):
-            issues.append({
-                "type": "warning",
-                "message": f"Model may have features smaller than {min_size_value}mm. "
-                           "These may not print correctly."
-            })
-
-    # 5. Minimum wall thickness check
-    min_wall = printer.get("minWallThickness")
-    if min_wall:
-        min_wall_value = min_wall["value"]
-        model_min_wall = stl_data["stats"].get("minWallThickness")
-        if model_min_wall and model_min_wall < min_wall_value:
-            issues.append({
-                "type": "error",
-                "message": f"Wall thickness ({model_min_wall}mm) is below minimum ({min_wall_value}mm)."
-            })
-
-    # 6. Aspect ratio check (thin/tall features)
-    dims = stl_data["dimensions"]
     min_xy = min(dims["x"], dims["y"])
-    if min_xy > 0 and dims["z"] / min_xy > 10:  # arbitrary threshold
+    if min_xy > 0 and dims["z"] / min_xy > 10:  
         issues.append({
             "type": "warning",
-            "message": "Model has very high aspect ratio. Tall thin features may fail during printing."
+            "message": (
+                f"Very high aspect ratio (height/min_width = "
+                f"{dims['z'] / min_xy:.1f})."
+                "Tall, thin features may fail or warp during printing."
+            ),
         })
 
-    # 7. Technology-specific checks
     if printer["technology"] == "SLA":
-        if stl_data["stats"].get("internalVoids", False):
-            issues.append({
-                "type": "warning",
-                "message": "Model may trap resin. Drain holes recommended for SLA printing."
-            })
+        bounding_box_volume = dims["x"] * dims["y"] * dims["z"]
+        if bounding_box_volume > 0:
+            fill_ratio = stats["volume"] / bounding_box_volume
+            if fill_ratio < 0.15:
+                issues.append({
+                    "type": "warning",
+                    "message": (
+                        "Model appears largely hollow "
+                        f"(fill ratio \u2248 {fill_ratio:.0%}). "
+                        "Trapped resin may cause print failures; consider adding drain holes. "
+                    ),
+                })
+
+    score = compute_score(issues)
+    return {
+        "printer_id": printer["id"],
+        "technology": printer["technology"],
+        "class": printer["class"],
+        "score": score,
+        "compatible": len(issues) ==0,
+        "issues": issues,
+    }
+    
+def validator_against_printer(stl_data: dict, printer_id: str) -> dict:
+    profiles = load_printer_validator_data()
+    printer  = next((p for p in profiles if p["id"] == printer_id), None)
+    if printer is None:
+        raise ValueError(f"Printer profile '{printer_id}' not found")
+
+    result = validator_single(stl_data, printer)
+    return {
+        "success":    True,
+        "printer_id": result["printer_id"],
+        "compatible": result["compatible"],
+        "score":      result["score"],
+        "issues":     result["issues"],
+    }
+
+def validate_against_all_printers(stl_data: dict) -> dict:
+
+    profiles = load_printer_validator_data()
+    results = sorted(
+        (validator_single(stl_data, printer) for printer in profiles),
+        key=lambda r: (r["score"], len(r["issues"])),
+
+    )
+    compatible = [r["printer_id"] for r in results if r["compatible"]]
 
     return {
         "success": True,
-        "issues": issues,
-        "compatible":len(issues) == 0,
-        "printer_id": printer["id"]
+        "results": results,
+        "best": results[0] if results else None,
+        "compatible": compatible
     }
+        
+
     
