@@ -39,6 +39,34 @@ def validator_single(stl_data: dict, printer: dict) -> dict:
             ),
         })
 
+    printer_min_wall = printer.get("minWallThickness")
+    model_min_wall = stats.get("minWallThickness")
+
+    if printer_min_wall and model_min_wall is not None:
+        min_wall_value = printer_min_wall["value"]
+        reliable = stats.get("wallThicknessReliable", False)
+
+        if model_min_wall <min_wall_value:
+            if reliable:
+                issues.append({
+                    "type": "error",
+                    "message": (
+                        f"Minimum wall thickness({model_min_wall:.2f} mm is below"
+                        f"the printer minimum {min_wall_value} mm). "
+                        "Thin wall will likely fail or be too fragile."
+                    ),
+                        
+                })
+            else:
+                issues.append({
+                    "type": "warning",
+                    "message": (
+                        f"Estimated minimum wall thickness ({model_min_wall:.2f} mm) "
+                        f"may be below the printer minimum ({min_wall_value} mm). "
+                        "Verify wall thickness before printing."
+                    ),
+                })
+
     min_feature = printer.get("minFeatureSize")
     if min_feature:
         min_size = min_feature["min"]
@@ -78,6 +106,7 @@ def validator_single(stl_data: dict, printer: dict) -> dict:
                         "Trapped resin may cause print failures; consider adding drain holes. "
                     ),
                 })
+                
 
     score = compute_score(issues)
     return {
@@ -94,7 +123,7 @@ def validator_against_printer(stl_data: dict, printer_id: str) -> dict:
     printer  = next((p for p in profiles if p["id"] == printer_id), None)
     if printer is None:
         raise ValueError(f"Printer profile '{printer_id}' not found")
-
+ 
     result = validator_single(stl_data, printer)
     return {
         "success":    True,
