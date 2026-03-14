@@ -11,12 +11,13 @@ print (sys.path)
 def test_basic_validation():
 
     stl_data = {
-        "dimensions": {"x": 100, "y": 100, "z": 100},
+        "dimensions": {"x": 350, "y": 300, "z": 320}, 
         "stats": {
-            "faces": 200000,
-            "volume": 500000
+            "faces": 1500000,   
+            "volume": 2000000
         }
     }
+
 
     result = validate_against_all_printers(stl_data)
     pprint(result)
