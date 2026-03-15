@@ -34,13 +34,13 @@ def get_showroom_items(
     items = load_items()
 
     if material:
-        items = [i for i in items if i["material"] == material]
+        items = [i for i in items if i["material"].lower() == material.lower()]
     if print_type:
-        items = [i for i in items if i["print_type"] == print_type]
+        items = [i for i in items if i["print_type"].lower() == print_type.lower()]
     if color:
-        items = [i for i in items if i["color"] == color]
+        items = [i for i in items if i["color"].lower() == color.lower()]
     if category:
-        items = [i for i in items if i["category"] == category]
+        items = [i for i in items if i["category"].lower() == category.lower()]
 
     return items
 
@@ -60,11 +60,13 @@ async def upload_showroom_item(
     printer_id: str = Form(...)
 ):
     # Validate file type
-    if not image.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    allowed_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.tiff', '.svg'}
+    file_extension = os.path.splitext(image.filename)[1].lower()
+    
+    if not image.content_type.startswith("image/") or file_extension not in allowed_extensions:
+        raise HTTPException(status_code=400, detail="Only image files (jpg, jpeg, png, gif, webp, bmp, tiff, svg) are allowed")
 
     # Generate unique filename
-    file_extension = os.path.splitext(image.filename)[1]
     unique_filename = f"{uuid.uuid4()}{file_extension}"
     image_path = os.path.join("static", "showroom", unique_filename)
 
