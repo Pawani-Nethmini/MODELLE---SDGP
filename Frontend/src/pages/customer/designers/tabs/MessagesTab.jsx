@@ -30,7 +30,7 @@ const MessagesTab = ({ designer }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "420px" }}>
 
-      {/* Header */}
+      /*Header*/
       <div style={{
         display: "flex", alignItems: "center", gap: "10px",
         padding: "0 0 14px", borderBottom: "1px solid rgba(255,255,255,0.06)",
@@ -45,7 +45,7 @@ const MessagesTab = ({ designer }) => {
         </div>
       </div>
 
-      {/* Message list */}
+      /*Message list*/
       <div style={{
         flex: 1, overflowY: "auto", display: "flex", flexDirection: "column",
         gap: "10px", paddingRight: "4px",
@@ -98,7 +98,7 @@ const MessagesTab = ({ designer }) => {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input bar */}
+      /*Input bar*/
       <div style={{
         display: "flex", gap: "8px", marginTop: "14px",
         paddingTop: "14px", borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0,

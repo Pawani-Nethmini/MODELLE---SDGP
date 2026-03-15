@@ -44,14 +44,14 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
 
-      {/* Banner */}
+      /*Banner*/
       <div style={{ padding: "12px 14px", background: `${designer.accentColor}0d`, border: `1px solid ${designer.accentColor}25`, borderRadius: "12px" }}>
         <p style={{ margin: 0, fontSize: "0.8rem", color: designer.accentColor, fontWeight: 600 }}>
           ✏️ Describe your idea — {designer.name} will review it, ask questions if needed, and send a quote.
         </p>
       </div>
 
-      {/* Model type */}
+      /*Model type*/
       <div>
         <label style={labelStyle}>What type of model? *</label>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
@@ -67,7 +67,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
         </div>
       </div>
 
-      {/* Title */}
+      /*Title*/
       <div>
         <label style={labelStyle}>Project Title *</label>
         <input type="text" style={inputStyle}
@@ -75,7 +75,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
           value={form.title} onChange={e => inp("title", e.target.value)} />
       </div>
 
-      {/* Description */}
+      /*Description*/
       <div>
         <label style={labelStyle}>Describe Your Idea *</label>
         <textarea rows={4} style={inputStyle}
@@ -83,7 +83,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
           value={form.description} onChange={e => inp("description", e.target.value)} />
       </div>
 
-      {/* Dimensions */}
+      /*Dimensions*/
       <div>
         <label style={labelStyle}>Approximate Dimensions (mm)</label>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
@@ -94,7 +94,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
         </div>
       </div>
 
-      {/* Print method + Finish */}
+      /*Print method+Finish*/
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
         <div>
           <label style={labelStyle}>Print Method</label>
@@ -110,7 +110,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
         </div>
       </div>
 
-      {/* Quantity + Urgency */}
+      /*Quantity +Urgency*/
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
         <div>
           <label style={labelStyle}>Quantity</label>
@@ -125,7 +125,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
         </div>
       </div>
 
-      {/* Sketch notes */}
+      /*Sketch notes*/
       <div>
         <label style={labelStyle}>Sketch Description / Visual Notes</label>
         <textarea rows={2} style={inputStyle}
@@ -133,7 +133,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
           value={form.sketchNote} onChange={e => inp("sketchNote", e.target.value)} />
       </div>
 
-      {/* Reference links */}
+      /*Reference links*/
       <div>
         <label style={labelStyle}>Reference Links (images, Pinterest, etc.)</label>
         <input type="text" style={inputStyle}
@@ -141,7 +141,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
           value={form.refLinks} onChange={e => inp("refLinks", e.target.value)} />
       </div>
 
-      {/* File drop zone */}
+      /*File drop zone*/
       <div>
         <label style={labelStyle}>Attach Files (sketches, STL drafts, photos — max 5)</label>
         <div
@@ -182,7 +182,7 @@ const CustomizeTab = ({ designer, onTabSwitch }) => {
         )}
       </div>
 
-      {/* Submit */}
+      /*Submit*/
       <button
         onClick={handleSubmit}
         disabled={!canSubmit}

@@ -23,7 +23,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
         animationDelay: `${index * 0.07}s`,
       }}
     >
-      {/* Top accent line */}
+      /*Top accent line*/
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: "2px", zIndex: 2,
         background: hovered
@@ -32,7 +32,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
         transition: "all 0.3s ease",
       }} />
 
-      {/* Image */}
+      /*Image*/
       <div style={{ position: "relative", height: "180px", overflow: "hidden" }}>
         <img
           src={designer.image} alt={designer.name}
@@ -45,7 +45,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
         />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,#0e0e18 0%,transparent 50%)" }} />
 
-        {/* Badges */}
+        /*Badges*/
         <div style={{ position: "absolute", top: "12px", left: "12px", display: "flex", gap: "5px", flexWrap: "wrap", zIndex: 2 }}>
           {designer.badges.map(badge => (
             <span key={badge} style={{
@@ -60,7 +60,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
           ))}
         </div>
 
-        {/* Availability */}
+        /*Availability*/
         <div style={{
           position: "absolute", top: "12px", right: "12px",
           background: designer.available ? "rgba(16,185,129,0.2)" : "rgba(100,116,139,0.2)",
@@ -72,7 +72,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
           {designer.available ? "● Available" : "● Busy"}
         </div>
 
-        {/* Rating */}
+        /*Rating*/
         <div style={{
           position: "absolute", bottom: "12px", right: "12px",
           background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)",
@@ -85,7 +85,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
           <span style={{ color: "#666", fontSize: "0.72rem" }}>({designer.reviews})</span>
         </div>
 
-        {/* Verified */}
+        /*Verified*/
         {designer.verified && (
           <div style={{
             position: "absolute", bottom: "12px", left: "12px",
@@ -96,7 +96,7 @@ const DesignerCard = ({ designer, onClick, index }) => {
         )}
       </div>
 
-      {/* Content */}
+      /*Content*/
       <div style={{ padding: "16px 18px 18px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
           <div>

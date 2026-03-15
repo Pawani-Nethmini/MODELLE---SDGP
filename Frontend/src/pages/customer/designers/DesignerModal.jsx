@@ -36,10 +36,10 @@ const DesignerModal = ({ designer, onClose }) => {
           overflow: "hidden",
         }}
       >
-        {/* Accent line */}
+        /*Accent line*/
         <div style={{ height: "3px", flexShrink: 0, background: `linear-gradient(90deg,transparent,${designer.accentColor},transparent)` }} />
 
-        {/* Hero image */}
+        /*Hero image*/
         <div style={{ position: "relative", height: "160px", flexShrink: 0 }}>
           <img src={designer.image} alt={designer.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,#0d0d17 0%,transparent 55%)" }} />
@@ -52,7 +52,7 @@ const DesignerModal = ({ designer, onClose }) => {
           }}>×</button>
         </div>
 
-        {/* Designer header */}
+        /*Designer header*/
         <div style={{ padding: "0 1.5rem", flexShrink: 0 }}>
           <div style={{ display: "flex", gap: "12px", alignItems: "flex-end", marginTop: "-18px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
             <AvatarCircle initials={designer.avatar} color={designer.accentColor} size={50} />
@@ -79,7 +79,7 @@ const DesignerModal = ({ designer, onClose }) => {
             </div>
           </div>
 
-          {/* Tab bar */}
+          /*Tab bar*/
           <div style={{ display: "flex", gap: "4px", background: "rgba(255,255,255,0.03)", borderRadius: "12px", padding: "4px" }}>
             {MODAL_TABS.map(({ id, icon, label }) => (
               <button
@@ -108,7 +108,7 @@ const DesignerModal = ({ designer, onClose }) => {
           </div>
         </div>
 
-        {/* Scrollable content */}
+        /*Scrollable content*/
         <div style={{
           flex: 1, overflowY: "auto", padding: "16px 1.5rem 1.5rem",
           scrollbarWidth: "thin", scrollbarColor: "#1e1e30 transparent",

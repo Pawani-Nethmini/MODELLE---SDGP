@@ -10,7 +10,7 @@ const ProfileTab = ({ designer, onTabSwitch }) => (
       {designer.bio}
     </p>
 
-    {/* Stats grid */}
+    /*Stats grid*/
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px", marginBottom: "20px" }}>
       {[
         { label: "Rating",     value: `${designer.rating}/5`         },
@@ -30,7 +30,7 @@ const ProfileTab = ({ designer, onTabSwitch }) => (
       ))}
     </div>
 
-    {/* Specialties */}
+    /*Specialties*/
     <div style={{ marginBottom: "16px" }}>
       <div style={{ fontSize: "0.68rem", color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: "8px" }}>Specialties</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
@@ -44,7 +44,7 @@ const ProfileTab = ({ designer, onTabSwitch }) => (
       </div>
     </div>
 
-    {/* Software */}
+    /*Software*/
     <div style={{ marginBottom: "20px" }}>
       <div style={{ fontSize: "0.68rem", color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: "8px" }}>Software</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
@@ -58,7 +58,7 @@ const ProfileTab = ({ designer, onTabSwitch }) => (
       </div>
     </div>
 
-    {/* Portfolio */}
+    /*Portfolio*/
     <div style={{ marginBottom: "24px" }}>
       <div style={{ fontSize: "0.68rem", color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: "8px" }}>Portfolio</div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "8px" }}>

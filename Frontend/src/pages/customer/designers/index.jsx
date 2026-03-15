@@ -4,7 +4,7 @@ import { Divider } from "./DesignerShared";
 import DesignerCard  from "./DesignerCard";
 import DesignerModal from "./DesignerModal";
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
+//Empty state
 const EmptyState = ({ onReset }) => (
   <div style={{
     gridColumn: "span 3", textAlign: "center", padding: "80px 20px",
@@ -21,7 +21,7 @@ const EmptyState = ({ onReset }) => (
   </div>
 );
 
-// ─── Main page ────────────────────────────────────────────────────────────────
+//Main page
 const Designers = () => {
   const [searchTerm,          setSearchTerm]          = useState("");
   const [priceRange,          setPriceRange]          = useState(150);
@@ -85,7 +85,7 @@ const Designers = () => {
         input[type=date]::-webkit-calendar-picker-indicator{filter:invert(0.5)}
       `}</style>
 
-      {/* ── Hero ── */}
+      /*Hero*/
       <div style={{ position: "relative", padding: "60px 40px 0", textAlign: "center", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: "-60px", left: "50%", transform: "translateX(-50%)", width: "700px", height: "400px", background: "radial-gradient(ellipse,rgba(0,245,255,0.1) 0%,transparent 70%)", pointerEvents: "none" }} />
 
@@ -104,7 +104,7 @@ const Designers = () => {
           Browse expert 3D designers. Share your idea, chat directly, and get a custom quote — all in one place.
         </p>
 
-        {/* Search bar */}
+        /*Search bar*/
         <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "16px", padding: "12px 18px", maxWidth: "580px", margin: "0 auto", backdropFilter: "blur(8px)" }}>
           <span style={{ color: "#475569", fontSize: "1rem" }}>🔍</span>
           <input
@@ -117,7 +117,7 @@ const Designers = () => {
           )}
         </div>
 
-        {/* Stats bar */}
+        /*Stats bar*/
         <div style={{ display: "flex", justifyContent: "center", marginTop: "36px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "28px" }}>
           {[
             { label: "Designers",  value: MOCK_DESIGNERS.length,                        icon: "🎨" },
@@ -135,10 +135,10 @@ const Designers = () => {
         </div>
       </div>
 
-      {/* ── Body ── */}
+      /*Body*/
       <div style={{ maxWidth: "1300px", margin: "0 auto", padding: "32px 24px", display: "flex", gap: "24px", alignItems: "flex-start" }}>
 
-        {/* ── Sidebar filters ── */}
+        /*Sidebar filters*/
         <aside style={{ width: "230px", flexShrink: 0, position: "sticky", top: "20px" }}>
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "20px", padding: "20px", backdropFilter: "blur(8px)" }}>
 
@@ -147,7 +147,7 @@ const Designers = () => {
               <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "0.06em" }}>Filters</span>
             </div>
 
-            {/* Price */}
+            /*Price*/
             <div style={{ marginBottom: "20px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                 <div style={{ fontSize: "0.62rem", color: "#334155", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700 }}>Max Price</div>
@@ -161,7 +161,7 @@ const Designers = () => {
 
             <Divider />
 
-            {/* Specialties */}
+            /*Specialties*/
             <div style={{ marginBottom: "20px" }}>
               <div style={{ fontSize: "0.62rem", color: "#334155", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700, marginBottom: "10px" }}>Specialties</div>
               <div style={{ display: "flex", gap: "5px", flexWrap: "wrap" }}>
@@ -178,7 +178,7 @@ const Designers = () => {
 
             <Divider />
 
-            {/* Software */}
+            /*Software*/
             <div style={{ marginBottom: "20px" }}>
               <div style={{ fontSize: "0.62rem", color: "#334155", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700, marginBottom: "10px" }}>Software</div>
               {ALL_SOFTWARE.map(sw => (
@@ -198,7 +198,7 @@ const Designers = () => {
 
             <Divider />
 
-            {/* Toggle checkboxes */}
+            /*Toggle checkboxes*/
             {[
               { label: "Available only", value: availableOnly, setter: setAvailableOnly, color: "#10b981" },
               { label: "Verified only",  value: verifiedOnly,  setter: setVerifiedOnly,  color: "#8b5cf6" },
@@ -224,9 +224,9 @@ const Designers = () => {
           </div>
         </aside>
 
-        {/* ── Card grid ── */}
+        /*Card grid*/
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Results bar */}
+          /*Results bar*/
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
             <div>
               <span style={{ color: "#64748b", fontSize: "0.85rem" }}>Showing </span>

@@ -17,7 +17,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
 
   const respond = (action) => setQuote(q => ({ ...q, status: action }));
 
-  // ── No quote ──
+  //No quote
   if (quote.status === "none") return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", padding: "24px 0" }}>
       {!requested ? (
@@ -56,7 +56,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
     </div>
   );
 
-  // ── Quote received ──
+  //Quote received
   if (quote.status === "received") return (
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
@@ -72,7 +72,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
         }}>⏳ Awaiting Response</div>
       </div>
 
-      {/* Line items */}
+      /*Line items*/
       <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden", marginBottom: "14px" }}>
         {quote.items.map((item, i) => (
           <div key={i} style={{
@@ -84,7 +84,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
             <span style={{ color: "white", fontWeight: 700, fontSize: "0.9rem" }}>${item.amount}</span>
           </div>
         ))}
-        {/* Total row */}
+        /*Total row*/
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "center",
           padding: "14px 16px", background: `${designer.accentColor}0d`,
@@ -95,7 +95,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
         </div>
       </div>
 
-      {/* Designer note */}
+      /*Designer note*/
       <div style={{ padding: "12px 14px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", marginBottom: "20px" }}>
         <div style={{ fontSize: "0.65rem", color: "#334155", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: "6px" }}>Designer's Note</div>
         <p style={{ margin: 0, fontSize: "0.83rem", color: "#94a3b8", lineHeight: 1.6 }}>{quote.note}</p>
@@ -117,7 +117,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
     </div>
   );
 
-  // ── Accepted ──
+  //Accepted
   if (quote.status === "accepted") return (
     <div style={{ textAlign: "center", padding: "40px 20px" }}>
       <div style={{ fontSize: "3.5rem", marginBottom: "14px" }}>🎉</div>
@@ -142,7 +142,7 @@ const QuoteTab = ({ designer, onTabSwitch }) => {
     </div>
   );
 
-  // ── Rejected ──
+  //Rejected
   if (quote.status === "rejected") return (
     <div style={{ textAlign: "center", padding: "40px 20px" }}>
       <div style={{ fontSize: "3.5rem", marginBottom: "14px" }}>🙁</div>

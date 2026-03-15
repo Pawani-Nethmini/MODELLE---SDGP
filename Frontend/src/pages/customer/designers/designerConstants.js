@@ -1,4 +1,4 @@
-// ─── Static config ────────────────────────────────────────────────────────────
+//Static config
 export const ALL_SPECIALTIES = [
   "Architectural","Parametric","Organic","Mechanical","Prototyping",
   "Enclosures","Jewellery","Wearables","Character","Figurines","Artistic","Medical",
@@ -30,7 +30,7 @@ export const MODEL_TYPES = [
 export const PRINT_METHODS = ["FDM","SLA / Resin","SLS","MJF","No preference"];
 export const FINISH_OPTS   = ["Raw print","Sanded & smooth","Painted","Polished","Designer's choice"];
 
-// ─── Mock data (replace with Firestore calls later) ───────────────────────────
+//Mock data (replace with Firestore calls later)
 export const MOCK_DESIGNERS = [
   {
     id: 1, name: "Aria Chen", title: "Parametric & Architectural Designer",
