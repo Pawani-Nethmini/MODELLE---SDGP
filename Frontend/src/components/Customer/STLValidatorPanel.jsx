@@ -59,34 +59,42 @@ export default function STLValidatorPanel({ file }) {
   };
 
   const handleAutoFix = async () => {
-  try {
-    setLoading(true);
-    setError("");
+    if (!file) return;
+    try {
+      setLoading(true);
+      setError("");
 
-    const formData = new FormData();
-    formData.append("file", file);
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const res = await fetch("http://localhost:8000/autofix", {
-      method: "POST",
-      body: formData,
-    });
+      const res = await fetch("http://localhost:8000/api/validator/autofix", {
+        method: "POST",
+        body: formData,
+      });
 
-    if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) throw new Error(await res.text());
 
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name.replace(/\.stl$/i, "") + "_fixed.stl";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = file.name.replace(/\.stl$/i, "") + "_fixed.stl";
-    a.click();
+      // Show success message
+      setValidationResult(prev => ({
+        ...prev,
+        autoFixStatus: "Fixed STL downloaded successfully. Re-upload to re-validate."
+      }));
 
-    window.URL.revokeObjectURL(url);
-  } catch (e) {
-    setError(e.message || "Auto-fix failed.");
-  } finally {
-    setLoading(false);
-  }
+    } catch (e) {
+      setError(e.message || "Auto-fix failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -269,15 +277,31 @@ export default function STLValidatorPanel({ file }) {
         {validationResult && (
           <PrintabilityReport result={validationResult} />
         )}
-        {validationResult && validationResult.fixableMinor && (
-          <div style={{ marginTop: 12 }}>
-            <CTA
-            text="Auto-fix Minor Issues"
-            variant="secondary"
-            onClick={handleAutoFix}
-            />
-          </div>
-      )}
+        {/* At the bottom of your result section */}
+{validationResult && validationResult.autoFixStatus && (
+  <p style={{ color: "green", marginTop: 8 }}>
+    ✓ {validationResult.autoFixStatus}
+  </p>
+)}
+
+{validationResult && validationResult.fixableMinor && !validationResult.autoFixStatus && (
+  <div style={{ marginTop: 12 }}>
+    <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
+      Minor issues detected that can be automatically repaired:
+    </p>
+    <ul style={{ fontSize: 13, color: "var(--text-muted)" }}>
+      {validationResult.fixableErrors?.map((e, i) => (
+        <li key={i}>{e}</li>
+      ))}
+    </ul>
+    <CTA
+      text={loading ? "Fixing..." : "Auto-fix Minor Issues"}
+      variant="secondary"
+      onClick={handleAutoFix}
+      disabled={loading}
+    />
+  </div>
+)}
 
       </div>
     </>
