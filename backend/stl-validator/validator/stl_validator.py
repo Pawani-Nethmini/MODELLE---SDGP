@@ -158,3 +158,28 @@ def validate_stl(file_path: str) -> dict:
         }
     }
     return result
+
+def repair_mesh(mesh: trimesh.Trimesh) -> tuple[trimesh.Trimesh, list[str]]:
+    fixes = []
+
+    if not mesh.is_winding_consistent:
+        trimesh.repair.fix_winding(mesh)
+        fixes.append("Fixed inconsistent face winding")
+
+    trimesh.repair.fix_normals(mesh)
+    if not mesh.is_winding_consistent:
+        fixes.append("Recomputed face normals")
+
+    face_areas = mesh.area_faces
+    degenerate_mask = face_areas > 1e-12
+    if not degenerate_mask.all():
+        mesh.update_faces(degenerate_mask)
+        mesh.remove_unreferenced_vertices()
+        fixes.append(f"Removed {np.sum(~degenerate_mask)} degenerate faces")
+
+    if not mesh.is_watertight:
+        trimesh.repair.fill_holes(mesh)
+        if mesh.is_watertight:
+            fixes.append("Merged duplicate vertices and faces to fix holes")
+
+    return mesh, fixes
