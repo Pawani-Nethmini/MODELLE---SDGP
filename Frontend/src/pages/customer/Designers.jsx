@@ -1,3 +1,2 @@
-export default function Designers() {
-  return <h2 style={{ padding: "40px" }}>Designers Page (Coming Soon)</h2>;
-}
+// All source lives in ./designers/ — do not add code here.
+export { default } from "./designers/index";

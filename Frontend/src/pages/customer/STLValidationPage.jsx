@@ -2,7 +2,6 @@ import { useState } from "react";
 import STLUploadCard from "../../components/Customer/STLUploadCard";
 import InteractiveRobot from "../../components/InteractiveRobot";
 import STLValidatorPanel from "../../components/Customer/STLValidatorPanel";
-import BackgroundShapes from "../../components/BackgroundShapes";
 
 import "../../styles/stlValidator.css";
 

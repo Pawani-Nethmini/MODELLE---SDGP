@@ -1,8 +1,17 @@
 // filtering UI with search
 // tasks: search bar, interactive dropdowns, emits filter state upward
-import { useState } from "react";
 
-export default function ShowroomFilters({ onChange, onSearch }) {
+export default function ShowroomFilters({ filters, onChange, onSearch }) {
+
+  const handleFilterChange = (key, value) => {
+    const newFilters = { ...filters };
+    if (value === "") {
+      delete newFilters[key];
+    } else {
+      newFilters[key] = value;
+    }
+    onChange(newFilters);
+  };
 
   return (
     <div className="showroom-filters-row">
@@ -31,11 +40,15 @@ export default function ShowroomFilters({ onChange, onSearch }) {
           <label className="filter-label">Material</label>
           <select
             className="filter-select"
-            onChange={(e) => onChange({ material: e.target.value })}
+            value={filters.material || ""}
+            onChange={(e) => handleFilterChange("material", e.target.value)}
           >
             <option value="">All Materials</option>
             <option value="PLA">PLA</option>
             <option value="ABS">ABS</option>
+            <option value="PETG">PETG</option>
+            <option value="TPU">TPU</option>
+            <option value="Nylon">Nylon</option>
             <option value="Resin">Resin</option>
           </select>
         </div>
@@ -44,12 +57,34 @@ export default function ShowroomFilters({ onChange, onSearch }) {
           <label className="filter-label">Print Type</label>
           <select
             className="filter-select"
-            onChange={(e) => onChange({ print_type: e.target.value })}
+            value={filters.print_type || ""}
+            onChange={(e) => handleFilterChange("print_type", e.target.value)}
           >
             <option value="">All Print Types</option>
             <option value="FDM">FDM</option>
             <option value="SLA">SLA</option>
             <option value="SLS">SLS</option>
+            <option value="DLP">DLP</option>
+            <option value="ABS">ABS</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label className="filter-label">Color</label>
+          <select
+            className="filter-select"
+            value={filters.color || ""}
+            onChange={(e) => handleFilterChange("color", e.target.value)}
+          >
+            <option value="">All Colors</option>
+            <option value="Red">Red</option>
+            <option value="Blue">Blue</option>
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Transparent">Transparent</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Orange">Orange</option>
+            <option value="Green">Green</option>
           </select>
         </div>
 
@@ -57,7 +92,8 @@ export default function ShowroomFilters({ onChange, onSearch }) {
           <label className="filter-label">Category</label>
           <select
             className="filter-select"
-            onChange={(e) => onChange({ category: e.target.value })}
+            value={filters.category || ""}
+            onChange={(e) => handleFilterChange("category", e.target.value)}
           >
             <option value="">All Category Types</option>
             <option value="Toys">Toys</option>

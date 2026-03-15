@@ -1,9 +1,12 @@
 // represent one printed model
 // shows image, material, print type, color
 
-export default function ShowroomCard({ item }) {
+export default function ShowroomCard({ item, isNewlyUploaded }) {
   return (
-    <div className="showroom-card">
+    <div className={`showroom-card ${isNewlyUploaded ? "newly-uploaded" : ""}`}>
+      {isNewlyUploaded && (
+        <div className="new-badge">✨ New</div>
+      )}
       <div className="image-wrap">
         <img
           src={item.imageUrl}

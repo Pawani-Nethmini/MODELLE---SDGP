@@ -5,7 +5,7 @@
 
 import ShowroomCard from "./ShowroomCard";
 
-export default function ShowroomGrid({ items }) {
+export default function ShowroomGrid({ items, newlyUploadedItemId }) {
   if (!items.length) {
     return <p>No items found.</p>;
   }
@@ -14,7 +14,11 @@ export default function ShowroomGrid({ items }) {
     <div className="showroom-panel">
       <div className="showroom-grid">
         {items.map((item) => (
-          <ShowroomCard key={item.id} item={item} />
+          <ShowroomCard 
+            key={item.id} 
+            item={item} 
+            isNewlyUploaded={item.id === newlyUploadedItemId}
+          />
         ))}
       </div>
     </div>

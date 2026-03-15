@@ -46,7 +46,35 @@ export default function RegisterPrinter() {
       setSuccess(true);
     } catch (error) {
       console.error("Registration Error:", error);
-      setError(error.message);
+      // special handling for duplicate email
+      if (error.code === "auth/email-already-in-use") {
+        try {
+          // try sign in with provided credentials to verify password
+          const signInResult = await import("firebase/auth").then(({ signInWithEmailAndPassword }) =>
+            signInWithEmailAndPassword(auth, form.email, form.password)
+          );
+          const existingUid = signInResult.user.uid;
+          const docRef = doc(db, "users", existingUid);
+          const docSnap = await import("firebase/firestore").then(({ getDoc }) => getDoc(docRef));
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.role !== "printer") {
+              // upgrade role
+              await import("firebase/firestore").then(({ updateDoc }) =>
+                updateDoc(docRef, { role: "printer" })
+              );
+              setSuccess(true);
+              return;
+            }
+          }
+          setError("Email already registered. Please log in or use a different email.");
+        } catch (inner) {
+          console.error("Error upgrading existing account:", inner);
+          setError("Email already in use. Please log in instead.");
+        }
+      } else {
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }
